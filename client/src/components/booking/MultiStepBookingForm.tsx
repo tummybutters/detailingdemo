@@ -223,6 +223,30 @@ export default function MultiStepBookingForm() {
   const watchServiceCategory = form.watch("serviceCategory");
   const watchMainService = form.watch("mainService");
   
+  // Check for prefilled address from hero section
+  useEffect(() => {
+    const prefilledAddress = localStorage.getItem('prefilledAddress');
+    const prefilledCoordinatesStr = localStorage.getItem('prefilledCoordinates');
+    
+    if (prefilledAddress) {
+      form.setValue('location', prefilledAddress);
+      
+      if (prefilledCoordinatesStr) {
+        try {
+          const coords = JSON.parse(prefilledCoordinatesStr) as [number, number];
+          setAddressCoordinates(coords);
+          setIsValidAddress(true);
+        } catch (e) {
+          console.error('Error parsing prefilled coordinates', e);
+        }
+      }
+      
+      // Clear localStorage after using
+      localStorage.removeItem('prefilledAddress');
+      localStorage.removeItem('prefilledCoordinates');
+    }
+  }, [form]);
+  
   // Effects to update form values based on selections
   useEffect(() => {
     if (watchServiceCategory) {

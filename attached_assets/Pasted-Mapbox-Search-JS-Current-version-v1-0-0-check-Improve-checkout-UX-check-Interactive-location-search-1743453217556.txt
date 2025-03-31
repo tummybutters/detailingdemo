@@ -1,0 +1,101 @@
+Mapbox Search JS
+Current version:v1.0.0
+
+check
+Improve checkout UX
+check
+Interactive location search
+check
+Address Form Autofill
+check
+Fully customizable
+
+On this page
+Features
+Use cases
+Structure
+Search JS Web
+Search JS React
+Search JS Core
+Additional Developer Resources
+Mapbox Developer Discord
+Developer Cheatsheet
+Mapbox Support
+Ask AI
+Mapbox Search JS is a set of client-side JavaScript libraries for building interactive location search experiences using the Mapbox Search Service. You can use Mapbox Search JS to add address autofill to a web browser, add a search box to a Mapbox GL JS map, and retrieve suggestion coordinates programmatically.
+
+Works with existing HTML5 autocomplete tags
+Fully themeable to match your design system
+Accessibility-first (ARIA), mobile and desktop native
+First-class support for Google Tag Manager, HTML Custom Elements, and React
+Want to get started right away?
+Quickstart Guides are available for the three main features of Mapbox Search JS:
+
+Address Autofill - Web | React
+Search Box - Web | React
+Geocoding - Web | React
+Features
+Mapbox Search JS includes three main features: Address Autofill, Search Box, and Geocoding. Search JS provides rich interactive UI components when used in web and React projects. You can also build your own UI for these features by using Search JS Core framework.
+
+Features (3)
+
+Address Autofill
+"Attach address autofill to any input field. Confirm user-entered addresses."
+
+
+Search Box
+"Search for places, addresses, and landmarks."
+
+
+Geocoding
+"Precise address and places search for business intelligence, ecommerce, and logistics."
+
+Use cases
+Use cases for Mapbox Search JS include:
+
+Address Autofill to increase customer conversion
+Address verification and delivery point confirmation
+Interactive search experience to control a map
+Interface with Search APIs across Web, Node.js, and React Native
+For more inspiration about what you can do with Mapbox Search JS, see our tutorials, examples, and the Mapbox customer showcase page.
+
+Structure
+Mapbox Search JS consists of three frameworks. Each is published as a separate package on npm under the @mapbox namespace:
+
+Search JS Web (@mapbox/search-js-web)
+Search JS React (@mapbox/search-js-react)
+Search JS Core (@mapbox/search-js-core)
+Search JS Web and Search JS Core are also available via the Mapbox CDN for inclusion using a <script> tag.
+
+Search JS Web
+Search JS Web is the main entry-point to Mapbox Search JS, and provides rich UI components on top of Search JS Core.
+
+These are defined as HTML Custom Elements, meaning they have the same fidelity as built ins such as <button> and <input>. Helpers are also included in Search JS Web for use in low-code environments, where modifying the HTML is not accessible or necessary.
+
+Web Quickstart Guides:
+
+Address Autofill
+Search Box
+Geocoding
+Once you're familiar with the basics, explore full documentation in the Web reference.
+
+Search JS React
+Search JS React provides rich UI components in React, built on top of Search JS Web. This is the recommended entry-point Mapbox Search JS for large-scale applications.
+
+Search JS React also provides React hooks based on Search JS Core interfaces.
+
+React Quickstart Guides:
+
+Address Autofill
+Search Box
+Geocoding
+Once you're familiar with the basics, explore full documentation in the React reference.
+
+Search JS Core
+Search JS Core provides a higher level framework for the Mapbox Search Service. The framework provides strong typing for the APIs, handles requests/responses automatically, and can manage session tokens.
+
+You can use the classes in the Core framework to build your own implementation and UI for location search and address autofill.
+
+Search JS Core is consumed by Search JS Web and other frameworks. It is not reliant on Web technologies, and can be used in most JavaScript environments. We officially support Web, Node.js, and React Native.
+
+Explore full documentation in the Core reference

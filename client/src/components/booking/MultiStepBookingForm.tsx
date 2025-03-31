@@ -7,6 +7,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { CheckCircle, ArrowRight, ArrowLeft, MapPin, Calendar, Car, Settings, ClipboardList, Clock, DollarSign, X, Check } from "lucide-react";
+import LocationSearch from "./LocationSearch";
 
 import {
   Form,
@@ -168,6 +169,8 @@ export default function MultiStepBookingForm() {
   const [selectedAddOnDetails, setSelectedAddOnDetails] = useState<{id: string, price: string}[]>([]);
   const [bookingReference, setBookingReference] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValidAddress, setIsValidAddress] = useState(false);
+  const [addressCoordinates, setAddressCoordinates] = useState<[number, number] | undefined>(undefined);
   const stepsRef = useRef<HTMLDivElement>(null);
   
   // Extract price value as numeric
@@ -331,6 +334,12 @@ export default function MultiStepBookingForm() {
   const validateStepFields = async (fields: string[]): Promise<boolean> => {
     if (fields.length === 0) return true;
     
+    // Special handling for location step - check if address is in service area
+    if (fields.includes("location") && currentStep === 0) {
+      const result = await form.trigger(fields as any[]);
+      return result && isValidAddress;
+    }
+    
     const result = await form.trigger(fields as any[]);
     return result;
   };
@@ -433,20 +442,42 @@ export default function MultiStepBookingForm() {
                       control={form.control}
                       name="location"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Your Location</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your address" 
-                              {...field} 
-                              className="border-gray-300 focus:border-primary"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                          <p className="text-xs text-gray-500 mt-1">
-                            We service Irvine and surrounding areas within a 25-mile radius.
-                          </p>
-                        </FormItem>
+                        <>
+                          <LocationSearch 
+                            value={field.value} 
+                            onChange={field.onChange}
+                            onAddressValidated={(isValid, coordinates) => {
+                              setIsValidAddress(isValid);
+                              if (coordinates) {
+                                setAddressCoordinates(coordinates);
+                              }
+                              
+                              if (!isValid && field.value) {
+                                toast({
+                                  title: "Location Outside Service Area",
+                                  description: "We currently only service areas within 25 miles of Irvine, CA. Please enter a location within our service area.",
+                                  variant: "destructive",
+                                });
+                              }
+                            }}
+                            field={field}
+                            formState={form.formState}
+                          />
+                          
+                          {field.value && !isValidAddress && (
+                            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                              <div className="flex items-start">
+                                <X className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
+                                <div>
+                                  <h4 className="text-sm font-medium text-red-800">Outside Service Area</h4>
+                                  <p className="text-sm text-red-700 mt-1">
+                                    The address you've entered is outside our service area. We currently only service locations within 25 miles of Irvine, CA. Please enter a different address or contact us for special arrangements.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </>
                       )}
                     />
                   </div>

@@ -539,28 +539,35 @@ export default function MultiStepBookingForm() {
                               {vehicleTypes.map((vehicle) => (
                                 <div 
                                   key={vehicle.value} 
-                                  className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                                    field.value === vehicle.value 
-                                      ? 'border-primary bg-primary/5' 
-                                      : 'border-gray-200 hover:border-gray-300'
-                                  }`}
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === vehicle.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
                                   onClick={() => field.onChange(vehicle.value)}
                                 >
-                                  <div className="flex items-center">
+                                  <div className="p-4">
                                     <RadioGroupItem
                                       value={vehicle.value}
                                       id={vehicle.value}
                                       className="sr-only"
                                     />
-                                    <div className="mr-3 text-2xl">{vehicle.icon}</div>
-                                    <div>
-                                      <label 
-                                        htmlFor={vehicle.value}
-                                        className="block font-medium cursor-pointer"
-                                      >
-                                        {vehicle.label}
-                                      </label>
-                                      <span className="text-sm text-gray-500">{vehicle.description}</span>
+                                    <div className="flex items-center">
+                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === vehicle.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
+                                        {vehicle.icon}
+                                      </div>
+                                      <div>
+                                        <label 
+                                          htmlFor={vehicle.value}
+                                          className="block font-medium cursor-pointer"
+                                        >
+                                          {vehicle.label}
+                                        </label>
+                                        <span className="text-sm text-gray-500">{vehicle.description}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -597,28 +604,35 @@ export default function MultiStepBookingForm() {
                               {serviceCategories.map((category) => (
                                 <div 
                                   key={category.value} 
-                                  className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                                    field.value === category.value 
-                                      ? 'border-primary bg-primary/5' 
-                                      : 'border-gray-200 hover:border-gray-300'
-                                  }`}
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === category.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
                                   onClick={() => field.onChange(category.value)}
                                 >
-                                  <div className="flex items-center">
+                                  <div className="p-4">
                                     <RadioGroupItem
                                       value={category.value}
                                       id={category.value}
                                       className="sr-only"
                                     />
-                                    <div className="mr-3 text-2xl">{category.icon}</div>
-                                    <div>
-                                      <label 
-                                        htmlFor={category.value}
-                                        className="block font-medium cursor-pointer"
-                                      >
-                                        {category.label}
-                                      </label>
-                                      <span className="text-sm text-gray-500">{category.description}</span>
+                                    <div className="flex items-center">
+                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === category.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
+                                        {category.icon}
+                                      </div>
+                                      <div>
+                                        <label 
+                                          htmlFor={category.value}
+                                          className="block font-medium cursor-pointer"
+                                        >
+                                          {category.label}
+                                        </label>
+                                        <span className="text-sm text-gray-500">{category.description}</span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -655,32 +669,37 @@ export default function MultiStepBookingForm() {
                               {servicePackages[selectedCategory as keyof typeof servicePackages].map((service) => (
                                 <div 
                                   key={service.value} 
-                                  className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                                    field.value === service.value 
-                                      ? 'border-primary bg-primary/5' 
-                                      : 'border-gray-200 hover:border-gray-300'
-                                  }`}
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === service.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
                                   onClick={() => field.onChange(service.value)}
                                 >
-                                  <div className="flex justify-between items-start">
-                                    <div>
-                                      <RadioGroupItem
-                                        value={service.value}
-                                        id={service.value}
-                                        className="sr-only"
-                                      />
-                                      <label 
-                                        htmlFor={service.value}
-                                        className="block font-bold cursor-pointer"
-                                      >
-                                        {service.label}
-                                      </label>
-                                      <p className="text-sm text-gray-600 mt-1">{service.description}</p>
-                                      <p className="text-sm text-gray-500 mt-1">Duration: {service.duration}</p>
+                                  <div className="p-4">
+                                    <div className="flex justify-between items-start">
+                                      <div>
+                                        <RadioGroupItem
+                                          value={service.value}
+                                          id={service.value}
+                                          className="sr-only"
+                                        />
+                                        <label 
+                                          htmlFor={service.value}
+                                          className="block font-bold cursor-pointer"
+                                        >
+                                          {service.label}
+                                        </label>
+                                        <p className="text-sm text-gray-600 mt-1">{service.description}</p>
+                                        <p className="text-sm text-gray-500 mt-1">Duration: {service.duration}</p>
+                                      </div>
+                                      <span className="text-primary font-bold text-lg bg-primary/5 px-3 py-1 rounded-md">
+                                        {service.price}
+                                      </span>
                                     </div>
-                                    <span className="text-primary font-bold text-lg">
-                                      {service.price}
-                                    </span>
                                   </div>
                                 </div>
                               ))}
@@ -699,30 +718,35 @@ export default function MultiStepBookingForm() {
                           {addOnServices.map((addon) => (
                             <div 
                               key={addon.id}
-                              className={`border rounded-lg p-3 cursor-pointer transition-all ${
-                                selectedAddOns.includes(addon.id)
-                                  ? 'border-primary bg-primary/5' 
-                                  : 'border-gray-200 hover:border-gray-300'
-                              }`}
+                              className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                ${selectedAddOns.includes(addon.id) 
+                                  ? 'border-2 border-primary transform -translate-y-1' 
+                                  : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                }
+                                before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                              `}
                             >
-                              <div className="flex items-start">
-                                <Checkbox
-                                  id={addon.id}
-                                  checked={selectedAddOns.includes(addon.id)}
-                                  onCheckedChange={(checked) => {
-                                    handleAddOnChange(addon.id, checked as boolean);
-                                  }}
-                                  className="mt-1 mr-3"
-                                />
-                                <div className="flex-1">
-                                  <label
-                                    htmlFor={addon.id}
-                                    className="flex justify-between w-full font-medium cursor-pointer"
-                                  >
-                                    <span>{addon.label}</span>
-                                    <span className="text-primary font-bold">{addon.price}</span>
-                                  </label>
-                                  <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
+                              <div className="p-3">
+                                <div className="flex items-start">
+                                  <Checkbox
+                                    id={addon.id}
+                                    checked={selectedAddOns.includes(addon.id)}
+                                    onCheckedChange={(checked) => {
+                                      handleAddOnChange(addon.id, checked as boolean);
+                                    }}
+                                    className="mt-1 mr-3"
+                                  />
+                                  <div className="flex-1">
+                                    <label
+                                      htmlFor={addon.id}
+                                      className="flex justify-between w-full font-medium cursor-pointer"
+                                    >
+                                      <span>{addon.label}</span>
+                                      <span className="text-primary font-bold px-2 py-0.5 bg-primary/5 rounded-md">{addon.price}</span>
+                                    </label>
+                                    <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
+                                  </div>
                                 </div>
                               </div>
                             </div>

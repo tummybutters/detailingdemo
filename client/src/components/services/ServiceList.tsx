@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Service3DButton } from "@/components/ui/service-3d-button";
 import { ArrowRight, Star, CheckCircle2 } from "lucide-react";
 
 interface ServiceFeature {
@@ -172,11 +173,9 @@ export default function ServiceList() {
                 </div>
                 
                 <Link href="/booking">
-                  <Button 
-                    className="w-full bg-red-primary hover:bg-orange-primary text-white border-0 py-2 rounded-md transition-all duration-300"
-                  >
+                  <Service3DButton className="w-full">
                     Book Now
-                  </Button>
+                  </Service3DButton>
                 </Link>
               </div>
               
@@ -220,9 +219,9 @@ export default function ServiceList() {
             Remember, all our services come to your location—no need to disrupt your day. Our satisfaction guarantee ensures your car will look its best or your service is free.
           </p>
           <Link href="/booking">
-            <Button size="lg" className="bg-red-primary hover:bg-orange-primary text-white px-8 shadow-md">
+            <Service3DButton className="px-8">
               Book Your Mobile Detail Now <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            </Service3DButton>
           </Link>
         </div>
       </div>

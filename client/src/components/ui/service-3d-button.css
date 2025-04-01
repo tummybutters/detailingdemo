@@ -1,0 +1,66 @@
+/* 3D Service Button Styling */
+.service-3d-button {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 0 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1rem;
+  transition: transform 0.15s ease;
+  transform-style: preserve-3d;
+}
+
+.service-3d-button-face {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: var(--primary);
+  box-shadow: 
+    0 1px 1px rgba(0, 0, 0, 0.1),
+    0 2px 3px rgba(0, 0, 0, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform: translateZ(0);
+  transition: all 0.15s ease;
+  z-index: 1;
+}
+
+.service-3d-button:hover .service-3d-button-face {
+  color: white;
+  background-image: linear-gradient(135deg, var(--red-primary), var(--orange-primary));
+}
+
+.service-3d-button:active {
+  transform: translateY(4px);
+}
+
+.service-3d-button:active .service-3d-button-face {
+  transform: translateY(-4px);
+}
+
+.service-3d-button-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  background-color: var(--red-primary-darker, #c83823);
+  transform: translateY(4px) translateZ(-1px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.service-3d-button:active .service-3d-button-shadow {
+  transform: translateY(0) translateZ(-1px);
+}

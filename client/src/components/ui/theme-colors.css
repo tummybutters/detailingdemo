@@ -7,6 +7,13 @@
   --primary-light: #f05e4a;
   --primary-lighter: #f27a69;
   
+  /* For service buttons and key UI elements */
+  --red-primary: #EE432C;
+  --red-primary-dark: #d93d29;
+  --red-primary-darker: #c83823;
+  --orange-primary: #FFB375;
+  --orange-light: #FFD7B5;
+  
   --accent-orange: #FFB375;
   --accent-orange-dark: #e69c64;
   --accent-orange-darker: #d98c51;

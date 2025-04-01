@@ -56,16 +56,16 @@ export default function Hero() {
         
         {/* Stats section */}
         <div className="grid grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
-          <div className="bg-stat rounded-lg p-4 text-center">
-            <div className="text-primary-orange font-bold text-3xl">5★</div>
+          <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 text-center border border-white/10">
+            <div className="text-accent-orange font-bold text-3xl">5★</div>
             <div className="text-white text-sm mt-1">Rated Service</div>
           </div>
-          <div className="bg-stat rounded-lg p-4 text-center">
-            <div className="text-primary-orange font-bold text-3xl">2K+</div>
+          <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 text-center border border-white/10">
+            <div className="text-accent-orange font-bold text-3xl">2K+</div>
             <div className="text-white text-sm mt-1">Cars Detailed</div>
           </div>
-          <div className="bg-stat rounded-lg p-4 text-center">
-            <div className="text-primary-orange font-bold text-3xl">100%</div>
+          <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 text-center border border-white/10">
+            <div className="text-accent-orange font-bold text-3xl">100%</div>
             <div className="text-white text-sm mt-1">Satisfaction</div>
           </div>
         </div>

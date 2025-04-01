@@ -221,7 +221,7 @@ export default function Contact() {
                   <Phone className="h-5 w-5 text-primary mt-1 mr-4" />
                   <div>
                     <h3 className="font-medium text-gray-900">Phone</h3>
-                    <p className="text-gray-700 mt-1">(714) 555-8765</p>
+                    <p className="text-gray-700 mt-1">+1 949-734-0201</p>
                     <p className="text-sm text-gray-500 mt-1">Monday-Friday: 8am-5pm</p>
                     <p className="text-sm text-gray-500">Saturday: 9am-3pm</p>
                   </div>
@@ -231,10 +231,8 @@ export default function Contact() {
                   <Mail className="h-5 w-5 text-primary mt-1 mr-4" />
                   <div>
                     <h3 className="font-medium text-gray-900">Email</h3>
-                    <p className="text-gray-700 mt-1">info@hardysdetailing.com</p>
-                    <p className="text-sm text-gray-500 mt-1">For general inquiries</p>
-                    <p className="text-gray-700 mt-3">bookings@hardysdetailing.com</p>
-                    <p className="text-sm text-gray-500 mt-1">For scheduling appointments</p>
+                    <p className="text-gray-700 mt-1">hardyswashnwax@gmail.com</p>
+                    <p className="text-sm text-gray-500 mt-1">For general inquiries and scheduling appointments</p>
                   </div>
                 </div>
                 

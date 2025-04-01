@@ -16,9 +16,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="text-xl font-bold mb-4 font-heading">PremiumShine</h3>
+            <h3 className="text-xl font-bold mb-4 font-heading">Hardys Wash N' Wax</h3>
             <p className="text-gray-300 mb-4">
-              Professional auto detailing services committed to excellence and customer satisfaction.
+              Professional mobile detailing services committed to excellence and customer satisfaction.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-300 hover:text-red-500 transition-colors">
@@ -55,15 +55,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="mr-2 text-gray-400 mt-1" size={18} />
-                <span className="text-gray-300">123 Detail Drive, Automotive City, AC 12345</span>
+                <span className="text-gray-300">Irvine, Orange County, CA</span>
               </li>
               <li className="flex items-start">
                 <Phone className="mr-2 text-gray-400 mt-1" size={18} />
-                <span className="text-gray-300">(555) 555-1234</span>
+                <span className="text-gray-300">+1 949-734-0201</span>
               </li>
               <li className="flex items-start">
                 <Mail className="mr-2 text-gray-400 mt-1" size={18} />
-                <span className="text-gray-300">info@premiumshine.com</span>
+                <span className="text-gray-300">hardyswashnwax@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -91,7 +91,7 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} PremiumShine Auto Detailing. All rights reserved.
+              &copy; {new Date().getFullYear()} Hardys Wash N' Wax. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>

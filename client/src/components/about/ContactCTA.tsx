@@ -12,13 +12,13 @@ export default function ContactCTA() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Button asChild variant="secondary" size="lg" className="inline-flex items-center bg-white text-primary hover:bg-gray-100 gap-2">
-              <a href="tel:+15555551234">
-                <Phone className="h-5 w-5" /> (555) 555-1234
+              <a href="tel:+19497340201">
+                <Phone className="h-5 w-5" /> +1 949-734-0201
               </a>
             </Button>
             <Button asChild variant="outline" size="lg" className="bg-white/10 hover:bg-white/20 text-white border-transparent inline-flex items-center gap-2">
-              <a href="mailto:info@premiumshine.com">
-                <Mail className="h-5 w-5" /> info@premiumshine.com
+              <a href="mailto:hardyswashnwax@gmail.com">
+                <Mail className="h-5 w-5" /> hardyswashnwax@gmail.com
               </a>
             </Button>
           </div>

@@ -129,7 +129,7 @@ interface EmailData {
  */
 export function prepareEmployeeEmailNotification(booking: Booking): EmailData {
   return {
-    to: 'staff@hardyswashnwax.com', // This would be replaced with actual staff emails
+    to: 'hardyswashnwax@gmail.com', // Staff email address
     subject: `New Booking Alert: ${booking.serviceCategory} for ${booking.firstName} ${booking.lastName}`,
     html: formatBookingForEmail(booking),
     text: formatBookingForPlainTextEmail(booking), // Fallback for email clients that don't support HTML

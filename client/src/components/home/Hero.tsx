@@ -1,19 +1,19 @@
 import { Link } from "wouter";
-import { Shield, Clock, Sparkles } from "lucide-react";
 import HeroLocationSearch from "./HeroLocationSearch";
 import { ThreeDButton } from "@/components/ui/3d-button";
 import '../ui/custom-3d-button.css';
 import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
+import carSunsetBg from "@assets/ChatGPT Image Mar 31, 2025, 05_35_46 PM.png";
 
 export default function Hero() {
   return (
     <div className="relative bg-secondary min-h-[85vh] overflow-hidden">
       <img 
-        src="https://images.unsplash.com/photo-1553545985-1e0d8781d5db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&h=1080&q=80" 
-        alt="Luxury car detailing" 
-        className="absolute inset-0 w-full h-full object-cover opacity-50"
+        src={carSunsetBg} 
+        alt="Luxury car detailing at sunset" 
+        className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent"></div>
       
       <div className="relative container mx-auto px-4 py-16 md:py-24">
         {/* Company logo */}
@@ -77,39 +77,6 @@ export default function Hero() {
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
             <div className="text-[#FFB375] font-bold text-3xl">100%</div>
             <div className="text-white text-sm mt-1">Satisfaction</div>
-          </div>
-        </div>
-        
-        {/* Features section under the hero */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 mb-8">
-          <div className="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6">
-            <div className="flex items-start">
-              <Sparkles className="text-[#EE432C] mr-3 mt-1 h-6 w-6" />
-              <div>
-                <span className="font-semibold text-lg">Every Detail, Mastered</span>
-                <p className="text-gray-600 mt-2">We bring an obsessive focus to every inch of your car—so it feels brand-new, inside and out.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6">
-            <div className="flex items-start">
-              <Clock className="text-[#EE432C] mr-3 mt-1 h-6 w-6" />
-              <div>
-                <span className="font-semibold text-lg">Convenience Without Compromise</span>
-                <p className="text-gray-600 mt-2">We come to you, delivering top-tier results at your doorstep while you go about your day.</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6">
-            <div className="flex items-start">
-              <Shield className="text-[#EE432C] mr-3 mt-1 h-6 w-6" />
-              <div>
-                <span className="font-semibold text-lg">Protect Your Investment</span>
-                <p className="text-gray-600 mt-2">Our services safeguard your car's longevity and keep it looking pristine for years to come.</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

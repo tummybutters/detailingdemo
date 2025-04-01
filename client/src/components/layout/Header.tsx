@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Car } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
@@ -25,11 +24,17 @@ export default function Header() {
       <div className="container mx-auto px-4 py-3">
         <nav className="flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-red-primary text-2xl font-bold font-heading">
-              <Car className="inline-block mr-2" />
-              PremiumShine
-            </span>
+          <Link href="/" className="flex items-center">
+            <div className="flex items-center">
+              <img 
+                src="/images/hardy-logo.png" 
+                alt="Hardys Wash N' Wax" 
+                className="h-12 mr-3" 
+              />
+              <span className="text-[#EE432C] text-xl font-bold font-heading">
+                Hardys Wash N' Wax
+              </span>
+            </div>
           </Link>
           
           {/* Desktop Navigation */}
@@ -39,7 +44,7 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={`font-medium transition-colors ${
-                  isActive(link.href) ? "text-orange-primary" : "text-gray-800 hover:text-orange-primary"
+                  isActive(link.href) ? "text-[#EE432C]" : "text-gray-800 hover:text-[#FFB375]"
                 }`}
               >
                 {link.label}
@@ -62,7 +67,7 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     className={`text-lg font-medium py-2 ${
-                      isActive(link.href) ? "text-orange-primary" : "text-gray-800 hover:text-orange-primary"
+                      isActive(link.href) ? "text-[#EE432C]" : "text-gray-800 hover:text-[#FFB375]"
                     }`}
                     onClick={() => setOpen(false)}
                   >

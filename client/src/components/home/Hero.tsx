@@ -15,6 +15,15 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-transparent"></div>
       
       <div className="relative container mx-auto px-4 py-16 md:py-24">
+        {/* Company logo */}
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/images/hardy-logo.png" 
+            alt="Hardys Wash N' Wax" 
+            className="h-24" 
+          />
+        </div>
+        
         {/* Main headline that spans both columns */}
         <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight text-center mb-12">
           Luxury Where It Matters Most:

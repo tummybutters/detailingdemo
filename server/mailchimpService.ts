@@ -4,7 +4,7 @@ import { Booking } from '@shared/schema';
 // Initialize the Mailchimp client
 mailchimp.setConfig({
   apiKey: process.env.MAILCHIMP_API_KEY,
-  server: process.env.MAILCHIMP_SERVER,
+  server: 'us7', // Hardcoded based on error message that showed API key is linked to us7 datacenter
 });
 
 /**

@@ -144,65 +144,252 @@ export default function ServiceList() {
           </div>
         </div>
         
-        {/* Service Cards Grid - Set to height equal cards */}
+        {/* Service Cards Grid with equal height rows */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {services.map((service) => (
-            <div 
-              key={service.id}
-              className="relative overflow-hidden rounded-lg shadow-lg flex flex-col h-full"
-              style={{ height: "650px" }} // Fixed total card height
-            >
-              {/* Card Header (Orange Section) - Fixed height */}
-              <div className={`${service.bgColor} p-5 text-center`} style={{ height: "220px" }}>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">{service.title}</h3>
-                <div className="flex items-center justify-center space-x-2 text-sm">
-                  <span className="line-through text-gray-700">{service.originalPrice}</span>
-                  <span className="font-bold text-red-600">{service.discount}</span>
-                </div>
-                <div className="text-3xl font-black mt-1 mb-4">
-                  {service.salePrice}
-                </div>
-                
-                <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
-                  {service.duration}
-                </div>
-                
-                <Link href="/booking">
-                  <Service3DButton className="w-full">
-                    BOOK NOW
-                  </Service3DButton>
-                </Link>
+          {/* First Row: Cards 1-3 */}
+          <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
+            {/* Card Header */}
+            <div className={`${services[0].bgColor} p-5 text-center`}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[0].title}</h3>
+              <div className="flex items-center justify-center space-x-2 text-sm">
+                <span className="line-through text-gray-700">{services[0].originalPrice}</span>
+                <span className="font-bold text-red-600">{services[0].discount}</span>
+              </div>
+              <div className="text-3xl font-black mt-1 mb-4">
+                {services[0].salePrice}
+              </div>
+              <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
+                {services[0].duration}
+              </div>
+              <Link href="/booking">
+                <Service3DButton className="w-full">
+                  BOOK NOW
+                </Service3DButton>
+              </Link>
+            </div>
+            
+            {/* Card Body */}
+            <div className="bg-white p-5 flex flex-col flex-grow" style={{minHeight: "400px"}}>
+              <div>
+                <ul className="space-y-3">
+                  {services[0].features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-sm">
+                      <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
               
-              {/* Card Body (White Section) - Fills remaining height */}
-              <div className="bg-white p-5 flex flex-col flex-grow">
-                {/* Service Features */}
-                <div className="mb-6">
-                  <ul className="space-y-3">
-                    {service.features.map((feature, index) => (
-                      <li key={index} className="flex items-start text-sm">
-                        <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
-                        <span>{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Bonuses Section - at bottom of card */}
-                <div className="mt-auto pt-4 border-t border-gray-200">
-                  <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
-                  <ul className="space-y-3">
-                    {service.bonuses.map((bonus, index) => (
-                      <li key={index} className="flex justify-between items-center text-sm text-gray-700">
-                        <span>{bonus.text}</span>
-                        {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <ul className="space-y-3">
+                  {services[0].bonuses.map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-          ))}
+          </div>
+          
+          <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
+            {/* Card Header */}
+            <div className={`${services[1].bgColor} p-5 text-center`}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[1].title}</h3>
+              <div className="flex items-center justify-center space-x-2 text-sm">
+                <span className="line-through text-gray-700">{services[1].originalPrice}</span>
+                <span className="font-bold text-red-600">{services[1].discount}</span>
+              </div>
+              <div className="text-3xl font-black mt-1 mb-4">
+                {services[1].salePrice}
+              </div>
+              <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
+                {services[1].duration}
+              </div>
+              <Link href="/booking">
+                <Service3DButton className="w-full">
+                  BOOK NOW
+                </Service3DButton>
+              </Link>
+            </div>
+            
+            {/* Card Body */}
+            <div className="bg-white p-5 flex flex-col flex-grow" style={{minHeight: "400px"}}>
+              <div>
+                <ul className="space-y-3">
+                  {services[1].features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-sm">
+                      <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <ul className="space-y-3">
+                  {services[1].bonuses.map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
+            {/* Card Header */}
+            <div className={`${services[2].bgColor} p-5 text-center`}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[2].title}</h3>
+              <div className="flex items-center justify-center space-x-2 text-sm">
+                <span className="line-through text-gray-700">{services[2].originalPrice}</span>
+                <span className="font-bold text-red-600">{services[2].discount}</span>
+              </div>
+              <div className="text-3xl font-black mt-1 mb-4">
+                {services[2].salePrice}
+              </div>
+              <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
+                {services[2].duration}
+              </div>
+              <Link href="/booking">
+                <Service3DButton className="w-full">
+                  BOOK NOW
+                </Service3DButton>
+              </Link>
+            </div>
+            
+            {/* Card Body */}
+            <div className="bg-white p-5 flex flex-col flex-grow" style={{minHeight: "400px"}}>
+              <div>
+                <ul className="space-y-3">
+                  {services[2].features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-sm">
+                      <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <ul className="space-y-3">
+                  {services[2].bonuses.map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          {/* Second Row: Cards 4-5 */}
+          <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
+            {/* Card Header */}
+            <div className={`${services[3].bgColor} p-5 text-center`}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[3].title}</h3>
+              <div className="flex items-center justify-center space-x-2 text-sm">
+                <span className="line-through text-gray-700">{services[3].originalPrice}</span>
+                <span className="font-bold text-red-600">{services[3].discount}</span>
+              </div>
+              <div className="text-3xl font-black mt-1 mb-4">
+                {services[3].salePrice}
+              </div>
+              <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
+                {services[3].duration}
+              </div>
+              <Link href="/booking">
+                <Service3DButton className="w-full">
+                  BOOK NOW
+                </Service3DButton>
+              </Link>
+            </div>
+            
+            {/* Card Body */}
+            <div className="bg-white p-5 flex flex-col flex-grow" style={{minHeight: "450px"}}>
+              <div>
+                <ul className="space-y-3">
+                  {services[3].features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-sm">
+                      <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <ul className="space-y-3">
+                  {services[3].bonuses.map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
+            {/* Card Header */}
+            <div className={`${services[4].bgColor} p-5 text-center`}>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[4].title}</h3>
+              <div className="flex items-center justify-center space-x-2 text-sm">
+                <span className="line-through text-gray-700">{services[4].originalPrice}</span>
+                <span className="font-bold text-red-600">{services[4].discount}</span>
+              </div>
+              <div className="text-3xl font-black mt-1 mb-4">
+                {services[4].salePrice}
+              </div>
+              <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
+                {services[4].duration}
+              </div>
+              <Link href="/booking">
+                <Service3DButton className="w-full">
+                  BOOK NOW
+                </Service3DButton>
+              </Link>
+            </div>
+            
+            {/* Card Body */}
+            <div className="bg-white p-5 flex flex-col flex-grow" style={{minHeight: "450px"}}>
+              <div>
+                <ul className="space-y-3">
+                  {services[4].features.map((feature, index) => (
+                    <li key={index} className="flex items-start text-sm">
+                      <CheckCircle2 className="text-primary shrink-0 mr-2 mt-0.5 h-4 w-4" />
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div className="mt-auto pt-4 border-t border-gray-200">
+                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <ul className="space-y-3">
+                  {services[4].bonuses.map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          {/* Empty div to maintain grid alignment with 5 items */}
+          <div className="hidden lg:block"></div>
         </div>
         
         {/* CTA Section */}

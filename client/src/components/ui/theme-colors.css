@@ -1,108 +1,62 @@
+/* Theme Colors */
 :root {
-  --primary-red: #EE432C;
-  --primary-orange: #FFB375;
-  --light-orange: #FFD7B5;
-  --cream: #F3F4E6;
-  --background-gradient-start: rgba(0, 0, 0, 0.3);
-  --background-gradient-end: transparent;
-  --stat-background: rgba(255, 255, 255, 0.1);
-  --text-white: #ffffff;
-  --text-gray: #f0f0f0;
+  --body-bg: #F3F4E6;
+  --primary: #EE432C;
+  --primary-dark: #d93d29;
+  --primary-darker: #ba3021;
+  --primary-light: #f05e4a;
+  --primary-lighter: #f27a69;
+  
+  --accent-orange: #FFB375;
+  --accent-orange-dark: #e69c64;
+  --accent-orange-darker: #d98c51;
+  --accent-orange-light: #ffbf89;
+  --accent-orange-lighter: #ffd7b5;
+  
   --text-dark: #333333;
+  --text-medium: #555555;
+  --text-light: #777777;
 }
 
-/* Background colors */
-.bg-primary-red {
-  background-color: var(--primary-red);
-}
-
-.bg-primary-orange {
-  background-color: var(--primary-orange);
-}
-
-.bg-light-orange {
-  background-color: var(--light-orange);
-}
-
-.bg-cream {
-  background-color: var(--cream);
-}
-
-.bg-stat {
-  background-color: var(--stat-background);
-  backdrop-filter: blur(4px);
-}
-
-/* Text colors */
+/* Custom utility classes */
 .text-primary-red {
-  color: var(--primary-red);
+  color: var(--primary);
 }
 
-.text-primary-orange {
-  color: var(--primary-orange);
+.bg-primary-red {
+  background-color: var(--primary);
 }
 
-.text-light-orange {
-  color: var(--light-orange);
-}
-
-.text-cream {
-  color: var(--cream);
-}
-
-/* Border colors */
 .border-primary-red {
-  border-color: var(--primary-red);
+  border-color: var(--primary);
 }
 
-.border-primary-orange {
-  border-color: var(--primary-orange);
+.text-accent-orange {
+  color: var(--accent-orange);
 }
 
-.border-light-orange {
-  border-color: var(--light-orange);
+.bg-accent-orange {
+  background-color: var(--accent-orange);
 }
 
-/* Gradients */
-.bg-sunset-gradient {
-  background: linear-gradient(to right, var(--primary-red), var(--primary-orange));
+.border-accent-orange {
+  border-color: var(--accent-orange);
 }
 
-.bg-overlay-gradient {
-  background: linear-gradient(to bottom, var(--background-gradient-start), var(--background-gradient-end));
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
-/* Button hover effects */
-.hover-primary:hover {
-  background-color: var(--primary-red);
-  color: white;
+/* Button gradients */
+.btn-gradient-primary {
+  background: radial-gradient(var(--primary-light), var(--primary));
 }
 
-.hover-orange:hover {
-  background-color: var(--primary-orange);
-  color: white;
-}
-
-/* Card styles */
-.card-sunset {
-  background-color: var(--light-orange);
-  border: 1px solid var(--primary-orange);
-}
-
-/* Stats card */
-.stat-card {
-  background-color: var(--stat-background);
-  backdrop-filter: blur(4px);
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-.hero-overlay {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-/* Apply the sunset colors to the whole site */
-body {
-  background-color: var(--cream);
-  color: var(--text-dark);
+.btn-gradient-secondary {
+  background: radial-gradient(var(--accent-orange-light), var(--accent-orange));
 }

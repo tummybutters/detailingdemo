@@ -6,8 +6,11 @@ import { bookingFormSchema } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
-import { CheckCircle, ArrowRight, ArrowLeft, MapPin, Calendar, Car, Settings, ClipboardList, Clock, DollarSign, X, Check } from "lucide-react";
+import { CheckCircle, ArrowRight, ArrowLeft, MapPin, Calendar, Car, Settings, 
+  ClipboardList, Clock, DollarSign, X, Check, Droplets, Sparkles, 
+  Search, PenTool, Brush, ShieldCheck, Truck, Layers, ChevronsUp } from "lucide-react";
 import LocationSearch from "./LocationSearch";
+import { ThreeDButton } from "@/components/ui/3d-button";
 
 import {
   Form,
@@ -38,20 +41,20 @@ type FormValues = z.infer<typeof bookingFormSchema>;
 
 // Vehicle Types
 const vehicleTypes = [
-  { value: "sedan", label: "Sedan", icon: "🚗", description: "Standard 4-door car" },
-  { value: "coupe", label: "Coupe", icon: "🏎️", description: "2-door sporty car" },
-  { value: "suv", label: "SUV/Crossover", icon: "🚙", description: "Sport utility vehicle" },
-  { value: "truck", label: "Truck", icon: "🛻", description: "Pickup truck" },
-  { value: "van", label: "Van/Minivan", icon: "🚐", description: "Family or cargo van" },
-  { value: "luxury", label: "Luxury/Sports Car", icon: "🏎️", description: "High-end performance vehicle" },
+  { value: "sedan", label: "Sedan", icon: <Car className="w-6 h-6 text-primary-red" />, description: "Standard 4-door car" },
+  { value: "coupe", label: "Coupe", icon: <Car className="w-6 h-6 text-primary-red" />, description: "2-door sporty car" },
+  { value: "suv", label: "SUV/Crossover", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Sport utility vehicle" },
+  { value: "truck", label: "Truck", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Pickup truck" },
+  { value: "van", label: "Van/Minivan", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Family or cargo van" },
+  { value: "luxury", label: "Luxury/Sports Car", icon: <Car className="w-6 h-6 text-primary-red" />, description: "High-end performance vehicle" },
 ];
 
 // Categories 
 const serviceCategories = [
-  { value: "interior", label: "Interior Only", icon: "🧹", description: "Focus on cleaning the inside of your vehicle" },
-  { value: "exterior", label: "Exterior Only", icon: "💦", description: "Focus on making the outside shine" },
-  { value: "complete", label: "Complete Package", icon: "✨", description: "Full interior and exterior detailing" },
-  { value: "specialty", label: "Specialty Services", icon: "🔍", description: "Specific treatments for particular issues" }
+  { value: "interior", label: "Interior Only", icon: <Brush className="w-6 h-6 text-primary-red" />, description: "Focus on cleaning the inside of your vehicle" },
+  { value: "exterior", label: "Exterior Only", icon: <Droplets className="w-6 h-6 text-primary-red" />, description: "Focus on making the outside shine" },
+  { value: "complete", label: "Complete Package", icon: <Sparkles className="w-6 h-6 text-primary-red" />, description: "Full interior and exterior detailing" },
+  { value: "specialty", label: "Specialty Services", icon: <Search className="w-6 h-6 text-primary-red" />, description: "Specific treatments for particular issues" }
 ];
 
 // Service Packages
@@ -1080,22 +1083,22 @@ export default function MultiStepBookingForm() {
                 {currentStep < 8 && (
                   <div className={`flex ${currentStep > 0 ? 'justify-between' : 'justify-end'} mt-8 pt-4 border-t border-gray-200`}>
                     {currentStep > 0 && (
-                      <Button
+                      <ThreeDButton
                         type="button"
                         onClick={handlePrevious}
-                        variant="outline"
+                        variant="secondary"
                         className="border-gray-300"
                       >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
-                      </Button>
+                      </ThreeDButton>
                     )}
                     
-                    <Button
+                    <ThreeDButton
                       type="button"
                       onClick={handleNext}
                       disabled={isSubmitting}
-                      className="bg-primary hover:bg-primary/90"
+                      variant="primary"
                     >
                       {currentStep === 7 ? (
                         isSubmitting ? "Processing..." : "Confirm Booking"
@@ -1105,7 +1108,7 @@ export default function MultiStepBookingForm() {
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </>
                       )}
-                    </Button>
+                    </ThreeDButton>
                   </div>
                 )}
               </div>

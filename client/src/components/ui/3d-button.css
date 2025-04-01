@@ -1,0 +1,52 @@
+/* 3D Button Styles */
+.button {
+  --button-text-color: white;
+  --button-gradient: radial-gradient(#EE432C, #d93d29);
+  --button-bottom-color: #ba3021;
+  --button-shadow-color: rgba(0, 0, 0, 0.5);
+  transform-style: preserve-3d;
+  position: relative;
+  outline: none;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.button:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+.button:not(:disabled):active .button-top {
+  transform: translateY(2px);
+}
+
+.button:not(:disabled):active .button-bottom {
+  height: calc(100% - 12px);
+}
+
+.button-top {
+  background-image: var(--button-gradient);
+  color: var(--button-text-color);
+  border-radius: 10px;
+  box-shadow: 
+    0 -1px 0 0 rgba(255, 255, 255, 0.2) inset,
+    0 1px 0 0 rgba(0, 0, 0, 0.3) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.3) inset;
+}
+
+.button:hover:not(:disabled) .button-top {
+  filter: brightness(1.1);
+}
+
+.button:focus-visible {
+  outline: 2px solid rgba(238, 67, 44, 0.5);
+  outline-offset: 2px;
+}
+
+/* Add to index.css */
+@media (prefers-reduced-motion) {
+  .button,
+  .button-top,
+  .button-bottom {
+    transition: none;
+  }
+}

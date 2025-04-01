@@ -12,18 +12,9 @@ export default function Hero() {
         alt="Luxury car detailing at sunset" 
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent"></div>
+      <div className="absolute inset-0 bg-overlay-gradient"></div>
       
       <div className="relative container mx-auto px-4 py-16 md:py-24">
-        {/* Company logo */}
-        <div className="flex justify-start mb-8">
-          <img 
-            src={hardyLogoPath} 
-            alt="Hardys Wash N' Wax" 
-            className="h-24" 
-          />
-        </div>
-        
         {/* Main headline - larger and left-aligned */}
         <h1 className="text-white text-5xl md:text-6xl lg:text-7xl font-bold font-heading leading-tight text-left mb-10 max-w-5xl">
           Luxury Where It Matters Most:
@@ -44,7 +35,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-6 mt-6">
               <Link href="/booking">
                 <HeroButton className="text-base sm:text-lg">
-                  🚗 Book Your Luxury Detail
+                  Book Your Luxury Detail
                 </HeroButton>
               </Link>
               <Link href="/services">
@@ -65,16 +56,16 @@ export default function Hero() {
         
         {/* Stats section */}
         <div className="grid grid-cols-3 gap-4 mt-12 max-w-3xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-            <div className="text-[#FFB375] font-bold text-3xl">5★</div>
+          <div className="bg-stat rounded-lg p-4 text-center">
+            <div className="text-primary-orange font-bold text-3xl">5★</div>
             <div className="text-white text-sm mt-1">Rated Service</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-            <div className="text-[#FFB375] font-bold text-3xl">2K+</div>
+          <div className="bg-stat rounded-lg p-4 text-center">
+            <div className="text-primary-orange font-bold text-3xl">2K+</div>
             <div className="text-white text-sm mt-1">Cars Detailed</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-            <div className="text-[#FFB375] font-bold text-3xl">100%</div>
+          <div className="bg-stat rounded-lg p-4 text-center">
+            <div className="text-primary-orange font-bold text-3xl">100%</div>
             <div className="text-white text-sm mt-1">Satisfaction</div>
           </div>
         </div>

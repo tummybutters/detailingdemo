@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { useEffect } from "react";
 import App from "./App";
 import "./index.css";
+import "./components/ui/theme-colors.css";
 
 // Initialize global Mapbox search after load
 const MapboxSearchInitializer = () => {

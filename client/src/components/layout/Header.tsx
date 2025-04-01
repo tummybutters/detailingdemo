@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 bg-[#FFD7B5] shadow-md z-50">
+    <header className="sticky top-0 bg-light-orange shadow-md z-50">
       <div className="container mx-auto px-4 py-3">
         <nav className="flex justify-between items-center">
           {/* Logo */}
@@ -53,12 +53,12 @@ export default function Header() {
           {/* Mobile Navigation Button */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden text-[#333333]">
+              <Button variant="ghost" size="icon" className="md:hidden text-text-dark">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent className="bg-[#FFD7B5]">
+            <SheetContent className="bg-light-orange">
               <div className="flex flex-col mt-12">
                 {navLinks.map((link) => (
                   <Link

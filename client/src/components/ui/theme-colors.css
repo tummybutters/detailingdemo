@@ -1,0 +1,108 @@
+:root {
+  --primary-red: #EE432C;
+  --primary-orange: #FFB375;
+  --light-orange: #FFD7B5;
+  --cream: #F3F4E6;
+  --background-gradient-start: rgba(0, 0, 0, 0.3);
+  --background-gradient-end: transparent;
+  --stat-background: rgba(255, 255, 255, 0.1);
+  --text-white: #ffffff;
+  --text-gray: #f0f0f0;
+  --text-dark: #333333;
+}
+
+/* Background colors */
+.bg-primary-red {
+  background-color: var(--primary-red);
+}
+
+.bg-primary-orange {
+  background-color: var(--primary-orange);
+}
+
+.bg-light-orange {
+  background-color: var(--light-orange);
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.bg-stat {
+  background-color: var(--stat-background);
+  backdrop-filter: blur(4px);
+}
+
+/* Text colors */
+.text-primary-red {
+  color: var(--primary-red);
+}
+
+.text-primary-orange {
+  color: var(--primary-orange);
+}
+
+.text-light-orange {
+  color: var(--light-orange);
+}
+
+.text-cream {
+  color: var(--cream);
+}
+
+/* Border colors */
+.border-primary-red {
+  border-color: var(--primary-red);
+}
+
+.border-primary-orange {
+  border-color: var(--primary-orange);
+}
+
+.border-light-orange {
+  border-color: var(--light-orange);
+}
+
+/* Gradients */
+.bg-sunset-gradient {
+  background: linear-gradient(to right, var(--primary-red), var(--primary-orange));
+}
+
+.bg-overlay-gradient {
+  background: linear-gradient(to bottom, var(--background-gradient-start), var(--background-gradient-end));
+}
+
+/* Button hover effects */
+.hover-primary:hover {
+  background-color: var(--primary-red);
+  color: white;
+}
+
+.hover-orange:hover {
+  background-color: var(--primary-orange);
+  color: white;
+}
+
+/* Card styles */
+.card-sunset {
+  background-color: var(--light-orange);
+  border: 1px solid var(--primary-orange);
+}
+
+/* Stats card */
+.stat-card {
+  background-color: var(--stat-background);
+  backdrop-filter: blur(4px);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply the sunset colors to the whole site */
+body {
+  background-color: var(--cream);
+  color: var(--text-dark);
+}

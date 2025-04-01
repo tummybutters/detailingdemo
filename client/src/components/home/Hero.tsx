@@ -1,11 +1,12 @@
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
 import { Shield, Clock, Sparkles } from "lucide-react";
 import HeroLocationSearch from "./HeroLocationSearch";
+import { ThreeDButton } from "@/components/ui/3d-button";
+import '../ui/custom-3d-button.css';
 
 export default function Hero() {
   return (
-    <div className="relative bg-secondary min-h-[90vh] overflow-hidden">
+    <div className="relative bg-secondary min-h-[85vh] overflow-hidden">
       <img 
         src="https://images.unsplash.com/photo-1553545985-1e0d8781d5db?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&h=1080&q=80" 
         alt="Luxury car detailing" 
@@ -14,44 +15,34 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-transparent"></div>
       
       <div className="relative container mx-auto px-4 py-16 md:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[calc(90vh-8rem)]">
+        {/* Main headline that spans both columns */}
+        <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight text-center mb-12">
+          Luxury Where It Matters Most:
+        </h1>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[calc(80vh-12rem)]">
           {/* Left side content */}
           <div className="flex flex-col justify-center">
-            <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold font-heading leading-tight">
-              Luxury Where It Matters Most: 
-              <span className="block mt-2">Your Home on the Road</span>
-            </h1>
+            <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight">
+              Your Home on the Road,
+              <span className="block mt-2">Detailed Right at Your Door.</span>
+            </h2>
             
-            <div className="bg-gradient-to-r from-[#FFB375] to-[#EE432C] text-white inline-block px-3 py-2 my-6 rounded-md">
-              <span className="text-lg md:text-xl font-semibold">Detailed Right at Your Door</span>
-            </div>
-            
-            <p className="text-gray-100 text-xl mb-6 font-light">
+            <p className="text-gray-100 text-xl mt-6 mb-8 font-light">
               "You'll spend thousands of Hours in your Car, Let Us Spend Two making it perfect"
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Button asChild size="lg" className="bg-red-600 hover:bg-red-700 text-white">
-                <Link href="/booking">🚗 Book Your Luxury Detail Now</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="bg-white/10 hover:bg-white/20 text-white backdrop-blur border-transparent">
-                <Link href="/services">View Our Services</Link>
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4 mt-12">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-                <div className="text-[#FFB375] font-bold text-3xl">5★</div>
-                <div className="text-white text-sm mt-1">Rated Service</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-                <div className="text-[#FFB375] font-bold text-3xl">2K+</div>
-                <div className="text-white text-sm mt-1">Cars Detailed</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-                <div className="text-[#FFB375] font-bold text-3xl">100%</div>
-                <div className="text-white text-sm mt-1">Satisfaction</div>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-6 mt-6">
+              <Link href="/booking">
+                <ThreeDButton variant="primary" className="text-base sm:text-lg py-3 px-5">
+                  🚗 Book Your Luxury Detail
+                </ThreeDButton>
+              </Link>
+              <Link href="/services">
+                <ThreeDButton variant="secondary" className="text-base sm:text-lg py-3 px-5">
+                  View Our Services
+                </ThreeDButton>
+              </Link>
             </div>
           </div>
           
@@ -63,8 +54,24 @@ export default function Hero() {
           </div>
         </div>
         
+        {/* Stats section */}
+        <div className="grid grid-cols-3 gap-4 mt-8 max-w-3xl mx-auto">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+            <div className="text-[#FFB375] font-bold text-3xl">5★</div>
+            <div className="text-white text-sm mt-1">Rated Service</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+            <div className="text-[#FFB375] font-bold text-3xl">2K+</div>
+            <div className="text-white text-sm mt-1">Cars Detailed</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+            <div className="text-[#FFB375] font-bold text-3xl">100%</div>
+            <div className="text-white text-sm mt-1">Satisfaction</div>
+          </div>
+        </div>
+        
         {/* Features section under the hero */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 md:mt-0 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 mb-8">
           <div className="bg-white/95 backdrop-blur rounded-lg shadow-lg p-6">
             <div className="flex items-start">
               <Sparkles className="text-[#EE432C] mr-3 mt-1 h-6 w-6" />

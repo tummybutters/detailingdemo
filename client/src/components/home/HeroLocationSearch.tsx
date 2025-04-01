@@ -264,7 +264,7 @@ export default function HeroLocationSearch() {
       <form ref={formRef} className="space-y-4" onSubmit={(e) => e.preventDefault()}>
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700 flex items-center">
-            <MapPin className="h-4 w-4 mr-1 text-primary" />
+            <MapPin className="h-4 w-4 mr-1 text-[#EE432C]" />
             Your Location
           </label>
           
@@ -274,7 +274,11 @@ export default function HeroLocationSearch() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Enter your address"
-              className={`pr-8 ${isInServiceArea === false ? 'border-red-500' : isInServiceArea === true ? 'border-green-500' : 'border-gray-300'}`}
+              className={`pr-8 bg-[#FFD7B5]/20 border-[#FFB375] rounded-md focus:ring-[#EE432C] focus:border-[#EE432C] ${
+                isInServiceArea === false ? 'border-red-500' : 
+                isInServiceArea === true ? 'border-green-500' : 
+                'border-[#FFB375]'
+              }`}
             />
             
             {isInServiceArea !== null && (
@@ -297,14 +301,14 @@ export default function HeroLocationSearch() {
         
         <div 
           ref={mapContainerRef} 
-          className="h-[120px] w-full rounded-md border border-gray-200 overflow-hidden"
+          className="h-[120px] w-full rounded-md border border-[#FFB375] overflow-hidden"
         />
         
         <div className="pt-2">
           <Button 
             onClick={handleGetQuote}
             disabled={!isInServiceArea || !address}
-            className="w-full bg-red-600 hover:bg-red-700 text-white"
+            className="w-full bg-[#EE432C] hover:bg-[#d93d29] text-white flex items-center justify-center py-2 rounded-md"
           >
             Get an Instant Quote
             <ArrowRight className="ml-2 h-4 w-4" />

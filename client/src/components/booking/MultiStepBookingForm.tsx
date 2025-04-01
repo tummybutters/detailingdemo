@@ -924,42 +924,45 @@ export default function MultiStepBookingForm() {
                       <div className="mt-6">
                         <h3 className="font-medium mb-3">Enhance Your Service with Add-ons</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {addOnServices.map((addon) => (
-                            <div 
-                              key={addon.id}
-                              className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
-                                ${selectedAddOns.includes(addon.id) 
-                                  ? 'border-2 border-primary transform -translate-y-1' 
-                                  : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
-                                }
-                                before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
-                                before:bg-gray-100 before:-z-10 before:border before:border-gray-200
-                              `}
-                            >
-                              <div className="p-3">
-                                <div className="flex items-start">
-                                  <Checkbox
-                                    id={addon.id}
-                                    checked={selectedAddOns.includes(addon.id)}
-                                    onCheckedChange={(checked) => {
-                                      handleAddOnChange(addon.id, checked as boolean);
-                                    }}
-                                    className="mt-1 mr-3"
-                                  />
-                                  <div className="flex-1">
-                                    <label
-                                      htmlFor={addon.id}
-                                      className="flex justify-between w-full font-medium cursor-pointer"
-                                    >
-                                      <span>{addon.label}</span>
-                                      <span className="text-primary font-bold px-2 py-0.5 bg-primary/5 rounded-md">{addon.price}</span>
-                                    </label>
-                                    <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
+                          {addOnServices.map((addon) => {
+                            const isSelected = selectedAddOns.includes(addon.id);
+                            return (
+                              <div 
+                                key={addon.id}
+                                className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                  ${isSelected 
+                                    ? 'border-2 border-primary transform -translate-y-1' 
+                                    : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                  }
+                                  before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                  before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                `}
+                                onClick={() => handleAddOnChange(addon.id, !isSelected)}
+                              >
+                                <div className="p-3">
+                                  <div className="flex items-start">
+                                    <Checkbox
+                                      id={addon.id}
+                                      checked={isSelected}
+                                      onCheckedChange={(checked) => {
+                                        handleAddOnChange(addon.id, checked as boolean);
+                                      }}
+                                      className={`mt-1 mr-3 ${isSelected ? 'bg-primary text-primary-foreground border-primary' : ''}`}
+                                    />
+                                    <div className="flex-1">
+                                      <div
+                                        className="flex justify-between w-full font-medium cursor-pointer"
+                                      >
+                                        <span>{addon.label}</span>
+                                        <span className="text-primary font-bold px-2 py-0.5 bg-primary/5 rounded-md">{addon.price}</span>
+                                      </div>
+                                      <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -1362,16 +1365,16 @@ export default function MultiStepBookingForm() {
                   </div>
                 )}
                 
-                {/* Navigation buttons - optimized for mobile */}
+                {/* Navigation buttons */}
                 {currentStep < 8 && (
-                  <div className={`flex ${currentStep > 0 ? 'justify-between' : 'justify-end'} mt-6 sm:mt-8 pt-4 border-t border-gray-200`}>
+                  <div className={`flex ${currentStep > 0 ? 'justify-between' : 'justify-end'} mt-8 pt-4 border-t border-gray-200`}>
                     {currentStep > 0 && (
                       <BackButton
                         type="button"
                         onClick={handlePrevious}
-                        className="border-gray-300 text-sm sm:text-base"
+                        className="border-gray-300"
                       >
-                        <ArrowLeft className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                        <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                       </BackButton>
                     )}
@@ -1381,14 +1384,13 @@ export default function MultiStepBookingForm() {
                       onClick={handleNext}
                       disabled={isSubmitting}
                       variant="primary"
-                      className="text-sm sm:text-base px-4 py-2 sm:px-6 sm:py-3"
                     >
                       {currentStep === 7 ? (
                         isSubmitting ? "Processing..." : "Confirm Booking"
                       ) : (
                         <>
-                          {isMobile ? "Next" : "Continue"}
-                          <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4" />
+                          Continue
+                          <ArrowRight className="ml-2 h-4 w-4" />
                         </>
                       )}
                     </ThreeDButton>

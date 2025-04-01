@@ -114,23 +114,34 @@ Booking Time: ${new Date(booking.createdAt || Date.now()).toLocaleString()}
   `;
 }
 
+// Define an interface for our email data structure
+interface EmailData {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+  booking: Booking;
+  enhancedData?: any; // Optional field for enriched booking data
+}
+
 /**
  * Prepares the email content for an employee notification
  */
-export function prepareEmployeeEmailNotification(booking: Booking) {
+export function prepareEmployeeEmailNotification(booking: Booking): EmailData {
   return {
     to: 'staff@hardyswashnwax.com', // This would be replaced with actual staff emails
     subject: `New Booking Alert: ${booking.serviceCategory} for ${booking.firstName} ${booking.lastName}`,
     html: formatBookingForEmail(booking),
     text: formatBookingForPlainTextEmail(booking), // Fallback for email clients that don't support HTML
-    booking: booking // Include full booking data for any additional processing
+    booking: booking, // Include full booking data for any additional processing
+    enhancedData: undefined // Will be populated in routes.ts when necessary
   };
 }
 
 /**
  * Prepares the email content for a customer confirmation
  */
-export function prepareCustomerEmailConfirmation(booking: Booking) {
+export function prepareCustomerEmailConfirmation(booking: Booking): EmailData {
   return {
     to: booking.email,
     subject: `Your Hardys Wash N' Wax Booking Confirmation`,
@@ -144,7 +155,7 @@ export function prepareCustomerEmailConfirmation(booking: Booking) {
  * In a production environment, this would connect to an email service like SendGrid, Mailgun, etc.
  * For this demo, we'll just log the email content
  */
-export function sendEmailNotification(emailData: any): Promise<boolean> {
+export function sendEmailNotification(emailData: EmailData): Promise<boolean> {
   // In a real implementation, this would use something like:
   // return sendgridClient.send(emailData);
   
@@ -155,6 +166,29 @@ export function sendEmailNotification(emailData: any): Promise<boolean> {
   console.log(`Customer: ${emailData.booking.firstName} ${emailData.booking.lastName}`);
   console.log(`Service: ${emailData.booking.mainService}`);
   console.log(`Appointment: ${emailData.booking.appointmentDate} at ${emailData.booking.appointmentTime}`);
+  
+  // Log enhanced data if available (for employee emails only)
+  if (emailData.enhancedData) {
+    console.log('\n--- ENHANCED BOOKING DATA ---');
+    console.log('Vehicle Type:', emailData.enhancedData.vehicleTypeName || emailData.booking.vehicleType);
+    console.log('Service Category:', emailData.enhancedData.serviceCategoryName || emailData.booking.serviceCategory);
+    console.log('Selected Service:', emailData.enhancedData.mainServiceName || emailData.booking.mainService);
+    
+    if (emailData.enhancedData.addOnDetailsList && emailData.enhancedData.addOnDetailsList.length > 0) {
+      console.log('\nSelected Add-ons:');
+      emailData.enhancedData.addOnDetailsList.forEach((addon: any) => {
+        console.log(`- ${addon.name} (${addon.price})`);
+      });
+    }
+    
+    if (emailData.enhancedData.coordinates) {
+      console.log('\nLocation Coordinates:', emailData.enhancedData.coordinates.join(', '));
+    }
+    
+    console.log('\nTotal Price:', emailData.enhancedData.totalPrice || emailData.booking.totalPrice);
+    console.log('---------------------------');
+  }
+  
   console.log('=======================================================');
   
   // Return a successful promise for demo purposes

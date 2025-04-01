@@ -10,6 +10,37 @@ import {
   sendEmailNotification 
 } from "./emailService";
 
+// Type for enhanced booking data
+interface EnhancedBookingData {
+  reference?: string;
+  status?: string;
+  timestamp?: string;
+  location?: string;
+  coordinates?: [number, number];
+  vehicleType?: string;
+  vehicleTypeName?: string;
+  vehicleCondition?: string;
+  serviceCategory?: string;
+  serviceCategoryName?: string;
+  mainService?: string;
+  mainServiceName?: string;
+  mainServicePrice?: string;
+  mainServiceDuration?: string;
+  addOns?: string;
+  addOnDetailsList?: Array<{id: string; name?: string; price?: string}>;
+  appointmentDate?: string;
+  appointmentTime?: string;
+  appointmentTimeFormatted?: string;
+  totalPrice?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  submittedFrom?: string;
+  userAgent?: string;
+  [key: string]: any; // Allow for additional properties
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
@@ -17,25 +48,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Booking endpoints
   app.post('/api/bookings', async (req, res) => {
     try {
-      // Validate the request body
-      const validatedData = bookingFormSchema.parse(req.body);
+      // Extract the comprehensive tracking data if it exists
+      const { bookingData, ...formData } = req.body;
       
-      // Generate a unique booking reference (will be added by storage layer)
-      const bookingReference = `HWW-${Date.now().toString().slice(-6)}-${Math.floor(Math.random() * 1000)}`;
+      // Validate the core booking data
+      const validatedData = bookingFormSchema.parse(formData);
       
       // Create the booking
       const booking = await storage.createBooking(validatedData);
       
-      // Prepare and send employee notification email
+      // Log comprehensive data if available
+      if (bookingData) {
+        console.log('===== COMPREHENSIVE BOOKING DATA =====');
+        console.log(JSON.stringify(bookingData, null, 2));
+        console.log('=====================================');
+      }
+      
+      // Prepare and send employee notification email with the enhanced data
       const employeeEmailData = prepareEmployeeEmailNotification(booking);
+      // If we have comprehensive data, add it to the email for the employees
+      if (bookingData) {
+        employeeEmailData.enhancedData = bookingData as EnhancedBookingData;
+      }
       await sendEmailNotification(employeeEmailData);
       
-      // Prepare and send customer confirmation email
+      // Prepare and send customer confirmation email (without the enhanced data)
       const customerEmailData = prepareCustomerEmailConfirmation(booking);
       await sendEmailNotification(customerEmailData);
       
-      // Log booking for tracking purposes
-      console.log(`New booking (${bookingReference}) created for ${booking.firstName} ${booking.lastName}`);
+      // Log basic booking info
+      console.log(`New booking (${booking.bookingReference}) created for ${booking.firstName} ${booking.lastName}`);
       console.log(`Vehicle: ${booking.vehicleType}, Service: ${booking.mainService}`);
       console.log(`Appointment: ${booking.appointmentDate} at ${booking.appointmentTime}`);
       console.log(`Location: ${booking.location}`);

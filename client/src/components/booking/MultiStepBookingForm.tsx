@@ -334,13 +334,90 @@ export default function MultiStepBookingForm() {
     }
   };
   
+  // Function to collect all essential booking data in one place
+  const captureBookingData = () => {
+    // Get current form data
+    const formData = form.getValues();
+    
+    // Get service details
+    const selectedService = getSelectedServiceDetails();
+    
+    // Get add-ons info
+    const addOnDetails = selectedAddOns.map(id => {
+      const addon = addOnServices.find(a => a.id === id);
+      return { id, name: addon?.label, price: addon?.price };
+    });
+    
+    // Get vehicle type details
+    const vehicleTypeDetails = vehicleTypes.find(v => v.value === formData.vehicleType);
+    
+    // Get time slot details
+    const timeSlotDetails = timeSlots.find(slot => slot.value === formData.appointmentTime);
+    
+    // Comprehensive booking data object
+    const bookingData = {
+      // Basic info
+      reference: bookingReference,
+      status: "pending",
+      timestamp: new Date().toISOString(),
+      
+      // Location
+      location: formData.location,
+      coordinates: addressCoordinates,
+      
+      // Vehicle info
+      vehicleType: formData.vehicleType,
+      vehicleTypeName: vehicleTypeDetails?.label || '',
+      vehicleCondition: formData.conditionNotes || 'No notes provided',
+      
+      // Service selection
+      serviceCategory: formData.serviceCategory,
+      serviceCategoryName: serviceCategories.find(c => c.value === formData.serviceCategory)?.label || '',
+      mainService: formData.mainService,
+      mainServiceName: selectedService?.label || '',
+      mainServicePrice: selectedService?.price || '',
+      mainServiceDuration: selectedService?.duration || '',
+      
+      // Add-ons
+      addOns: selectedAddOns.join(", "),
+      addOnDetailsList: addOnDetails,
+      
+      // Appointment details
+      appointmentDate: formData.appointmentDate,
+      appointmentTime: formData.appointmentTime,
+      appointmentTimeFormatted: timeSlotDetails?.label || '',
+      
+      // Pricing
+      totalPrice: formData.totalPrice,
+      
+      // Customer details
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      
+      // For backend tracking
+      submittedFrom: 'website',
+      userAgent: navigator.userAgent,
+    };
+    
+    // Log the comprehensive data (in production, this would be sent to analytics)
+    console.log('COMPLETE BOOKING DATA:', bookingData);
+    
+    return bookingData;
+  };
+
   // Booking submission mutation
   const bookingMutation = useMutation({
     mutationFn: (data: FormValues) => {
+      // Capture all booking data when submitting
+      const completeBookingData = captureBookingData();
+      
       return apiRequest("POST", "/api/bookings", {
         ...data,
         addOns: selectedAddOns.join(", "),
-        bookingReference: bookingReference
+        bookingReference: bookingReference,
+        bookingData: completeBookingData // Send the complete data for analytics
       });
     },
     onSuccess: async () => {
@@ -366,9 +443,6 @@ export default function MultiStepBookingForm() {
     const fields = getFieldsForStep(currentStep);
     const stepName = steps[currentStep]?.id || `step_${currentStep}`;
     
-    // Track step navigation attempt
-    trackInteraction('attempt_next_step', 'navigation', stepName);
-    
     // Special handling for review step
     if (currentStep === 7) {
       try {
@@ -376,18 +450,8 @@ export default function MultiStepBookingForm() {
         const ref = generateBookingReference();
         setBookingReference(ref);
         
-        // Track booking submission
-        trackInteraction('booking_submission', 'form', ref);
-        
-        // Get current form data for tracking
-        const formData = form.getValues();
-        trackInteraction('complete_booking_data', 'form', JSON.stringify({
-          vehicle: formData.vehicleType,
-          service: formData.mainService,
-          date: formData.appointmentDate,
-          time: formData.appointmentTime,
-          addOns: selectedAddOns.length
-        }));
+        // Log the current state of the form
+        console.log('SUBMITTING BOOKING:', { step: 'review', reference: ref });
         
         // Submit the form
         await form.handleSubmit((data) => {
@@ -395,7 +459,6 @@ export default function MultiStepBookingForm() {
         })();
       } catch (error) {
         console.error("Error submitting form:", error);
-        trackInteraction('booking_submission_error', 'form', String(error));
         setIsSubmitting(false);
       }
       return;
@@ -405,15 +468,64 @@ export default function MultiStepBookingForm() {
     const isStepValid = await validateStepFields(fields);
     
     if (isStepValid && currentStep < steps.length - 1) {
-      // Track successful step completion
-      trackInteraction('complete_step', 'navigation', stepName);
+      // Capture data at each step
+      const currentData = form.getValues();
+      
+      // Log the current step's data
+      switch(currentStep) {
+        case 0:
+          console.log('BOOKING DATA - LOCATION:', {
+            location: currentData.location,
+            coordinates: addressCoordinates,
+            isValidAddress
+          });
+          break;
+        case 1:
+          console.log('BOOKING DATA - VEHICLE:', {
+            vehicleType: currentData.vehicleType,
+            vehicleName: vehicleTypes.find(v => v.value === currentData.vehicleType)?.label
+          });
+          break;
+        case 2:
+          console.log('BOOKING DATA - CATEGORY:', {
+            serviceCategory: currentData.serviceCategory,
+            categoryName: serviceCategories.find(c => c.value === currentData.serviceCategory)?.label
+          });
+          break;
+        case 3:
+          console.log('BOOKING DATA - SERVICE:', {
+            mainService: currentData.mainService,
+            serviceName: getSelectedServiceDetails()?.label,
+            price: getSelectedServiceDetails()?.price,
+            addOns: selectedAddOns,
+            totalPrice: currentData.totalPrice
+          });
+          break;
+        case 4:
+          console.log('BOOKING DATA - APPOINTMENT:', {
+            date: currentData.appointmentDate,
+            time: currentData.appointmentTime,
+            formattedTime: timeSlots.find(t => t.value === currentData.appointmentTime)?.label
+          });
+          break;
+        case 5:
+          console.log('BOOKING DATA - CONDITION:', {
+            conditionNotes: currentData.conditionNotes || 'No notes provided'
+          });
+          break;
+        case 6:
+          console.log('BOOKING DATA - CONTACT:', {
+            firstName: currentData.firstName,
+            lastName: currentData.lastName,
+            email: currentData.email,
+            phone: currentData.phone
+          });
+          break;
+      }
       
       setCurrentStep(prev => prev + 1);
       // Scroll to top when changing steps
       stepsRef.current?.scrollIntoView({ behavior: 'smooth' });
-    } else if (!isStepValid) {
-      // Track validation failure
-      trackInteraction('validation_failure', 'form', fields.join(', '));
     }
   };
   
@@ -448,18 +560,12 @@ export default function MultiStepBookingForm() {
 
   // Navigate to previous step
   const handlePrevious = () => {
-    const currentStepName = steps[currentStep]?.id || `step_${currentStep}`;
-    
-    // Track navigation back
-    trackInteraction('go_back', 'navigation', currentStepName);
+    // Simple log for navigation tracking
+    console.log('NAVIGATION: Going back from step', currentStep, 'to step', currentStep-1);
     
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
       stepsRef.current?.scrollIntoView({ behavior: 'smooth' });
-      
-      // Track which step they're returning to
-      const previousStepName = steps[currentStep-1]?.id || `step_${currentStep-1}`;
-      trackInteraction('return_to_step', 'navigation', previousStepName);
     }
   };
   

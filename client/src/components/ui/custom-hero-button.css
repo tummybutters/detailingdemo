@@ -42,7 +42,7 @@
   width: 100%;
   height: 100%;
   box-sizing: content-box;
-  background-image: radial-gradient(var(--primary-red), #d63a27);
+  background-image: radial-gradient(var(--primary-light), var(--primary));
   text-align: center;
   color: #fff;
   box-shadow: inset 0 0 0px 1px rgba(255, 255, 255, .2), 0 1px 2px 1px rgba(255, 255, 255, .2);
@@ -51,7 +51,7 @@
 }
 
 .hero-button.secondary .hero-button-top::after {
-  background-image: radial-gradient(var(--primary-orange), #e69550);
+  background-image: radial-gradient(var(--accent-orange-light), var(--accent-orange));
 }
 
 .hero-button:active .hero-button-top::after {
@@ -69,7 +69,7 @@
   width: calc(100% - 8px);
   height: calc(100% - 10px);
   box-sizing: content-box;
-  background-color: #b82e1f;
+  background-color: var(--primary-darker);
   background-image: radial-gradient(4px 8px at 4px calc(100% - 8px), rgba(255, 255, 255, .25), transparent), 
                     radial-gradient(4px 8px at calc(100% - 4px) calc(100% - 8px), rgba(255, 255, 255, .25), transparent), 
                     radial-gradient(16px at -4px 0, white, transparent), 
@@ -80,7 +80,7 @@
 }
 
 .hero-button.secondary .hero-button-bottom {
-  background-color: #e69550;
+  background-color: var(--accent-orange-darker);
 }
 
 .hero-button:active .hero-button-bottom {

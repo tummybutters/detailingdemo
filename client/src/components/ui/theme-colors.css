@@ -13,6 +13,8 @@
   --accent-orange-light: #ffbf89;
   --accent-orange-lighter: #ffd7b5;
   
+  --light-orange: #ffd7b5; /* Added for header background */
+  
   --text-dark: #333333;
   --text-medium: #555555;
   --text-light: #777777;
@@ -41,6 +43,10 @@
 
 .border-accent-orange {
   border-color: var(--accent-orange);
+}
+
+.bg-light-orange {
+  background-color: var(--light-orange);
 }
 
 /* Gradient text */

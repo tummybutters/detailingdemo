@@ -4,22 +4,9 @@ import fs from 'fs';
 import path from 'path';
 import { storage } from './storage';
 
-// Interface for contact form data
-interface ContactFormData {
-  id: number;
-  timestamp: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  subject: string;
-  message: string;
-}
-
 // Spreadsheet ID provided by user
 const SPREADSHEET_ID = '1QzR1-WiCTq9H5k-zA2PoJuSiXhAVp0JhxQy_Nq_9wGs';
-const BOOKING_SHEET_NAME = 'Bookings';
-const CONTACT_SHEET_NAME = 'Contact';
+const SHEET_NAME = 'Bookings';
 const CREDENTIALS_PATH = path.join(process.cwd(), 'service-account.json');
 
 // Function to authenticate with Google Sheets API
@@ -130,7 +117,7 @@ export async function syncBookingsToGoogleSheets(): Promise<boolean> {
       try {
         await sheets.spreadsheets.values.clear({
           spreadsheetId: SPREADSHEET_ID,
-          range: `${BOOKING_SHEET_NAME}!A2:P1000`, // Clear from A2 to preserve header
+          range: `${SHEET_NAME}!A2:P1000`, // Clear from A2 to preserve header
         });
       } catch (clearError) {
         console.warn('Error clearing sheet (continuing with update):', clearError);
@@ -143,7 +130,7 @@ export async function syncBookingsToGoogleSheets(): Promise<boolean> {
     if (bookings.length > 0) {
       response = await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${BOOKING_SHEET_NAME}!A1`,
+        range: `${SHEET_NAME}!A1`,
         valueInputOption: 'RAW',
         requestBody: {
           values: values,
@@ -184,7 +171,7 @@ export async function addBookingToGoogleSheets(booking: Booking): Promise<boolea
     // First, get existing data to determine where to insert
     const existingData = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${BOOKING_SHEET_NAME}!A1:P1000`, // Get all data
+      range: `${SHEET_NAME}!A1:P1000`, // Get all data
     });
     
     // Convert booking to row format
@@ -197,7 +184,7 @@ export async function addBookingToGoogleSheets(booking: Booking): Promise<boolea
       // If only header row or empty, just append
       const response = await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${BOOKING_SHEET_NAME}!A2`,
+        range: `${SHEET_NAME}!A2`,
         valueInputOption: 'RAW',
         insertDataOption: 'INSERT_ROWS',
         requestBody: {
@@ -212,13 +199,13 @@ export async function addBookingToGoogleSheets(booking: Booking): Promise<boolea
         spreadsheetId: SPREADSHEET_ID
       });
       
-      // Find the sheet ID for the BOOKING_SHEET_NAME
+      // Find the sheet ID for the SHEET_NAME
       const sheet = spreadsheet.data.sheets?.find(
-        s => s.properties?.title === BOOKING_SHEET_NAME
+        s => s.properties?.title === SHEET_NAME
       );
       
       if (!sheet || sheet.properties?.sheetId === undefined) {
-        throw new Error(`Could not find sheet ID for ${BOOKING_SHEET_NAME}`);
+        throw new Error(`Could not find sheet ID for ${SHEET_NAME}`);
       }
       
       const actualSheetId = sheet.properties.sheetId;
@@ -246,7 +233,7 @@ export async function addBookingToGoogleSheets(booking: Booking): Promise<boolea
       // Now add the new data to the inserted row
       const response = await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${BOOKING_SHEET_NAME}!A2`, // Row after header
+        range: `${SHEET_NAME}!A2`, // Row after header
         valueInputOption: 'RAW',
         requestBody: {
           values: [row],
@@ -275,11 +262,11 @@ async function ensureBookingsSheetExists(auth: any): Promise<boolean> {
     
     // Check if Bookings sheet already exists
     const sheetExists = spreadsheet.data.sheets?.some(
-      sheet => sheet.properties?.title === BOOKING_SHEET_NAME
+      sheet => sheet.properties?.title === SHEET_NAME
     );
     
     if (!sheetExists) {
-      console.log(`Creating '${BOOKING_SHEET_NAME}' sheet in spreadsheet...`);
+      console.log(`Creating '${SHEET_NAME}' sheet in spreadsheet...`);
       
       // Add new sheet
       await sheets.spreadsheets.batchUpdate({
@@ -289,7 +276,7 @@ async function ensureBookingsSheetExists(auth: any): Promise<boolean> {
             {
               addSheet: {
                 properties: {
-                  title: BOOKING_SHEET_NAME
+                  title: SHEET_NAME
                 }
               }
             }
@@ -300,16 +287,16 @@ async function ensureBookingsSheetExists(auth: any): Promise<boolean> {
       // Add header row
       await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${BOOKING_SHEET_NAME}!A1`,
+        range: `${SHEET_NAME}!A1`,
         valueInputOption: 'RAW',
         requestBody: {
           values: [HEADER_ROW]
         }
       });
       
-      console.log(`'${BOOKING_SHEET_NAME}' sheet created successfully with headers`);
+      console.log(`'${SHEET_NAME}' sheet created successfully with headers`);
     } else {
-      console.log(`'${BOOKING_SHEET_NAME}' sheet already exists in spreadsheet`);
+      console.log(`'${SHEET_NAME}' sheet already exists in spreadsheet`);
     }
     
     return true;
@@ -319,191 +306,7 @@ async function ensureBookingsSheetExists(auth: any): Promise<boolean> {
   }
 }
 
-// Header row for Contact sheet
-const CONTACT_HEADER_ROW = [
-  'ID',
-  'Timestamp',
-  'Email',
-  'First Name',
-  'Last Name',
-  'Phone',
-  'Subject',
-  'Message'
-];
-
-// Convert contact form data to sheet row
-function contactFormToSheetRow(contactData: ContactFormData): any[] {
-  return [
-    contactData.id.toString(),
-    contactData.timestamp,
-    contactData.email,
-    contactData.firstName,
-    contactData.lastName || '',
-    contactData.phone || '',
-    contactData.subject || '',
-    contactData.message || ''
-  ];
-}
-
-// Function to ensure the Contact form sheet exists
-async function ensureContactSheetExists(auth: any): Promise<boolean> {
-  try {
-    const sheets = google.sheets({ version: 'v4', auth });
-    
-    // Get spreadsheet info
-    const spreadsheet = await sheets.spreadsheets.get({
-      spreadsheetId: SPREADSHEET_ID
-    });
-    
-    // Check if Contact sheet already exists
-    const sheetExists = spreadsheet.data.sheets?.some(
-      sheet => sheet.properties?.title === CONTACT_SHEET_NAME
-    );
-    
-    if (!sheetExists) {
-      console.log(`Creating '${CONTACT_SHEET_NAME}' sheet in spreadsheet...`);
-      
-      // Add new sheet
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId: SPREADSHEET_ID,
-        requestBody: {
-          requests: [
-            {
-              addSheet: {
-                properties: {
-                  title: CONTACT_SHEET_NAME
-                }
-              }
-            }
-          ]
-        }
-      });
-      
-      // Add header row
-      await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${CONTACT_SHEET_NAME}!A1`,
-        valueInputOption: 'RAW',
-        requestBody: {
-          values: [CONTACT_HEADER_ROW]
-        }
-      });
-      
-      console.log(`'${CONTACT_SHEET_NAME}' sheet created successfully with headers`);
-    } else {
-      console.log(`'${CONTACT_SHEET_NAME}' sheet already exists in spreadsheet`);
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('Error ensuring Contact sheet exists:', error);
-    return false;
-  }
-}
-
-// Function to add a contact form submission to the Contact sheet
-export async function addContactToGoogleSheets(contactData: ContactFormData): Promise<boolean> {
-  // Get auth client
-  const auth = await getAuthClient();
-  if (!auth) {
-    console.error('Failed to get Google auth client');
-    return false;
-  }
-
-  try {
-    // Ensure the Contact sheet exists
-    const sheetExists = await ensureContactSheetExists(auth);
-    if (!sheetExists) {
-      console.error('Failed to create or verify Contact sheet');
-      return false;
-    }
-    
-    // Create sheets API instance
-    const sheets = google.sheets({ version: 'v4', auth });
-    
-    // First, get existing data to determine where to insert
-    const existingData = await sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${CONTACT_SHEET_NAME}!A1:H1000`, // Get all data
-    });
-    
-    // Convert contact data to row format
-    const row = contactFormToSheetRow(contactData);
-    
-    // Get the number of existing rows (headers included)
-    const dataRows = existingData.data.values || [CONTACT_HEADER_ROW];
-    
-    if (dataRows.length <= 1) {
-      // If only header row or empty, just append
-      const response = await sheets.spreadsheets.values.append({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${CONTACT_SHEET_NAME}!A2`,
-        valueInputOption: 'RAW',
-        insertDataOption: 'INSERT_ROWS',
-        requestBody: {
-          values: [row],
-        },
-      });
-      console.log(`Added contact form submission to Google Sheets. Updated ${response.data.updates?.updatedCells} cells.`);
-    } else {
-      // If there's existing data, insert after header row (at A2)
-      // First, we need to get the actual sheet ID
-      const spreadsheet = await sheets.spreadsheets.get({
-        spreadsheetId: SPREADSHEET_ID
-      });
-      
-      // Find the sheet ID for the CONTACT_SHEET_NAME
-      const sheet = spreadsheet.data.sheets?.find(
-        s => s.properties?.title === CONTACT_SHEET_NAME
-      );
-      
-      if (!sheet || sheet.properties?.sheetId === undefined) {
-        throw new Error(`Could not find sheet ID for ${CONTACT_SHEET_NAME}`);
-      }
-      
-      const actualSheetId = sheet.properties.sheetId;
-      
-      // Now insert a blank row to push everything down
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId: SPREADSHEET_ID,
-        requestBody: {
-          requests: [
-            {
-              insertDimension: {
-                range: {
-                  sheetId: actualSheetId,
-                  dimension: 'ROWS',
-                  startIndex: 1, // After header row (0-indexed)
-                  endIndex: 2 // Insert one row
-                },
-                inheritFromBefore: false
-              }
-            }
-          ]
-        }
-      });
-      
-      // Now add the new data to the inserted row
-      const response = await sheets.spreadsheets.values.update({
-        spreadsheetId: SPREADSHEET_ID,
-        range: `${CONTACT_SHEET_NAME}!A2`, // Row after header
-        valueInputOption: 'RAW',
-        requestBody: {
-          values: [row],
-        },
-      });
-      
-      console.log(`Added contact form submission to top of Google Sheets. Updated ${response.data.updatedCells} cells.`);
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('Error adding contact form to Google Sheets:', error);
-    return false;
-  }
-}
-
-// Check for Google Sheets credentials on startup and ensure sheets exist
+// Check for Google Sheets credentials on startup and ensure sheet exists
 export async function checkGoogleSheetsCredentials(): Promise<boolean> {
   try {
     if (!fs.existsSync(CREDENTIALS_PATH)) {
@@ -520,16 +323,9 @@ export async function checkGoogleSheetsCredentials(): Promise<boolean> {
     console.log('Google Sheets credentials valid - sheets integration enabled');
     
     // Ensure the Bookings sheet exists
-    const bookingsSheetExists = await ensureBookingsSheetExists(auth);
-    if (!bookingsSheetExists) {
+    const sheetExists = await ensureBookingsSheetExists(auth);
+    if (!sheetExists) {
       console.log('Failed to create or verify Bookings sheet');
-      return false;
-    }
-    
-    // Ensure the Contact sheet exists
-    const contactSheetExists = await ensureContactSheetExists(auth);
-    if (!contactSheetExists) {
-      console.log('Failed to create or verify Contact sheet');
       return false;
     }
     

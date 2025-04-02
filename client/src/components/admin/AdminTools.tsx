@@ -16,10 +16,9 @@ export function AdminTools() {
       setSyncStatus('loading');
       setSyncMessage('Syncing bookings to Google Sheets...');
 
-      const response = await apiRequest(
-        'POST',
-        '/api/sync-bookings-to-sheets'
-      );
+      const response = await apiRequest('/api/sync-bookings-to-sheets', {
+        method: 'POST',
+      });
 
       const data = await response.json();
 

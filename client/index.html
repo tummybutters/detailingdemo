@@ -23,9 +23,90 @@
   <!-- Preload critical assets for performance -->
   <link rel="preload" href="/src/main.tsx" as="script">
   <link rel="canonical" href="https://hardyswashnwax.com">
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  
+  <!-- Structured Data for Rich Results -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Hardys Wash N' Wax",
+      "image": "https://hardyswashnwax.com/logo.png",
+      "url": "https://hardyswashnwax.com",
+      "telephone": "+1-555-123-4567",
+      "priceRange": "$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Irvine",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 33.6846,
+        "longitude": -117.8265
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/hardyswashnwax",
+        "https://www.instagram.com/hardyswashnwax"
+      ]
+    }
+  </script>
 </head>
 <body>
   <div id="root"></div>
+  <noscript>
+    <div style="padding: 2rem; text-align: center; font-family: sans-serif;">
+      <h1>JavaScript Required</h1>
+      <p>Hardys Wash N' Wax requires JavaScript to be enabled in your browser to function properly. Please enable JavaScript and reload the page.</p>
+    </div>
+  </noscript>
   <script type="module" src="/src/main.tsx"></script>
+  <!-- Deferred non-critical scripts -->
+  <script defer>
+    // Preconnect to external domains we'll use
+    (function() {
+      var domains = ['https://api.mapbox.com', 'https://fonts.googleapis.com'];
+      domains.forEach(function(domain) {
+        var link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = domain;
+        var link2 = document.createElement('link');
+        link2.rel = 'dns-prefetch';
+        link2.href = domain;
+        document.head.appendChild(link);
+        document.head.appendChild(link2);
+      });
+    })();
+    
+    // Register service worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('ServiceWorker registration failed: ', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>

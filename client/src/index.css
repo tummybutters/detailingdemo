@@ -112,11 +112,17 @@
   font-family: inherit;
 }
 
+/* Move the search icon to align with form input standards */
+.mapboxgl-ctrl-geocoder--icon-search {
+  top: 10px !important;
+  left: 10px !important;
+}
+
 .mapboxgl-ctrl-geocoder input[type='text'] {
   font-size: 15px;
   border-radius: 0.5rem;
   border: 1px solid #eee;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2.5rem; /* Increased left padding to make room for the search icon */
   width: 100%;
 }
 

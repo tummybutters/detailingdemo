@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import LazyImage from "@/components/ui/LazyImage";
 
 interface BeforeAfterProps {
   beforeImage: string;
@@ -70,19 +71,23 @@ function BeforeAfterSlider({ beforeImage, afterImage, beforeAlt, afterAlt, label
         className="absolute inset-0 overflow-hidden"
         style={{ width: `${sliderPosition}%` }}
       >
-        <img
+        <LazyImage
           src={beforeImage}
           alt={beforeAlt}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0"
+          width="100%"
+          height="100%"
+          placeholderColor="#e5e7eb"
         />
       </div>
       
       {/* After Image */}
       <div className="absolute inset-0 w-full h-full">
-        <img
+        <LazyImage
           src={afterImage}
           alt={afterAlt}
-          className="w-full h-full object-cover"
+          className="w-full h-full"
+          placeholderColor="#e5e7eb"
         />
       </div>
       

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://hardyswashnwax.com/sitemap.xml
+
+# Disallow sensitive areas
+Disallow: /admin-dashboard
+Disallow: /api/

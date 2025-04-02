@@ -1,0 +1,38 @@
+# Node modules
+node_modules
+
+# Build files
+dist
+build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Git files
+.git
+.gitignore
+
+# Editor directories
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Other unnecessary files
+README.md
+LICENSE
+.dockerignore
+attached_assets

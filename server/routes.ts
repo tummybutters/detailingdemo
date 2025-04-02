@@ -10,6 +10,7 @@ import {
   sendEmailNotification 
 } from "./emailService";
 import { addSubscriberToMailchimp } from "./mailchimpService";
+import { syncBookingsToGoogleSheets, addBookingToGoogleSheets, checkGoogleSheetsCredentials } from "./googleSheetsSync";
 
 // Type for enhanced booking data
 interface EnhancedBookingData {
@@ -83,6 +84,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`Appointment: ${booking.appointmentDate} at ${booking.appointmentTime}`);
       console.log(`Location: ${booking.location}`);
       
+      // Sync the booking with Google Sheets (don't await, do this in the background)
+      addBookingToGoogleSheets(booking)
+        .then(success => {
+          if (success) {
+            console.log(`Booking ${booking.id} successfully added to Google Sheets`);
+          } else {
+            console.warn(`Failed to add booking ${booking.id} to Google Sheets`);
+          }
+        })
+        .catch(error => {
+          console.error(`Error syncing booking ${booking.id} to Google Sheets:`, error);
+        });
+      
       // Return the created booking
       return res.status(201).json({
         message: 'Booking created successfully',
@@ -110,10 +124,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/bookings', async (req, res) => {
     try {
       const bookings = await storage.getBookings();
-      return res.status(200).json(bookings);
+      return res.status(200).json({
+        success: true,
+        bookings: bookings
+      });
     } catch (error) {
       console.error('Error fetching bookings:', error);
       return res.status(500).json({
+        success: false,
         message: 'An error occurred while fetching bookings'
       });
     }
@@ -136,7 +154,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      return res.status(200).json(booking);
+      return res.status(200).json({
+        success: true,
+        booking
+      });
     } catch (error) {
       console.error('Error fetching booking:', error);
       return res.status(500).json({
@@ -177,6 +198,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating booking status:', error);
       return res.status(500).json({
         message: 'An error occurred while updating the booking status'
+      });
+    }
+  });
+  
+  // Endpoint to manually sync all bookings to Google Sheets
+  app.post('/api/sync-bookings-to-sheets', async (req, res) => {
+    try {
+      const result = await syncBookingsToGoogleSheets();
+      if (result) {
+        return res.status(200).json({
+          success: true,
+          message: 'All bookings successfully synced to Google Sheets'
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to sync bookings to Google Sheets'
+        });
+      }
+    } catch (error: any) {
+      console.error('Error syncing bookings to Google Sheets:', error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Error syncing bookings to Google Sheets'
       });
     }
   });

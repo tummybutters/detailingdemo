@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { checkGoogleSheetsCredentials, syncBookingsToGoogleSheets } from "./googleSheetsSync";
 
 const app = express();
 app.use(express.json());
@@ -64,7 +65,25 @@ app.use((req, res, next) => {
     port,
     host: "0.0.0.0",
     reusePort: true,
-  }, () => {
+  }, async () => {
     log(`serving on port ${port}`);
+    
+    // Check Google Sheets credentials and initialize on server startup
+    try {
+      const googleSheetsEnabled = await checkGoogleSheetsCredentials();
+      if (googleSheetsEnabled) {
+        // Perform initial sync of all bookings to Google Sheets
+        const syncResult = await syncBookingsToGoogleSheets();
+        if (syncResult) {
+          log('Initial sync of bookings to Google Sheets completed successfully');
+        } else {
+          log('Initial sync of bookings to Google Sheets failed');
+        }
+      } else {
+        log('Google Sheets integration is disabled - service account not found or invalid');
+      }
+    } catch (error) {
+      console.error('Error initializing Google Sheets integration:', error);
+    }
   });
 })();

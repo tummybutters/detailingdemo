@@ -26,6 +26,59 @@ export class MemStorage implements IStorage {
     this.bookingsStore = new Map();
     this.currentUserId = 1;
     this.currentBookingId = 1;
+    
+    // Add a test booking
+    this.addTestBooking();
+  }
+  
+  // Helper method to add test booking data
+  private addTestBooking() {
+    // First test booking - pending
+    const testBooking1: Booking = {
+      id: this.currentBookingId++,
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      phone: "(555) 123-4567",
+      location: "123 Main St, Davis, CA 95616",
+      vehicleType: "SUV",
+      serviceCategory: "Premium",
+      mainService: "Luxury Detail",
+      addOns: "Interior Sanitization",
+      totalPrice: "249.99",
+      totalDuration: "180",
+      appointmentDate: "2025-04-15",
+      appointmentTime: "10:00 AM",
+      conditionNotes: "Minor scratches on driver side door",
+      createdAt: new Date(),
+      status: "pending",
+      bookingReference: `HWW-${Date.now().toString().slice(-6)}-001`
+    };
+    
+    // Second test booking - confirmed
+    const testBooking2: Booking = {
+      id: this.currentBookingId++,
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      phone: "(555) 987-6543",
+      location: "456 Oak Ave, Irvine, CA 92617",
+      vehicleType: "Sedan",
+      serviceCategory: "Basic",
+      mainService: "Express Detail",
+      addOns: "Tire Shine",
+      totalPrice: "149.99",
+      totalDuration: "90",
+      appointmentDate: "2025-04-10",
+      appointmentTime: "2:30 PM",
+      conditionNotes: "Pet hair throughout interior",
+      createdAt: new Date(Date.now() - 86400000), // 1 day ago
+      status: "confirmed",
+      bookingReference: `HWW-${Date.now().toString().slice(-6)}-002`
+    };
+    
+    this.bookingsStore.set(testBooking1.id, testBooking1);
+    this.bookingsStore.set(testBooking2.id, testBooking2);
   }
 
   async getUser(id: number): Promise<User | undefined> {

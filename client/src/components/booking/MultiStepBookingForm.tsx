@@ -1,9 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider, Controller } from "react-hook-form";
-import { z } from "zod";
-import { format } from "date-fns";
+import { useMutation } from "@tanstack/react-query";
 import { bookingFormSchema } from "@shared/schema";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { z } from "zod";
+import { CheckCircle, ArrowRight, ArrowLeft, MapPin, Calendar, Car, Settings, 
+  ClipboardList, Clock, DollarSign, X, Check, Droplets, Sparkles, 
+  Search, PenTool, Brush, ShieldCheck, Truck, Layers, ChevronsUp } from "lucide-react";
+import LocationSearch from "./LocationSearch";
+import { ThreeDButton } from "@/components/ui/3d-button";
+import { ThreeDStepIcon, BackButton } from "@/components/ui/3d-step-icon";
+
 import {
   Form,
   FormControl,
@@ -12,13 +22,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -26,39 +33,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
-import LocationSearch from "./LocationSearch";
-import {
-  Car,
-  Truck,
-  Bus,
-  Brush,
-  Droplets,
-  Sparkles,
-  MapPin,
-  Settings,
-  ClipboardList,
-  Calendar as CalendarIcon,
-  Clock,
-  DollarSign,
-  CheckCircle,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 
-// Define the form values type using the Zod schema
 type FormValues = z.infer<typeof bookingFormSchema>;
 
-// Vehicle Types
+// Vehicle Types with pricing tiers
 const vehicleTypes = [
-  { value: "sedan", label: "Sedan", icon: <Car className="w-6 h-6 text-primary-red" />, description: "Economical 4-door car", priceTier: "low" },
-  { value: "coupe", label: "Coupe", icon: <Car className="w-6 h-6 text-primary-red" />, description: "Sporty 2-door car", priceTier: "low" },
-  { value: "suv", label: "SUV", icon: <Car className="w-6 h-6 text-primary-red" />, description: "Sport utility vehicle", priceTier: "medium" },
-  { value: "truck", label: "Truck", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Pickup truck", priceTier: "medium" },
-  { value: "van", label: "Van", icon: <Bus className="w-6 h-6 text-primary-red" />, description: "Family or cargo van", priceTier: "high" },
+  { value: "sedan", label: "Sedan", icon: <Car className="w-6 h-6 text-primary-red" />, description: "Standard 4-door car", priceTier: "low" },
+  { value: "coupe", label: "Coupe", icon: <Car className="w-6 h-6 text-primary-red" />, description: "2-door sporty car", priceTier: "low" },
+  { value: "suv", label: "SUV/Crossover", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Sport utility vehicle", priceTier: "mid" },
+  { value: "truck", label: "Truck", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Pickup truck", priceTier: "mid" },
+  { value: "van", label: "Van/Minivan", icon: <Truck className="w-6 h-6 text-primary-red" />, description: "Family or cargo van", priceTier: "high" },
   { value: "luxury", label: "Luxury/Sports Car", icon: <Car className="w-6 h-6 text-primary-red" />, description: "High-end performance vehicle", priceTier: "high" },
 ];
 
@@ -393,13 +382,38 @@ export default function MultiStepBookingForm() {
     return `${prefix}-${timestamp}-${random}`;
   };
   
-  // Track user interactions
-  const trackInteraction = (action: string, field: string, value: string) => {
-    // Analytics would go here in a real app
-    console.log(`User Interaction: ${action} - ${field}:`, value);
+  // Track user interactions for backend reporting
+  const [userInteractions, setUserInteractions] = useState<Array<{
+    action: string;
+    field?: string;
+    value?: string;
+    timestamp: number;
+  }>>([]);
+  
+  // Add interaction tracking
+  const trackInteraction = (action: string, field?: string, value?: string) => {
+    const newInteraction = {
+      action,
+      field,
+      value,
+      timestamp: Date.now()
+    };
+    
+    console.log("User interaction:", newInteraction);
+    setUserInteractions(prev => [...prev, newInteraction]);
+    
+    // In a real app, you might want to send this to analytics
   };
   
-  // Form initialization
+  // Wrapper function to track form field changes
+  const trackFieldChange = (fieldName: string, onChange: any) => {
+    return (value: any) => {
+      trackInteraction('field_change', fieldName, String(value));
+      onChange(value);
+    };
+  };
+  
+  // Initialize form with default values
   const form = useForm<FormValues>({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
@@ -412,266 +426,389 @@ export default function MultiStepBookingForm() {
       serviceCategory: "",
       mainService: "",
       addOns: "",
+      totalPrice: "",
+      totalDuration: "",
       appointmentDate: "",
       appointmentTime: "",
-      conditionNotes: "",
-      totalPrice: "$0",
-      totalDuration: "",
-    },
+      conditionNotes: ""
+    }
   });
   
-  // Watch for changes to fields we're interested in
-  const watchVehicleType = form.watch("vehicleType");
+  // Watch for selected values to enable conditional rendering
   const watchServiceCategory = form.watch("serviceCategory");
   const watchMainService = form.watch("mainService");
-  const watchAddOns = form.watch("addOns");
   
-  // Update the selected category when the service category changes
+  // Check for prefilled address from hero section
+  useEffect(() => {
+    const prefilledAddress = localStorage.getItem('prefilledAddress');
+    const prefilledCoordinatesStr = localStorage.getItem('prefilledCoordinates');
+    
+    if (prefilledAddress) {
+      form.setValue('location', prefilledAddress);
+      
+      if (prefilledCoordinatesStr) {
+        try {
+          const coords = JSON.parse(prefilledCoordinatesStr) as [number, number];
+          setAddressCoordinates(coords);
+          setIsValidAddress(true);
+        } catch (e) {
+          console.error('Error parsing prefilled coordinates', e);
+        }
+      }
+      
+      // Clear localStorage after using
+      localStorage.removeItem('prefilledAddress');
+      localStorage.removeItem('prefilledCoordinates');
+    }
+  }, [form]);
+  
+  // Effects to update form values based on selections
   useEffect(() => {
     if (watchServiceCategory) {
       setSelectedCategory(watchServiceCategory);
       
-      // Reset main service when category changes
-      form.setValue("mainService", "");
+      // Track category change
+      trackInteraction('select_service_category', 'serviceCategory', watchServiceCategory);
       
-      console.log("Selected category changed to:", watchServiceCategory);
-    }
-  }, [watchServiceCategory, form]);
-  
-  // Update duration based on selected service
-  useEffect(() => {
-    if (watchMainService && selectedCategory) {
-      const services = servicePackages[selectedCategory as keyof typeof servicePackages];
-      const serviceInfo = services.find(s => s.value === watchMainService);
-      
-      if (serviceInfo) {
-        form.setValue("totalDuration", serviceInfo.duration);
-        console.log("Duration set to:", serviceInfo.duration);
+      if (watchMainService) {
+        // Find the selected service package details
+        const selectedServices = servicePackages[watchServiceCategory as keyof typeof servicePackages];
+        const selectedService = selectedServices.find(s => s.value === watchMainService);
+        const vehicleType = form.getValues().vehicleType;
+        
+        // Track main service selection
+        trackInteraction('select_main_service', 'mainService', watchMainService);
+        
+        if (selectedService && vehicleType) {
+          // Calculate total price with add-ons
+          const totalPrice = calculateTotalPrice(selectedService, vehicleType, selectedAddOnDetails);
+          
+          // Track total price calculation
+          trackInteraction('total_price_calculated', 'totalPrice', totalPrice);
+          
+          // Update form values
+          form.setValue("totalPrice", totalPrice);
+          form.setValue("totalDuration", selectedService.duration);
+        }
       }
     }
-  }, [watchMainService, selectedCategory, form]);
-  
-  // Update total price when vehicle type, service, or add-ons change
-  useEffect(() => {
-    // Only proceed if we have both vehicle type and main service selected
-    if (watchVehicleType && watchMainService && selectedCategory) {
-      const services = servicePackages[selectedCategory as keyof typeof servicePackages];
-      const serviceInfo = services.find(s => s.value === watchMainService);
-      
-      if (serviceInfo) {
-        // Calculate and set the total price
-        const totalPrice = calculateTotalPrice(serviceInfo, watchVehicleType, selectedAddOnDetails);
-        form.setValue("totalPrice", totalPrice);
-        console.log("Total price set to:", totalPrice);
-      }
-    }
-  }, [watchVehicleType, watchMainService, selectedCategory, selectedAddOnDetails, form]);
+  }, [watchServiceCategory, watchMainService, selectedAddOnDetails, form]);
   
   // Handle add-on selection
-  const handleAddOnSelection = (addon: { id: string, label: string, price: string }, isChecked: boolean) => {
-    setSelectedAddOns(prev => {
-      if (isChecked) {
-        return [...prev, addon.id];
-      } else {
-        return prev.filter(id => id !== addon.id);
-      }
-    });
-    
-    setSelectedAddOnDetails(prev => {
-      if (isChecked) {
-        return [...prev, { id: addon.id, price: addon.price }];
-      } else {
-        return prev.filter(item => item.id !== addon.id);
-      }
-    });
-    
-    // Update the add-ons field in the form
-    form.setValue("addOns", isChecked 
-      ? [...selectedAddOns, addon.id].join(',') 
-      : selectedAddOns.filter(id => id !== addon.id).join(','),
-      { shouldValidate: true, shouldDirty: true }
+  const handleAddOnChange = (addOnId: string, checked: boolean) => {
+    // Track user interaction
+    const selectedAddOn = addOnServices.find(addon => addon.id === addOnId);
+    trackInteraction(
+      checked ? 'addon_added' : 'addon_removed',
+      'addOns',
+      selectedAddOn?.label || addOnId
     );
     
-    trackInteraction("toggle", "addon", `${addon.id}:${isChecked}`);
+    if (checked) {
+      if (selectedAddOn) {
+        setSelectedAddOns(prev => [...prev, addOnId]);
+        setSelectedAddOnDetails(prev => [...prev, {id: addOnId, price: selectedAddOn.price}]);
+      }
+    } else {
+      setSelectedAddOns(prev => prev.filter(id => id !== addOnId));
+      setSelectedAddOnDetails(prev => prev.filter(item => item.id !== addOnId));
+    }
   };
   
-  // Validate fields at the current step
-  const validateCurrentStep = () => {
-    const fields: Record<number, string[]> = {
-      0: ["location"],
-      1: ["vehicleType"],
-      2: ["serviceCategory"],
-      3: ["mainService"],
-      4: ["appointmentDate", "appointmentTime"],
-      5: [], // conditionNotes is optional
-      6: ["firstName", "lastName", "email", "phone"]
+  // Function to collect all essential booking data in one place
+  const captureBookingData = () => {
+    // Get current form data
+    const formData = form.getValues();
+    
+    // Get service details
+    const selectedService = getSelectedServiceDetails();
+    
+    // Get add-ons info
+    const addOnDetails = selectedAddOns.map(id => {
+      const addon = addOnServices.find(a => a.id === id);
+      return { id, name: addon?.label, price: addon?.price };
+    });
+    
+    // Get vehicle type details
+    const vehicleTypeDetails = vehicleTypes.find(v => v.value === formData.vehicleType);
+    
+    // Get time slot details
+    const timeSlotDetails = timeSlots.find(slot => slot.value === formData.appointmentTime);
+    
+    // Comprehensive booking data object
+    const bookingData = {
+      // Basic info
+      reference: bookingReference,
+      status: "pending",
+      timestamp: new Date().toISOString(),
+      
+      // Location
+      location: formData.location,
+      coordinates: addressCoordinates,
+      
+      // Vehicle info
+      vehicleType: formData.vehicleType,
+      vehicleTypeName: vehicleTypeDetails?.label || '',
+      vehicleCondition: formData.conditionNotes || 'No notes provided',
+      
+      // Service selection
+      serviceCategory: formData.serviceCategory,
+      serviceCategoryName: serviceCategories.find(c => c.value === formData.serviceCategory)?.label || '',
+      mainService: formData.mainService,
+      mainServiceName: selectedService?.label || '',
+      mainServicePrice: selectedService?.price || '',
+      mainServiceDuration: selectedService?.duration || '',
+      
+      // Add-ons
+      addOns: selectedAddOns.join(", "),
+      addOnDetailsList: addOnDetails,
+      
+      // Appointment details
+      appointmentDate: formData.appointmentDate,
+      appointmentTime: formData.appointmentTime,
+      appointmentTimeFormatted: timeSlotDetails?.label || '',
+      
+      // Pricing
+      totalPrice: formData.totalPrice,
+      
+      // Customer details
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      
+      // For backend tracking
+      submittedFrom: 'website',
+      userAgent: navigator.userAgent,
     };
     
-    if (currentStep > 7) return true; // No validation for confirmation step
+    // Log the comprehensive data (in production, this would be sent to analytics)
+    console.log('COMPLETE BOOKING DATA:', bookingData);
     
-    const currentFields = fields[currentStep] || [];
-    let isValid = true;
-    
-    // Location step has special validation
-    if (currentStep === 0 && !isValidAddress) {
-      toast({
-        title: "Invalid Location",
-        description: "Please enter a valid service address within our service area.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    // For other steps, validate the relevant fields
-    for (const field of currentFields) {
-      const value = form.getValues(field as any);
-      if (!value) {
-        toast({
-          title: "Missing Information",
-          description: `Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field.`,
-          variant: "destructive",
-        });
-        isValid = false;
-        break;
-      }
-    }
-    
-    // Service category validation - if they don't pick a category
-    if (currentStep === 2 && !form.getValues("serviceCategory")) {
-      toast({
-        title: "Service Category Required",
-        description: "Please select a service category to continue.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    // Service package validation - if they don't pick a package
-    if (currentStep === 3 && !form.getValues("mainService")) {
-      toast({
-        title: "Service Package Required",
-        description: "Please select a service package to continue.",
-        variant: "destructive",
-      });
-      return false;
-    }
-    
-    return isValid;
+    return bookingData;
   };
-  
-  // Form submission handler
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    
-    // Generate a booking reference
-    const reference = generateBookingReference();
-    setBookingReference(reference);
-    
-    // Add coordinates and reference to data
-    const enhancedData = {
-      ...data,
-      coordinates: addressCoordinates ? addressCoordinates.join(',') : '',
-      bookingReference: reference,
-      status: "pending"
-    };
-    
-    try {
-      // Submit the booking data
-      const response = await fetch('/api/bookings', {
-        method: 'POST',
-        body: JSON.stringify(enhancedData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+
+  // Booking submission mutation
+  const bookingMutation = useMutation({
+    mutationFn: (data: FormValues) => {
+      // Capture all booking data when submitting
+      const completeBookingData = captureBookingData();
+      
+      return apiRequest("POST", "/api/bookings", {
+        ...data,
+        addOns: selectedAddOns.join(", "),
+        bookingReference: bookingReference,
+        bookingData: completeBookingData // Send the complete data for analytics
       });
-      
-      if (!response.ok) {
-        throw new Error('Failed to create booking');
-      }
-      
-      // Move to the confirmation page
-      setCurrentStep(8);
-      
+    },
+    onSuccess: async () => {
       toast({
-        title: "Booking Successful!",
-        description: `Your booking reference is ${reference}. We'll send you an email confirmation shortly.`,
+        title: "Booking Successful",
+        description: "Your appointment has been scheduled. We will contact you to confirm the details.",
+        variant: "default",
       });
-      
-    } catch (error) {
-      console.error('Error creating booking:', error);
+      setCurrentStep(8); // Move to confirmation step
+    },
+    onError: (error) => {
       toast({
         title: "Booking Failed",
-        description: "There was an error processing your booking. Please try again.",
+        description: error.message || "There was an error booking your appointment. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
-  };
-  
-  // Handle next step
-  const handleNext = () => {
-    // Validate the current step before proceeding
+  });
+
+  // Handle next step and form submission
+  const handleNext = async () => {
+    const fields = getFieldsForStep(currentStep);
+    const stepName = steps[currentStep]?.id || `step_${currentStep}`;
+    
+    // Special handling for review step
     if (currentStep === 7) {
-      // Skip validation for the final submit button (review step)
-      console.log('Submitting form...');
-      form.handleSubmit(onSubmit)();
+      try {
+        setIsSubmitting(true);
+        const ref = generateBookingReference();
+        setBookingReference(ref);
+        
+        // Log the current state of the form
+        console.log('SUBMITTING BOOKING:', { step: 'review', reference: ref });
+        
+        // Submit the form
+        await form.handleSubmit((data) => {
+          bookingMutation.mutate(data);
+        })();
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        setIsSubmitting(false);
+      }
       return;
     }
     
-    if (validateCurrentStep()) {
-      if (currentStep < steps.length - 1) {
-        // Special handling for review step - show confirmation on submit
-        if (currentStep === 6) {
-          setCurrentStep(prev => prev + 1);
-          
-          // Simplified scrolling for review step
+    // Validate current step fields
+    const isStepValid = await validateStepFields(fields);
+    
+    if (isStepValid && currentStep < steps.length - 1) {
+      // Capture data at each step
+      const currentData = form.getValues();
+      
+      // Log the current step's data
+      switch(currentStep) {
+        case 0:
+          console.log('BOOKING DATA - LOCATION:', {
+            location: currentData.location,
+            coordinates: addressCoordinates,
+            isValidAddress
+          });
+          break;
+        case 1:
+          console.log('BOOKING DATA - VEHICLE:', {
+            vehicleType: currentData.vehicleType,
+            vehicleName: vehicleTypes.find(v => v.value === currentData.vehicleType)?.label
+          });
+          break;
+        case 2:
+          console.log('BOOKING DATA - CATEGORY:', {
+            serviceCategory: currentData.serviceCategory,
+            categoryName: serviceCategories.find(c => c.value === currentData.serviceCategory)?.label
+          });
+          break;
+        case 3:
+          console.log('BOOKING DATA - SERVICE:', {
+            mainService: currentData.mainService,
+            serviceName: getSelectedServiceDetails()?.label,
+            price: getSelectedServiceDetails()?.price,
+            addOns: selectedAddOns,
+            totalPrice: currentData.totalPrice
+          });
+          break;
+        case 4:
+          console.log('BOOKING DATA - APPOINTMENT:', {
+            date: currentData.appointmentDate,
+            time: currentData.appointmentTime,
+            formattedTime: timeSlots.find(t => t.value === currentData.appointmentTime)?.label
+          });
+          break;
+        case 5:
+          console.log('BOOKING DATA - CONDITION:', {
+            conditionNotes: currentData.conditionNotes || 'No notes provided'
+          });
+          break;
+        case 6:
+          console.log('BOOKING DATA - CONTACT:', {
+            firstName: currentData.firstName,
+            lastName: currentData.lastName,
+            email: currentData.email,
+            phone: currentData.phone
+          });
+          break;
+      }
+      
+      // Handle step navigation differently based on which step we're on
+      const isServiceToDateTransition = currentStep === 3; // Service packages to date/time section
+      
+      // Update step first
+      setCurrentStep(prev => prev + 1);
+      
+      // Extra aggressive handling for problematic transitions (especially service to date transition)
+      if (isServiceToDateTransition) {
+        console.log('Critical transition: Service packages to date/time section - using enhanced scrolling');
+        
+        // Most aggressive approach - force scroll to absolute top
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        
+        // Force layout recalculation
+        void document.documentElement.offsetHeight;
+        
+        // Multiple scroll attempts with increasing delays
+        window.scrollTo(0, 0);
+        
+        // Continue with multiple attempts to ensure scrolling works on all devices
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+            if (stepsRef.current) {
+              stepsRef.current.scrollIntoView({block: 'start', inline: 'nearest'});
+            }
+          }, i * 50); // 0ms, 50ms, 100ms
+        }
+      } else {
+        // Standard approach for other transitions
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto'
+        });
+        
+        setTimeout(() => {
           window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: 'auto'
           });
           
-          // Additional scroll with element reference for reliability
           setTimeout(() => {
             if (stepsRef.current) {
+              window.scrollTo({
+                top: stepsRef.current.offsetTop - 20,
+                behavior: 'auto'
+              });
+              
               stepsRef.current.scrollIntoView({
-                behavior: 'smooth', 
+                behavior: 'auto',
                 block: 'start'
               });
             }
           }, 50);
-        } 
-        // Final review to confirmation - submit the form
-        else if (currentStep === 7) {
-          console.log('Review step complete - submitting form');
-          form.handleSubmit(onSubmit)();
-        }
-        // Regular step advancement
-        else {
-          setCurrentStep(prev => prev + 1);
-          
-          // Simplified scrolling for better user experience
-          // Two-phase approach similar to handlePrevious
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-          
-          // Ensure the top of the form is visible even on complex layouts
-          setTimeout(() => {
-            if (stepsRef.current) {
-              stepsRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-              });
-            }
-          }, 50);
-        }
+        }, 50);
       }
     }
   };
   
-  // Go back to previous step
+  // Get fields that need validation for the current step
+  const getFieldsForStep = (step: number): string[] => {
+    switch(step) {
+      case 0: return ["location"];
+      case 1: return ["vehicleType"];
+      case 2: return ["serviceCategory"];
+      case 3: return ["mainService"];
+      case 4: return ["appointmentDate", "appointmentTime"];
+      case 5: return []; // Vehicle condition is optional
+      case 6: return ["firstName", "lastName", "email", "phone"];
+      case 7: return []; // Review page, no new fields
+      default: return [];
+    }
+  };
+  
+  // Validate fields for a step
+  const validateStepFields = async (fields: string[]): Promise<boolean> => {
+    if (fields.length === 0) return true;
+    
+    // Special handling for location step - check if address is in service area
+    if (fields.includes("location") && currentStep === 0) {
+      const result = await form.trigger(fields as any[]);
+      return result && isValidAddress;
+    }
+    
+    // Special handling for service selection - make sure a package is selected
+    if (fields.includes("mainService") && currentStep === 3) {
+      const result = await form.trigger(fields as any[]);
+      
+      if (!result) {
+        toast({
+          title: "Service Selection Required",
+          description: "Please select a service package before proceeding.",
+          variant: "destructive",
+        });
+        return false;
+      }
+      return result;
+    }
+    
+    const result = await form.trigger(fields as any[]);
+    return result;
+  };
+
+  // Navigate to previous step
   const handlePrevious = () => {
     // Simple log for navigation tracking
     console.log('NAVIGATION: Going back from step', currentStep, 'to step', currentStep-1);
@@ -682,46 +819,95 @@ export default function MultiStepBookingForm() {
       
       setCurrentStep(prev => prev - 1);
       
-      // Simplified, smoother scrolling approach that still ensures reliability
+      // Special handling for problematic transitions
       if (isDateToServiceTransition) {
-        // For critical transitions, use a two-phase approach:
-        // First, instant scroll to ensure we're at the top
+        console.log('Critical transition: Date/time back to service packages - using enhanced scrolling');
+        
+        // Most aggressive approach - force scroll to absolute top
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        
+        // Force layout recalculation
+        void document.documentElement.offsetHeight;
+        
+        // Multiple scroll attempts with increasing delays
         window.scrollTo(0, 0);
         
-        // Then smooth scroll to the reference element with a slight delay
-        setTimeout(() => {
-          if (stepsRef.current) {
-            stepsRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        }, 50);
-      } else {
-        // For non-critical transitions, use a gentler approach
-        if (stepsRef.current) {
-          window.scrollTo({
-            top: Math.max(0, stepsRef.current.offsetTop - 20),
-            behavior: 'smooth'
-          });
+        // Continue with multiple attempts to ensure scrolling works on all devices
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+            if (stepsRef.current) {
+              stepsRef.current.scrollIntoView({block: 'start', inline: 'nearest'});
+            }
+          }, i * 50); // 0ms, 50ms, 100ms
         }
+      } else {
+        // Standard approach for other transitions
+        // Immediate scroll to get closer to the top
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto'
+        });
+        
+        // Use multiple attempts with different techniques
+        setTimeout(() => {
+          // Mobile-optimized approach - scroll to absolute position
+          window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+          });
+          
+          // Fallback scrolling with a small delay
+          setTimeout(() => {
+            if (stepsRef.current) {
+              // Try native approach first
+              window.scrollTo({
+                top: stepsRef.current.offsetTop - 20,
+                behavior: 'auto'
+              });
+              
+              // Then element method
+              stepsRef.current.scrollIntoView({
+                behavior: 'auto',
+                block: 'start'
+              });
+            }
+          }, 50);
+        }, 50);
       }
     }
   };
-
-  // Helper to get service info for a given service ID
-  const getServiceInfoById = (serviceId: string): any => {
-    // Only attempt to get info if we have a category selected
-    if (!selectedCategory) return null;
+  
+  // Get service price adjusted for vehicle type
+  const getAdjustedPrice = (serviceInfo: any, vehicleType: string): string => {
+    if (!serviceInfo || !vehicleType) return "$0";
+    
+    try {
+      // Get price from our pricing tiers
+      const price = getServicePrice(serviceInfo.value, form.getValues().serviceCategory, vehicleType);
+      
+      // Format as whole dollar amount (no decimals)
+      return `$${price}`;
+    } catch (error) {
+      console.error('Error in getAdjustedPrice:', error);
+      return "$0";
+    }
+  };
+  
+  // Find selected service details with adjusted price based on vehicle type
+  const getSelectedServiceDetails = () => {
+    if (!selectedCategory || !watchMainService) return null;
     
     const services = servicePackages[selectedCategory as keyof typeof servicePackages];
-    const serviceInfo = services.find(s => s.value === serviceId);
+    const serviceInfo = services.find(s => s.value === watchMainService);
     
-    // Add the price property adjusted for vehicle type
-    if (serviceInfo && watchVehicleType) {
+    if (serviceInfo) {
+      const vehicleType = form.getValues().vehicleType;
+      // Add the price property adjusted for vehicle type
       return {
         ...serviceInfo,
-        price: getServicePrice(serviceInfo.value, selectedCategory, watchVehicleType)
+        price: getAdjustedPrice(serviceInfo, vehicleType)
       };
     }
     
@@ -743,73 +929,108 @@ export default function MultiStepBookingForm() {
           <div className="hidden md:flex justify-between items-center mb-4">
             {steps.map((step, index) => (
               <div 
-                key={step.id} 
-                className={`flex flex-col items-center relative ${
-                  index <= currentStep ? "text-[#EE432C]" : "text-gray-400"
-                } ${index === steps.length - 1 ? "" : "flex-1"}`}
+                key={step.id}
+                className={`relative flex flex-col items-center ${
+                  index <= currentStep ? 'text-primary' : 'text-gray-400'
+                }`}
+                style={{ width: `${100 / steps.length}%` }}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 z-10 bg-white ${
-                  index <= currentStep ? "border-[#EE432C]" : "border-gray-300"
-                }`}>
-                  {step.icon}
-                </div>
-                <div className="mt-2 text-xs font-medium hidden lg:block">{step.title}</div>
-                
-                {/* Connection line */}
-                {index < steps.length - 1 && (
-                  <div className={`absolute h-0.5 top-5 left-10 right-0 -mr-2 ${
-                    index < currentStep ? "bg-[#EE432C]" : "bg-gray-300"
-                  }`} />
-                )}
+                <ThreeDStepIcon 
+                  status={
+                    index < currentStep 
+                      ? 'completed' 
+                      : index === currentStep 
+                        ? 'active' 
+                        : 'upcoming'
+                  }
+                >
+                  {index < currentStep ? (
+                    <Check className="h-5 w-5" />
+                  ) : (
+                    step.icon
+                  )}
+                </ThreeDStepIcon>
+                <div className="text-xs mt-4 font-medium hidden md:block">{step.title}</div>
               </div>
+            ))}
+            
+            {/* Progress bar */}
+            <div 
+              className="absolute top-5 h-1 bg-gray-200 left-0 right-0 -z-10"
+              style={{ transform: "translateY(-50%)" }}
+            ></div>
+            <div 
+              className="absolute top-5 h-1 bg-primary left-0 -z-10 transition-all duration-300"
+              style={{ 
+                transform: "translateY(-50%)",
+                width: `${(currentStep / (steps.length - 1)) * 100}%` 
+              }}
+            ></div>
+          </div>
+          
+          {/* Mobile progress indicator - simplified dots */}
+          <div className="md:hidden flex items-center justify-center space-x-1 mb-4">
+            {steps.map((_, index) => (
+              <div 
+                key={index}
+                className={`h-2 rounded-full transition-all ${
+                  index === currentStep ? 'w-6 bg-primary' : 
+                  index < currentStep ? 'w-3 bg-primary' : 'w-3 bg-gray-300'
+                }`}
+              ></div>
             ))}
           </div>
           
-          {/* Mobile step indicator - just show current step */}
-          <div className="md:hidden flex items-center justify-center mb-6 px-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-[#EE432C] bg-white mr-3">
-              {steps[currentStep].icon}
+          {/* Mobile step indicator */}
+          <div className="text-center md:hidden mb-4">
+            <div className="flex justify-center mb-2">
+              <ThreeDStepIcon status="active">
+                {steps[currentStep].icon}
+              </ThreeDStepIcon>
             </div>
-            <div>
-              <div className="font-medium text-[#EE432C]">Step {currentStep + 1} of {steps.length}</div>
-              <div className="text-sm text-gray-600">{steps[currentStep].title} - {steps[currentStep].description}</div>
-            </div>
+            <h3 className="text-xl font-bold">{steps[currentStep].title}</h3>
+            <p className="text-gray-600 text-sm">{steps[currentStep].description}</p>
           </div>
         </div>
         
-        <div className="max-w-3xl mx-auto">
-          <FormProvider {...form}>
-            <Card className="border border-gray-200 shadow-sm overflow-hidden">
-              <CardContent className={`p-0 ${currentStep === 8 ? "bg-[#F3F4E6]" : ""}`}>
-                {/* Step 1: Location Information */}
+        {/* Main form card - adjusted padding for mobile */}
+        <Card className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-gray-200">
+          <CardContent className="p-4 sm:p-6 md:p-8">
+            <Form {...form}>
+              <div className="space-y-6">
+                {/* Step 1: Location */}
                 {currentStep === 0 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">Where should we meet you?</h2>
-                    <p className="text-gray-500 text-sm mb-6">We provide service in Davis, Irvine, Bonita, Costa Mesa, Tustin, Alameda, Mission Viejo, Newport Beach, Dixon, Woodland, Sacramento, and Galt.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Where should we meet you?</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      We'll come to your location with all the equipment needed for a perfect detail.
+                    </p>
                     
-                    <Controller
-                      name="location"
+                    <FormField
                       control={form.control}
+                      name="location"
                       render={({ field }) => (
-                        <div className="space-y-2">
-                          <LocationSearch
-                            value={field.value}
+                        <>
+                          <LocationSearch 
+                            value={field.value} 
                             onChange={field.onChange}
                             onAddressValidated={(isValid, coordinates) => {
                               setIsValidAddress(isValid);
-                              if (isValid && coordinates) {
+                              if (coordinates) {
                                 setAddressCoordinates(coordinates);
                               }
-                              if (!isValid) {
+                              
+                              if (!isValid && field.value) {
                                 toast({
-                                  title: "Location Not Serviced",
-                                  description: "Sorry, we don't provide service at this location. Please choose an address in one of our service areas.",
+                                  title: "Location Outside Service Area",
+                                  description: "We currently only service areas within California, from Sacramento to San Diego. Please enter a location within our service area.",
                                   variant: "destructive",
                                 });
-                              } else if (isValid) {
+                              } else if (isValid && field.value) {
                                 toast({
-                                  title: "Location Valid",
-                                  description: "Great! We provide service at this location.",
+                                  title: "Address Verified",
+                                  description: "Great! Your location is within our service area.",
+                                  variant: "default",
                                 });
                               }
                             }}
@@ -817,13 +1038,20 @@ export default function MultiStepBookingForm() {
                             formState={form.formState}
                           />
                           
-                          {isValidAddress && (
-                            <div className="mt-2 text-sm text-green-600 flex items-center">
-                              <CheckCircle className="h-4 w-4 mr-1" />
-                              Address verified - we service this location!
+                          {field.value && !isValidAddress && (
+                            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                              <div className="flex items-start">
+                                <X className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
+                                <div>
+                                  <h4 className="text-sm font-medium text-red-800">Outside Service Area</h4>
+                                  <p className="text-sm text-red-700 mt-1">
+                                    The address you've entered is outside our service area. We currently only service locations within California, from Sacramento to San Diego. Please enter a different address or contact us for special arrangements.
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           )}
-                        </div>
+                        </>
                       )}
                     />
                   </div>
@@ -831,40 +1059,68 @@ export default function MultiStepBookingForm() {
                 
                 {/* Step 2: Vehicle Type */}
                 {currentStep === 1 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">What type of vehicle do you have?</h2>
-                    <p className="text-gray-500 text-sm mb-6">Select your vehicle type so we can provide accurate pricing.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Select Your Vehicle Type</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      This helps us prepare the right equipment and supplies for your vehicle.
+                    </p>
                     
-                    <Controller
-                      name="vehicleType"
+                    <FormField
                       control={form.control}
+                      name="vehicleType"
                       render={({ field }) => (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                          {vehicleTypes.map((vehicle) => (
-                            <div 
-                              key={vehicle.value}
-                              className={`relative cursor-pointer rounded-lg border p-4 transition-all ${
-                                field.value === vehicle.value 
-                                  ? "border-[#EE432C] bg-red-50" 
-                                  : "border-gray-200 hover:border-gray-300"
-                              }`}
-                              onClick={() => {
-                                field.onChange(vehicle.value);
-                                trackInteraction("select", "vehicleType", vehicle.value);
+                        <FormItem className="space-y-3">
+                          <FormLabel>Vehicle Type</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={(value) => {
+                                // Track vehicle type selection
+                                trackInteraction('select_vehicle_type', 'vehicleType', value);
+                                field.onChange(value);
                               }}
+                              defaultValue={field.value}
+                              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                             >
-                              <div className="flex items-start space-x-3">
-                                <div className="shrink-0 mt-1">
-                                  {vehicle.icon}
+                              {vehicleTypes.map((vehicle) => (
+                                <div 
+                                  key={vehicle.value} 
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === vehicle.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
+                                  onClick={() => field.onChange(vehicle.value)}
+                                >
+                                  <div className="p-4">
+                                    <RadioGroupItem
+                                      value={vehicle.value}
+                                      id={vehicle.value}
+                                      className="sr-only"
+                                    />
+                                    <div className="flex items-center">
+                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === vehicle.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
+                                        {vehicle.icon}
+                                      </div>
+                                      <div>
+                                        <label 
+                                          htmlFor={vehicle.value}
+                                          className="block font-medium cursor-pointer"
+                                        >
+                                          {vehicle.label}
+                                        </label>
+                                        <span className="text-sm text-gray-500">{vehicle.description}</span>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div>
-                                  <div className="font-medium">{vehicle.label}</div>
-                                  <div className="text-xs text-gray-500 mt-1">{vehicle.description}</div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
                     />
                   </div>
@@ -872,111 +1128,128 @@ export default function MultiStepBookingForm() {
                 
                 {/* Step 3: Service Category */}
                 {currentStep === 2 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">What type of service do you need?</h2>
-                    <p className="text-gray-500 text-sm mb-6">Select a service category to continue.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Select Service Category</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      What type of detailing service are you looking for?
+                    </p>
                     
-                    <Controller
-                      name="serviceCategory"
+                    <FormField
                       control={form.control}
+                      name="serviceCategory"
                       render={({ field }) => (
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          {serviceCategories.map((category) => (
-                            <div 
-                              key={category.value}
-                              className={`relative cursor-pointer rounded-lg border p-4 transition-all ${
-                                field.value === category.value 
-                                  ? "border-[#EE432C] bg-red-50" 
-                                  : "border-gray-200 hover:border-gray-300"
-                              }`}
-                              onClick={() => {
-                                field.onChange(category.value);
-                                trackInteraction("select", "serviceCategory", category.value);
-                              }}
+                        <FormItem className="space-y-3">
+                          <FormLabel>Service Category</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-3"
                             >
-                              <div className="flex items-start space-x-3">
-                                <div className="shrink-0 mt-1">
-                                  {category.icon}
+                              {serviceCategories.map((category) => (
+                                <div 
+                                  key={category.value} 
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === category.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
+                                  onClick={() => field.onChange(category.value)}
+                                >
+                                  <div className="p-4">
+                                    <RadioGroupItem
+                                      value={category.value}
+                                      id={category.value}
+                                      className="sr-only"
+                                    />
+                                    <div className="flex items-center">
+                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === category.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
+                                        {category.icon}
+                                      </div>
+                                      <div>
+                                        <label 
+                                          htmlFor={category.value}
+                                          className="block font-medium cursor-pointer"
+                                        >
+                                          {category.label}
+                                        </label>
+                                        <span className="text-sm text-gray-500">{category.description}</span>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div>
-                                  <div className="font-medium">{category.label}</div>
-                                  <div className="text-xs text-gray-500 mt-1">{category.description}</div>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
                       )}
                     />
                   </div>
                 )}
                 
-                {/* Step 4: Choose Service Package */}
+                {/* Step 4: Service Selection */}
                 {currentStep === 3 && selectedCategory && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">Select Your Package</h2>
-                    <p className="text-gray-500 text-sm mb-6">Choose the service that best fits your needs.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Select Your Package</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      Choose a detailing package that best fits your needs.
+                    </p>
                     
                     <FormField
                       control={form.control}
                       name="mainService"
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="space-y-3">
+                          <FormLabel>Service Packages</FormLabel>
                           <FormControl>
                             <RadioGroup
-                              value={field.value}
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                                trackInteraction("select", "mainService", value);
-                                
-                                // Update service duration based on selection
-                                const services = servicePackages[selectedCategory as keyof typeof servicePackages];
-                                const serviceInfo = services.find(s => s.value === value);
-                                
-                                if (serviceInfo) {
-                                  form.setValue("totalDuration", serviceInfo.duration);
-                                }
-                              }}
-                              className="space-y-4"
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-3"
                             >
-                              {servicePackages[selectedCategory as keyof typeof servicePackages].map((service) => {
-                                // Adjust price based on vehicle type (if selected)
-                                const adjustedPrice = watchVehicleType 
-                                  ? getServicePrice(service.value, selectedCategory, watchVehicleType)
-                                  : service.basePrice;
-                                  
-                                return (
-                                  <div 
-                                    key={service.value}
-                                    className={`relative rounded-lg border transition-all ${
-                                      field.value === service.value 
-                                        ? "border-[#EE432C] bg-red-50" 
-                                        : "border-gray-200"
-                                    }`}
-                                  >
-                                    <RadioGroupItem
-                                      value={service.value}
-                                      id={service.value}
-                                      className="sr-only"
-                                    />
-                                    <label
-                                      htmlFor={service.value}
-                                      className="block cursor-pointer p-4"
-                                    >
-                                      <div className="flex flex-col sm:flex-row justify-between">
-                                        <div className="mb-2 sm:mb-0">
-                                          <div className="font-medium text-lg">{service.label}</div>
-                                          <div className="text-sm text-gray-500 mt-1">{service.description}</div>
-                                          <div className="text-xs text-gray-500 mt-2">Estimated time: {service.duration}</div>
-                                        </div>
-                                        <div className="sm:text-right">
-                                          <div className="text-lg font-bold text-[#EE432C]">${adjustedPrice}</div>
-                                        </div>
+                              {servicePackages[selectedCategory as keyof typeof servicePackages].map((service) => (
+                                <div 
+                                  key={service.value} 
+                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                    ${field.value === service.value 
+                                      ? 'border-2 border-primary transform -translate-y-1' 
+                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                    }
+                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                  `}
+                                  onClick={() => field.onChange(service.value)}
+                                >
+                                  <div className="p-4">
+                                    <div className="flex justify-between items-start">
+                                      <div>
+                                        <RadioGroupItem
+                                          value={service.value}
+                                          id={service.value}
+                                          className="sr-only"
+                                        />
+                                        <label 
+                                          htmlFor={service.value}
+                                          className="block font-bold cursor-pointer"
+                                        >
+                                          {service.label}
+                                        </label>
+                                        <p className="text-sm text-gray-600 mt-1">{service.description}</p>
+                                        <p className="text-sm text-gray-500 mt-1">Duration: {service.duration}</p>
                                       </div>
-                                    </label>
+                                      <span className="text-primary font-bold text-lg bg-primary/5 px-3 py-1 rounded-md">
+                                        {form.getValues().vehicleType 
+                                          ? getAdjustedPrice(service, form.getValues().vehicleType)
+                                          : `$${service.basePrice.toFixed(2)}`}
+                                      </span>
+                                    </div>
                                   </div>
-                                );
-                              })}
+                                </div>
+                              ))}
                             </RadioGroup>
                           </FormControl>
                           <FormMessage />
@@ -984,145 +1257,158 @@ export default function MultiStepBookingForm() {
                       )}
                     />
                     
-                    {/* Add-on services selection */}
+                    {/* Add-on services section */}
                     {watchMainService && (
-                      <div className="mt-8">
-                        <h3 className="font-semibold text-lg mb-4">Enhance Your Service with Add-ons</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {addOnServices.map((addon) => (
-                            <div key={addon.id} className="flex items-start space-x-3 border border-gray-200 rounded-lg p-3">
-                              <Checkbox
-                                id={addon.id}
-                                checked={selectedAddOns.includes(addon.id)}
-                                onCheckedChange={(checked) => handleAddOnSelection(addon, checked === true)}
-                                className="mt-1"
-                              />
-                              <div className="flex-1">
-                                <label
-                                  htmlFor={addon.id}
-                                  className="text-sm font-medium cursor-pointer"
-                                >
-                                  {addon.label} <span className="text-[#EE432C] font-semibold">{addon.price}</span>
-                                </label>
-                                <p className="text-xs text-gray-500 mt-1">{addon.description}</p>
+                      <div className="mt-6">
+                        <h3 className="font-medium mb-3">Enhance Your Service with Add-ons</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {addOnServices.map((addon) => {
+                            const isSelected = selectedAddOns.includes(addon.id);
+                            return (
+                              <div 
+                                key={addon.id}
+                                className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
+                                  ${isSelected 
+                                    ? 'border-2 border-primary transform -translate-y-1' 
+                                    : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
+                                  }
+                                  before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
+                                  before:bg-gray-100 before:-z-10 before:border before:border-gray-200
+                                `}
+                                onClick={() => handleAddOnChange(addon.id, !isSelected)}
+                              >
+                                <div className="p-3">
+                                  <div className="flex items-start">
+                                    <Checkbox
+                                      id={addon.id}
+                                      checked={isSelected}
+                                      onCheckedChange={(checked) => {
+                                        handleAddOnChange(addon.id, checked as boolean);
+                                      }}
+                                      className={`mt-1 mr-3 ${isSelected ? 'bg-primary text-primary-foreground border-primary' : ''}`}
+                                    />
+                                    <div className="flex-1">
+                                      <div
+                                        className="flex justify-between w-full font-medium cursor-pointer"
+                                      >
+                                        <span>{addon.label}</span>
+                                        <span className="text-primary font-bold px-2 py-0.5 bg-primary/5 rounded-md">{addon.price}</span>
+                                      </div>
+                                      <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}
                   </div>
                 )}
                 
-                {/* Step 5: Date and Time Selection */}
+                {/* Step 5: Appointment Time */}
                 {currentStep === 4 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">Select Date and Time</h2>
-                    <p className="text-gray-500 text-sm mb-6">Choose when you'd like us to detail your vehicle.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Choose Your Appointment Time</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      Select a date and time that works best for your schedule.
+                    </p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Date Selection */}
-                      <div>
-                        <FormField
-                          control={form.control}
-                          name="appointmentDate"
-                          render={({ field }) => (
-                            <FormItem className="flex flex-col">
-                              <FormLabel>Date</FormLabel>
-                              <div className="border rounded-md p-2 bg-white">
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value ? new Date(field.value) : undefined}
-                                  onSelect={(date) => {
-                                    if (date) {
-                                      // Format the date as YYYY-MM-DD
-                                      const formattedDate = format(date, "yyyy-MM-dd");
-                                      field.onChange(formattedDate);
-                                      trackInteraction("select", "appointmentDate", formattedDate);
-                                    }
-                                  }}
-                                  disabled={(date) => {
-                                    // Disable past dates and create a 90-day booking window
-                                    const now = new Date();
-                                    now.setHours(0, 0, 0, 0);
-                                    const maxDate = new Date();
-                                    maxDate.setDate(maxDate.getDate() + 90);
-                                    
-                                    // Disable weekends
-                                    const day = date.getDay();
-                                    const isSunday = day === 0;
-                                    
-                                    return date < now || date > maxDate || isSunday;
-                                  }}
-                                  className="w-full"
-                                />
-                              </div>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
-                      {/* Time Selection */}
-                      <div>
-                        <FormField
-                          control={form.control}
-                          name="appointmentTime"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Time</FormLabel>
-                              <Select
-                                onValueChange={(value) => {
-                                  field.onChange(value);
-                                  trackInteraction("select", "appointmentTime", value);
-                                }}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="appointmentDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Preferred Date</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="date" 
                                 value={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger className="bg-white">
-                                    <SelectValue placeholder="Select a time" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {timeSlots.map((time) => (
-                                    <SelectItem key={time.value} value={time.value}>
-                                      {time.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                                onChange={(e) => {
+                                  // Track date selection
+                                  trackInteraction('select_date', 'appointmentDate', e.target.value);
+                                  field.onChange(e);
+                                }}
+                                min={new Date().toISOString().split('T')[0]}
+                                className="border-gray-300"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="appointmentTime"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Preferred Time</FormLabel>
+                            <Select
+                              onValueChange={(value) => {
+                                // Track time selection
+                                trackInteraction('select_time', 'appointmentTime', value);
+                                field.onChange(value);
+                              }}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="border-gray-300">
+                                  <SelectValue placeholder="Select a time slot" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {timeSlots.map((slot) => (
+                                  <SelectItem key={slot.value} value={slot.value}>
+                                    {slot.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
+                    
+                    <p className="text-sm text-gray-500 mt-2">
+                      Appointments available Monday-Friday 8am-5pm and Saturday 9am-3pm
+                    </p>
                   </div>
                 )}
                 
                 {/* Step 6: Vehicle Condition */}
                 {currentStep === 5 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">Vehicle Condition</h2>
-                    <p className="text-gray-500 text-sm mb-6">Let us know about any specific areas that need attention or any particular conditions we should be aware of.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Tell Us About Your Vehicle's Condition</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      Help us prepare by letting us know about any specific issues or concerns.
+                    </p>
                     
                     <FormField
                       control={form.control}
                       name="conditionNotes"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Special Instructions or Notes</FormLabel>
+                          <FormLabel>Vehicle Condition Notes (Optional)</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Describe any special conditions, areas that need extra attention, or any other information that would help us prepare (optional)"
-                              className="min-h-[120px] resize-y bg-white"
-                              {...field}
+                              placeholder="Examples: Pet hair in back seat, coffee stains on front seats, scratches on driver side door, heavy pollen on exterior, etc."
+                              value={field.value || ''}
                               onChange={(e) => {
+                                // Only track when they finish typing (on blur) to avoid excessive tracking
                                 field.onChange(e);
-                                if (e.target.value) {
-                                  trackInteraction("input", "conditionNotes", "filled");
+                              }}
+                              onBlur={() => {
+                                if (field.value) {
+                                  // Track condition notes
+                                  trackInteraction('add_condition_notes', 'conditionNotes', 'provided');
                                 }
                               }}
+                              rows={4}
+                              className="border-gray-300 resize-none"
                             />
                           </FormControl>
                           <FormMessage />
@@ -1134,11 +1420,13 @@ export default function MultiStepBookingForm() {
                 
                 {/* Step 7: Contact Information */}
                 {currentStep === 6 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-1">Your Contact Information</h2>
-                    <p className="text-gray-500 text-sm mb-6">Please provide your contact details so we can confirm your booking.</p>
+                  <div className="space-y-4">
+                    <h2 className="text-xl font-bold hidden md:block">Your Contact Details</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      We'll use this information to confirm your appointment and send you updates.
+                    </p>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
                         name="firstName"
@@ -1146,7 +1434,19 @@ export default function MultiStepBookingForm() {
                           <FormItem>
                             <FormLabel>First Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your first name" className="bg-white" {...field} />
+                              <Input 
+                                placeholder="First Name" 
+                                value={field.value}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                                onBlur={() => {
+                                  if (field.value) {
+                                    trackInteraction('provided_first_name', 'firstName', 'entered');
+                                  }
+                                }}
+                                className="border-gray-300"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1160,7 +1460,19 @@ export default function MultiStepBookingForm() {
                           <FormItem>
                             <FormLabel>Last Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your last name" className="bg-white" {...field} />
+                              <Input 
+                                placeholder="Last Name" 
+                                value={field.value}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                                onBlur={() => {
+                                  if (field.value) {
+                                    trackInteraction('provided_last_name', 'lastName', 'entered');
+                                  }
+                                }}
+                                className="border-gray-300"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1168,15 +1480,28 @@ export default function MultiStepBookingForm() {
                       />
                     </div>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Email Address</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your email" type="email" className="bg-white" {...field} />
+                              <Input 
+                                placeholder="email@example.com" 
+                                type="email"
+                                value={field.value}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                                onBlur={() => {
+                                  if (field.value) {
+                                    trackInteraction('provided_email', 'email', 'entered');
+                                  }
+                                }}
+                                className="border-gray-300"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1190,7 +1515,19 @@ export default function MultiStepBookingForm() {
                           <FormItem>
                             <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter your phone number" className="bg-white" {...field} />
+                              <Input 
+                                placeholder="(555) 555-1234"
+                                value={field.value}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                }}
+                                onBlur={() => {
+                                  if (field.value) {
+                                    trackInteraction('provided_phone', 'phone', 'entered');
+                                  }
+                                }}
+                                className="border-gray-300"
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1200,194 +1537,257 @@ export default function MultiStepBookingForm() {
                   </div>
                 )}
                 
-                {/* Step 8: Review Booking */}
+                {/* Step 8: Review */}
                 {currentStep === 7 && (
-                  <div className="p-6">
-                    <h2 className="text-xl font-semibold mb-4">Review Your Booking</h2>
+                  <div className="space-y-6">
+                    <h2 className="text-xl font-bold hidden md:block">Review Your Booking</h2>
+                    <p className="text-gray-600 mb-6 hidden md:block">
+                      Please review your booking details before confirming.
+                    </p>
                     
-                    <div className="space-y-6">
-                      {/* Service Details */}
-                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <h3 className="font-medium text-gray-900 mb-3">Service Details</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-sm">
-                          <div>
-                            <span className="text-gray-500">Vehicle Type:</span>
-                            <span className="ml-2 font-medium">
-                              {vehicleTypes.find(v => v.value === watchVehicleType)?.label}
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                      <h3 className="font-bold text-gray-900 mb-3">Booking Summary</h3>
+                      
+                      <div className="space-y-4">
+                        {/* Service Details */}
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-500">Selected Service</h4>
+                          <div className="mt-1 flex justify-between">
+                            <span className="text-gray-900 font-medium">
+                              {getSelectedServiceDetails()?.label || "No service selected"}
+                            </span>
+                            <span className="text-primary font-bold">
+                              {getSelectedServiceDetails()?.price || "-"}
                             </span>
                           </div>
-                          
-                          <div>
-                            <span className="text-gray-500">Service Category:</span>
-                            <span className="ml-2 font-medium">
-                              {serviceCategories.find(c => c.value === watchServiceCategory)?.label}
-                            </span>
-                          </div>
-                          
-                          <div>
-                            <span className="text-gray-500">Service Package:</span>
-                            <span className="ml-2 font-medium">
-                              {getServiceInfoById(watchMainService)?.label}
-                            </span>
-                          </div>
-                          
-                          <div>
-                            <span className="text-gray-500">Duration:</span>
-                            <span className="ml-2 font-medium">{form.getValues().totalDuration}</span>
+                          <div className="text-sm text-gray-600">
+                            {getSelectedServiceDetails()?.description || ""}
                           </div>
                         </div>
                         
                         {/* Add-ons */}
                         {selectedAddOns.length > 0 && (
-                          <div className="mt-4 pt-4 border-t border-gray-200">
-                            <div className="font-medium text-gray-900 mb-2">Add-on Services:</div>
-                            <div className="flex flex-wrap gap-2">
-                              {selectedAddOns.map(addonId => {
-                                const addon = addOnServices.find(a => a.id === addonId);
-                                return addon ? (
-                                  <Badge key={addon.id} variant="outline" className="bg-white">
-                                    {addon.label} ({addon.price})
-                                  </Badge>
-                                ) : null;
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-500">Add-on Services</h4>
+                            <div className="mt-1 space-y-1">
+                              {selectedAddOns.map(id => {
+                                const addon = addOnServices.find(a => a.id === id);
+                                return (
+                                  <div key={id} className="flex justify-between text-sm">
+                                    <span className="text-gray-700">{addon?.label}</span>
+                                    <span className="text-primary font-medium">{addon?.price}</span>
+                                  </div>
+                                );
                               })}
                             </div>
                           </div>
                         )}
-                      </div>
-                      
-                      {/* Appointment Details */}
-                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <h3 className="font-medium text-gray-900 mb-3">Appointment Details</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-sm">
-                          <div>
-                            <span className="text-gray-500">Date:</span>
-                            <span className="ml-2 font-medium">
-                              {form.getValues().appointmentDate ? 
-                                format(new Date(form.getValues().appointmentDate), "EEEE, MMMM d, yyyy") : ""}
+                        
+                        {/* Total */}
+                        <div className="border-t border-gray-200 pt-3 mt-3">
+                          <div className="flex justify-between">
+                            <span className="font-bold">Total Price</span>
+                            <span className="text-primary font-bold text-lg">
+                              {form.getValues().totalPrice || "-"}
                             </span>
                           </div>
-                          
-                          <div>
-                            <span className="text-gray-500">Time:</span>
-                            <span className="ml-2 font-medium">
-                              {timeSlots.find(t => t.value === form.getValues().appointmentTime)?.label}
-                            </span>
-                          </div>
-                          
-                          <div className="sm:col-span-2">
-                            <span className="text-gray-500">Location:</span>
-                            <span className="ml-2 font-medium">{form.getValues().location}</span>
+                          <div className="flex justify-between text-sm text-gray-600 mt-1">
+                            <span>Estimated Duration</span>
+                            <span>{form.getValues().totalDuration || "-"}</span>
                           </div>
                         </div>
                       </div>
-                      
-                      {/* Customer Information */}
-                      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                        <h3 className="font-medium text-gray-900 mb-3">Customer Information</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-sm">
-                          <div>
-                            <span className="text-gray-500">Name:</span>
-                            <span className="ml-2 font-medium">
-                              {form.getValues().firstName} {form.getValues().lastName}
-                            </span>
-                          </div>
-                          
-                          <div>
-                            <span className="text-gray-500">Email:</span>
-                            <span className="ml-2 font-medium">{form.getValues().email}</span>
-                          </div>
-                          
-                          <div className="sm:col-span-2">
-                            <span className="text-gray-500">Phone:</span>
-                            <span className="ml-2 font-medium">{form.getValues().phone}</span>
-                          </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-500">Your Details</h4>
+                          <p className="text-gray-900">
+                            {form.getValues().firstName} {form.getValues().lastName}
+                          </p>
+                          <p className="text-gray-600 text-sm">{form.getValues().email}</p>
+                          <p className="text-gray-600 text-sm">{form.getValues().phone}</p>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-500">Appointment</h4>
+                          <p className="text-gray-900">
+                            {form.getValues().appointmentDate && new Date(form.getValues().appointmentDate).toLocaleDateString('en-US', { 
+                              weekday: 'long', 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric'
+                            })}
+                          </p>
+                          <p className="text-gray-600 text-sm">
+                            {form.getValues().appointmentTime && timeSlots.find(
+                              slot => slot.value === form.getValues().appointmentTime
+                            )?.label}
+                          </p>
                         </div>
                       </div>
                       
-                      {/* Special Instructions */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-500">Service Location</h4>
+                        <p className="text-gray-900">{form.getValues().location}</p>
+                        <p className="text-gray-600 text-sm">Vehicle Type: {
+                          vehicleTypes.find(v => v.value === form.getValues().vehicleType)?.label || "-"
+                        }</p>
+                      </div>
+                      
                       {form.getValues().conditionNotes && (
-                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                          <h3 className="font-medium text-gray-900 mb-2">Special Instructions</h3>
-                          <p className="text-sm text-gray-700">{form.getValues().conditionNotes}</p>
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-500">Special Instructions</h4>
+                          <p className="text-gray-600 text-sm">{form.getValues().conditionNotes}</p>
                         </div>
                       )}
-                      
-                      {/* Total Price */}
-                      <div className="bg-[#FFD7B5] rounded-lg p-4 border border-[#FFB375]">
-                        <div className="flex justify-between items-center">
-                          <div className="font-bold text-gray-900">Total Price:</div>
-                          <div className="text-xl font-bold text-[#EE432C]">{form.getValues().totalPrice}</div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
                 
                 {/* Step 9: Confirmation */}
                 {currentStep === 8 && (
-                  <div className="p-6 text-center">
-                    <div className="flex justify-center mb-4">
-                      <CheckCircle className="h-16 w-16 text-green-500" />
+                  <div className="text-center py-6">
+                    <div className="inline-flex items-center justify-center p-2 bg-green-100 text-green-600 rounded-full mb-4">
+                      <CheckCircle className="h-12 w-12" />
                     </div>
-                    <h2 className="text-2xl font-bold mb-2">Booking Confirmed!</h2>
-                    <p className="text-gray-600 mb-4">Your booking has been received and is being processed.</p>
-                    
-                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 inline-block mx-auto mb-6">
-                      <div className="text-sm text-gray-500">Booking Reference:</div>
-                      <div className="text-lg font-mono font-bold">{bookingReference}</div>
-                    </div>
-                    
-                    <p className="text-sm text-gray-600 mb-6">
-                      We've sent a confirmation email to <span className="font-medium">{form.getValues().email}</span> with your booking details.
-                      Our team will contact you before your appointment to confirm the exact timing.
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
+                    <p className="text-gray-600 mb-6">
+                      Your booking request has been received. We'll send a confirmation email shortly.
                     </p>
                     
-                    <Button 
-                      variant="default"
-                      className="bg-[#FFB375] hover:bg-[#EE432C] text-white w-full sm:w-auto"
-                      onClick={() => window.location.href = '/'}
-                    >
-                      Return to Homepage
-                    </Button>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 text-left mb-6">
+                      <div className="flex justify-between items-center mb-3">
+                        <h3 className="font-bold">Booking Reference</h3>
+                        <span className="text-primary font-mono font-bold">{bookingReference}</span>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Date:</span>
+                          <span className="font-medium">{form.getValues().appointmentDate && new Date(form.getValues().appointmentDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Time:</span>
+                          <span className="font-medium">{
+                            timeSlots.find(slot => slot.value === form.getValues().appointmentTime)?.label
+                          }</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Service:</span>
+                          <span className="font-medium">{getSelectedServiceDetails()?.label}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Total:</span>
+                          <span className="font-bold text-primary">{form.getValues().totalPrice}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          // Reset form and go back to step 1
+                          form.reset();
+                          setSelectedAddOns([]);
+                          setSelectedAddOnDetails([]);
+                          setCurrentStep(0);
+                        }}
+                        className="bg-primary hover:bg-primary/90"
+                      >
+                        Book Another Appointment
+                      </Button>
+                    </div>
                   </div>
                 )}
-              </CardContent>
-              
-              {/* Navigation buttons */}
-              {currentStep < 8 && (
-                <div className="p-6 border-t border-gray-200 bg-gray-50 flex flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2">
-                  {currentStep > 0 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handlePrevious}
-                      className="mt-3 sm:mt-0"
-                    >
-                      <ChevronLeft className="mr-2 h-4 w-4" />
-                      Previous
-                    </Button>
-                  )}
-                  
-                  <Button
-                    type="button"
-                    variant="default"
-                    className={`${currentStep === 7 ? "bg-[#EE432C]" : "bg-[#FFB375]"} hover:bg-[#EE432C] text-white ${currentStep === 0 && "w-full"}`}
-                    onClick={handleNext}
-                    disabled={isSubmitting}
-                  >
-                    {currentStep === 7 ? (
-                      isSubmitting ? "Processing..." : "Confirm Booking"
-                    ) : (
-                      <>
-                        Next
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </>
+                
+                {/* Navigation buttons */}
+                {currentStep < 8 && (
+                  <div className={`flex ${currentStep > 0 ? 'justify-between' : 'justify-end'} mt-8 pt-4 border-t border-gray-200`}>
+                    {currentStep > 0 && (
+                      <BackButton
+                        type="button"
+                        onClick={handlePrevious}
+                        className="border-gray-300"
+                      >
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back
+                      </BackButton>
                     )}
-                  </Button>
-                </div>
-              )}
-            </Card>
-          </FormProvider>
+                    
+                    <ThreeDButton
+                      type="button"
+                      onClick={handleNext}
+                      disabled={isSubmitting}
+                      variant="primary"
+                    >
+                      {currentStep === 7 ? (
+                        isSubmitting ? "Processing..." : "Confirm Booking"
+                      ) : (
+                        <>
+                          Continue
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </ThreeDButton>
+                  </div>
+                )}
+              </div>
+            </Form>
+          </CardContent>
+        </Card>
+        
+        {/* What to Expect section - mobile optimized */}
+        <div className="max-w-3xl mx-auto mt-8 sm:mt-12">
+          {isMobile ? (
+            <details className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+              <summary className="text-lg font-bold text-gray-900 cursor-pointer">
+                Mobile Detailing: What to Expect
+              </summary>
+              <ul className="space-y-3 mt-3 text-sm">
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-0.5 h-4 w-4 shrink-0" />
+                  <span>Appointments available Monday-Friday 8am-5pm and Saturday 9am-3pm.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-0.5 h-4 w-4 shrink-0" />
+                  <span>Ensure vehicle accessibility and water hookups within 100 feet.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-0.5 h-4 w-4 shrink-0" />
+                  <span>We bring all equipment, water capture systems, and eco-friendly products.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-0.5 h-4 w-4 shrink-0" />
+                  <span>Payment after service - accept credit cards, cash, and digital payments.</span>
+                </li>
+              </ul>
+            </details>
+          ) : (
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Mobile Detailing: What to Expect</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-1 h-5 w-5 shrink-0" />
+                  <span>We service Irvine and surrounding areas with appointments available Monday-Friday 8am-5pm and Saturday 9am-3pm.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-1 h-5 w-5 shrink-0" />
+                  <span>Please ensure your vehicle is accessible and that you have access to water hookups within 100 feet of your vehicle.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-1 h-5 w-5 shrink-0" />
+                  <span>Our team brings all necessary equipment, water capture systems, and eco-friendly cleaning products.</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="text-primary mr-2 mt-1 h-5 w-5 shrink-0" />
+                  <span>Payment is collected after service completion - we accept all major credit cards, cash, and digital payment apps.</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

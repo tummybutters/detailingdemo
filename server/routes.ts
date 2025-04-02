@@ -9,7 +9,6 @@ import {
   prepareCustomerEmailConfirmation, 
   sendEmailNotification 
 } from "./emailService";
-import { addSubscriberToMailchimp } from "./mailchimpService";
 import { syncBookingsToGoogleSheets, addBookingToGoogleSheets, checkGoogleSheetsCredentials } from "./googleSheetsSync";
 
 // Type for enhanced booking data
@@ -226,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Contact form & mailing list subscription endpoint
+  // Contact form endpoint (Mailchimp integration removed)
   app.post('/api/subscribe', async (req, res) => {
     try {
       const { email, firstName, lastName, phone, subject, message } = req.body;
@@ -247,28 +246,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         lastName: lastName || '',
         phone: phone || '',
         subject: subject || '',
-        message: message || '',
-        mailchimpStatus: 'pending'
+        message: message || ''
       };
       
       console.log('Contact form submission received:', contactSubmission);
       
-      // Try to add to Mailchimp but don't fail the whole request if it doesn't work
-      let mailchimpStatus = 'error';
-      try {
-        const response = await addSubscriberToMailchimp(email, firstName, lastName || '', phone);
-        mailchimpStatus = 'subscribed';
-        console.log(`Successfully added contact to Mailchimp: ${email}`);
-        contactSubmission.mailchimpStatus = 'subscribed';
-      } catch (mailchimpError: any) {
-        console.warn(`Mailchimp subscription failed but continuing: ${mailchimpError.message}`);
-        // We're intentionally not re-throwing this error so the contact form still works
-      }
-      
       return res.status(200).json({
         success: true,
         message: 'Your message has been received successfully',
-        mailchimpStatus,
         contactSubmission
       });
     } catch (error: any) {

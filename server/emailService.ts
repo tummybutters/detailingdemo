@@ -1,5 +1,4 @@
 import { Booking } from '@shared/schema';
-import { processBookingWithMailchimp, sendTransactionalEmail } from './mailchimpService';
 
 /**
  * Formats a booking for email content
@@ -153,8 +152,8 @@ export function prepareCustomerEmailConfirmation(booking: Booking): EmailData {
 }
 
 /**
- * Send email notifications using Mailchimp
- * Also adds the customer to the Mailchimp audience for future marketing emails
+ * Log email notifications (previously used Mailchimp)
+ * No longer adds the customer to a mailing list
  */
 export async function sendEmailNotification(emailData: EmailData): Promise<boolean> {
   try {
@@ -164,18 +163,9 @@ export async function sendEmailNotification(emailData: EmailData): Promise<boole
     console.log(`Subject: ${emailData.subject}`);
     console.log(`Booking ID: ${emailData.booking.id}`);
     
-    // 1. Add the customer to Mailchimp audience if it's a customer email
-    if (emailData.to === emailData.booking.email) {
-      await processBookingWithMailchimp(emailData.booking);
-    }
-    
-    // 2. Send the actual email notification using Mailchimp
-    await sendTransactionalEmail(
-      emailData.to,
-      emailData.subject,
-      emailData.html,
-      emailData.text
-    );
+    // Simply log the notification content for now
+    console.log(`Email would be sent to: ${emailData.to}`);
+    console.log(`Subject: ${emailData.subject}`);
     
     // Log detailed info for audit purposes
     console.log(`Customer: ${emailData.booking.firstName} ${emailData.booking.lastName}`);
@@ -207,10 +197,9 @@ export async function sendEmailNotification(emailData: EmailData): Promise<boole
     console.log('=======================================================');
     return true;
   } catch (error: any) {
-    console.error(`Failed to send email notification: ${error.message}`);
+    console.error(`Failed to process email notification: ${error.message}`);
     console.error(error);
     // Return true anyway to not block the booking process
-    // In a production app, you might want to handle this differently
     return true;
   }
 }

@@ -258,7 +258,16 @@ export default function MultiStepBookingForm() {
   
   // Extract price value as numeric
   const extractPrice = (priceString: string): number => {
-    // Remove non-numeric characters except for decimal points
+    // Special handling for price ranges (e.g., "+$45-$85")
+    if (priceString.includes('-')) {
+      // Take the lower value in the range for conservative pricing
+      const rangeMatch = priceString.match(/\$(\d+)-\$(\d+)/);
+      if (rangeMatch && rangeMatch[1]) {
+        return parseFloat(rangeMatch[1]) || 0;
+      }
+    }
+    
+    // Standard case: remove non-numeric characters except for decimal points
     const numericString = priceString.replace(/[^0-9.]/g, '');
     return parseFloat(numericString) || 0;
   };
@@ -724,6 +733,21 @@ export default function MultiStepBookingForm() {
     if (fields.includes("location") && currentStep === 0) {
       const result = await form.trigger(fields as any[]);
       return result && isValidAddress;
+    }
+    
+    // Special handling for service selection - make sure a package is selected
+    if (fields.includes("mainService") && currentStep === 3) {
+      const result = await form.trigger(fields as any[]);
+      
+      if (!result) {
+        toast({
+          title: "Service Selection Required",
+          description: "Please select a service package before proceeding.",
+          variant: "destructive",
+        });
+        return false;
+      }
+      return result;
     }
     
     const result = await form.trigger(fields as any[]);

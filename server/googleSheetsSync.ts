@@ -7,6 +7,7 @@ import { storage } from './storage';
 // Spreadsheet ID provided by user
 const SPREADSHEET_ID = '1QzR1-WiCTq9H5k-zA2PoJuSiXhAVp0JhxQy_Nq_9wGs';
 const SHEET_NAME = 'Bookings';
+const CONTACT_SHEET_NAME = 'Contact';
 const CREDENTIALS_PATH = path.join(process.cwd(), 'service-account.json');
 
 // Function to authenticate with Google Sheets API
@@ -78,6 +79,18 @@ const HEADER_ROW = [
   'Last Name',
   'Email',
   'Phone'
+];
+
+// Create a header row for the contact sheet if it doesn't exist
+const CONTACT_HEADER_ROW = [
+  'ID',
+  'Timestamp',
+  'First Name',
+  'Last Name',
+  'Email',
+  'Phone',
+  'Subject',
+  'Message'
 ];
 
 // Function to clear existing data and write all bookings to the sheet (newest first)
@@ -306,7 +319,158 @@ async function ensureBookingsSheetExists(auth: any): Promise<boolean> {
   }
 }
 
-// Check for Google Sheets credentials on startup and ensure sheet exists
+// Function to ensure the Contact sheet exists in the spreadsheet
+async function ensureContactSheetExists(auth: any): Promise<boolean> {
+  try {
+    const sheets = google.sheets({ version: 'v4', auth });
+    
+    // Get spreadsheet info
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId: SPREADSHEET_ID
+    });
+    
+    // Check if Contact sheet already exists
+    const sheetExists = spreadsheet.data.sheets?.some(
+      sheet => sheet.properties?.title === CONTACT_SHEET_NAME
+    );
+    
+    if (!sheetExists) {
+      console.log(`Creating '${CONTACT_SHEET_NAME}' sheet in spreadsheet...`);
+      
+      // Add new sheet
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId: SPREADSHEET_ID,
+        requestBody: {
+          requests: [
+            {
+              addSheet: {
+                properties: {
+                  title: CONTACT_SHEET_NAME
+                }
+              }
+            }
+          ]
+        }
+      });
+      
+      // Add header row
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${CONTACT_SHEET_NAME}!A1`,
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [CONTACT_HEADER_ROW]
+        }
+      });
+      
+      console.log(`'${CONTACT_SHEET_NAME}' sheet created successfully with headers`);
+    } else {
+      console.log(`'${CONTACT_SHEET_NAME}' sheet already exists in spreadsheet`);
+    }
+    
+    return true;
+  } catch (error) {
+    console.error(`Error ensuring ${CONTACT_SHEET_NAME} sheet exists:`, error);
+    return false;
+  }
+}
+
+// Function to add a contact form submission to the Contact sheet
+export async function addContactToGoogleSheets(contactData: {
+  id: number;
+  timestamp: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}): Promise<boolean> {
+  // Get auth client
+  const auth = await getAuthClient();
+  if (!auth) {
+    console.error('Failed to get Google auth client');
+    return false;
+  }
+
+  try {
+    // Ensure the Contact sheet exists
+    const sheetExists = await ensureContactSheetExists(auth);
+    if (!sheetExists) {
+      console.error('Failed to create or verify Contact sheet for adding contact submission');
+      return false;
+    }
+    
+    // Create sheets API instance
+    const sheets = google.sheets({ version: 'v4', auth });
+    
+    // Convert contact data to row format
+    const row = [
+      contactData.id.toString(),
+      contactData.timestamp,
+      contactData.firstName,
+      contactData.lastName,
+      contactData.email,
+      contactData.phone,
+      contactData.subject,
+      contactData.message
+    ];
+    
+    // Get spreadsheet info to find the Contact sheet ID
+    const spreadsheet = await sheets.spreadsheets.get({
+      spreadsheetId: SPREADSHEET_ID
+    });
+    
+    // Find the sheet ID for the CONTACT_SHEET_NAME
+    const sheet = spreadsheet.data.sheets?.find(
+      s => s.properties?.title === CONTACT_SHEET_NAME
+    );
+    
+    if (!sheet || sheet.properties?.sheetId === undefined) {
+      throw new Error(`Could not find sheet ID for ${CONTACT_SHEET_NAME}`);
+    }
+    
+    const contactSheetId = sheet.properties.sheetId;
+    
+    // Insert after header row (at A2)
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: SPREADSHEET_ID,
+      requestBody: {
+        requests: [
+          {
+            insertDimension: {
+              range: {
+                sheetId: contactSheetId,
+                dimension: 'ROWS',
+                startIndex: 1, // After header row (0-indexed)
+                endIndex: 2 // Insert one row
+              },
+              inheritFromBefore: false
+            }
+          }
+        ]
+      }
+    });
+    
+    // Add the new data to the inserted row
+    const response = await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${CONTACT_SHEET_NAME}!A2`, // Row after header
+      valueInputOption: 'RAW',
+      requestBody: {
+        values: [row],
+      },
+    });
+    
+    console.log(`Added contact submission to Google Sheets. Updated ${response.data.updatedCells} cells.`);
+    return true;
+  } catch (error) {
+    console.error('Error adding contact to Google Sheets:', error);
+    return false;
+  }
+}
+
+// Check for Google Sheets credentials on startup and ensure sheets exist
 export async function checkGoogleSheetsCredentials(): Promise<boolean> {
   try {
     if (!fs.existsSync(CREDENTIALS_PATH)) {
@@ -322,10 +486,16 @@ export async function checkGoogleSheetsCredentials(): Promise<boolean> {
     
     console.log('Google Sheets credentials valid - sheets integration enabled');
     
-    // Ensure the Bookings sheet exists
-    const sheetExists = await ensureBookingsSheetExists(auth);
-    if (!sheetExists) {
+    // Ensure both sheets exist
+    const bookingsSheetExists = await ensureBookingsSheetExists(auth);
+    if (!bookingsSheetExists) {
       console.log('Failed to create or verify Bookings sheet');
+      return false;
+    }
+    
+    const contactSheetExists = await ensureContactSheetExists(auth);
+    if (!contactSheetExists) {
+      console.log('Failed to create or verify Contact sheet');
       return false;
     }
     

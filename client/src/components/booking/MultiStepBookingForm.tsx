@@ -705,16 +705,8 @@ export default function MultiStepBookingForm() {
       }
       
       setCurrentStep(prev => prev + 1);
-      // Scroll to top of form when changing steps
-      setTimeout(() => {
-        // Using both methods for more reliable scrolling across browsers
-        stepsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Also scroll window to ensure visibility
-        window.scrollTo({
-          top: stepsRef.current?.offsetTop - 20 || 0,
-          behavior: 'smooth'
-        });
-      }, 50); // Short timeout to ensure DOM updates before scrolling
+      // Scroll to top when changing steps
+      stepsRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
   
@@ -769,16 +761,7 @@ export default function MultiStepBookingForm() {
     
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
-      // Scroll to top of form when changing steps
-      setTimeout(() => {
-        // Using both methods for more reliable scrolling across browsers
-        stepsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Also scroll window to ensure visibility
-        window.scrollTo({
-          top: stepsRef.current?.offsetTop - 20 || 0,
-          behavior: 'smooth'
-        });
-      }, 50); // Short timeout to ensure DOM updates before scrolling
+      stepsRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   };
   

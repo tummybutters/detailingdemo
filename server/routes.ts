@@ -10,7 +10,6 @@ import {
   sendEmailNotification 
 } from "./emailService";
 import { addSubscriberToMailchimp } from "./mailchimpService";
-import { syncSingleBookingToGoogleSheets, syncBookingsToGoogleSheets } from "./googleSheetsSync";
 
 // Type for enhanced booking data
 interface EnhancedBookingData {
@@ -83,19 +82,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`Vehicle: ${booking.vehicleType}, Service: ${booking.mainService}`);
       console.log(`Appointment: ${booking.appointmentDate} at ${booking.appointmentTime}`);
       console.log(`Location: ${booking.location}`);
-      
-      // Add the booking to Google Sheets (don't await to avoid delaying the response)
-      syncSingleBookingToGoogleSheets(booking)
-        .then(success => {
-          if (success) {
-            console.log(`Successfully added booking ${booking.bookingReference} to Google Sheets`);
-          } else {
-            console.warn(`Failed to add booking ${booking.bookingReference} to Google Sheets`);
-          }
-        })
-        .catch(error => {
-          console.error('Error syncing booking to Google Sheets:', error);
-        });
       
       // Return the created booking
       return res.status(201).json({
@@ -191,32 +177,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating booking status:', error);
       return res.status(500).json({
         message: 'An error occurred while updating the booking status'
-      });
-    }
-  });
-  
-  // Endpoint to manually sync all bookings to Google Sheets
-  app.post('/api/sync-bookings-to-sheets', async (req, res) => {
-    try {
-      console.log('Manual sync of bookings to Google Sheets requested');
-      const success = await syncBookingsToGoogleSheets();
-      
-      if (success) {
-        return res.status(200).json({
-          success: true,
-          message: 'All bookings successfully synced to Google Sheets'
-        });
-      } else {
-        return res.status(500).json({
-          success: false,
-          message: 'Failed to sync bookings to Google Sheets'
-        });
-      }
-    } catch (error: any) {
-      console.error('Error syncing bookings to Google Sheets:', error);
-      return res.status(500).json({
-        success: false,
-        message: error.message || 'An unexpected error occurred'
       });
     }
   });

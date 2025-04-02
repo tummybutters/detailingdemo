@@ -8,50 +8,13 @@ async function throwIfResNotOk(res: Response) {
 }
 
 export async function apiRequest(
-  urlOrOptions: string | {
-    method: string;
-    url?: string;
-    data?: unknown;
-    headers?: Record<string, string>;
-  },
-  options?: {
-    method?: string;
-    data?: unknown;
-    headers?: Record<string, string>;
-  }
+  method: string,
+  url: string,
+  data?: unknown | undefined,
 ): Promise<Response> {
-  // Determine if we're using the new API (url, options) or the old API (method, url, data)
-  let url: string;
-  let method: string;
-  let data: unknown | undefined;
-  let headers: Record<string, string> = {};
-
-  if (typeof urlOrOptions === 'string') {
-    // New API: (url, options)
-    url = urlOrOptions;
-    method = options?.method || 'GET';
-    data = options?.data;
-    if (options?.headers) {
-      headers = { ...options.headers };
-    }
-  } else {
-    // Old API: (method, url, data)
-    method = urlOrOptions.method;
-    url = urlOrOptions.url || '';
-    data = urlOrOptions.data;
-    if (urlOrOptions.headers) {
-      headers = { ...urlOrOptions.headers };
-    }
-  }
-
-  // Set default Content-Type if we have data
-  if (data && !headers['Content-Type']) {
-    headers['Content-Type'] = 'application/json';
-  }
-
   const res = await fetch(url, {
     method,
-    headers,
+    headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
   });

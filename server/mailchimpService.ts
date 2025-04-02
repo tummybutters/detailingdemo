@@ -5,37 +5,22 @@ import { Booking } from '@shared/schema';
 const hasMailchimpCredentials = 
   process.env.MAILCHIMP_API_KEY && 
   process.env.MAILCHIMP_API_KEY.length > 0 &&
-  process.env.MAILCHIMP_SERVER &&
-  process.env.MAILCHIMP_SERVER.length > 0 &&
   process.env.MAILCHIMP_AUDIENCE_ID && 
   process.env.MAILCHIMP_AUDIENCE_ID.length > 0;
 
 // Initialize the Mailchimp client if credentials are available
-let mailchimpInitialized = false;
-
 if (hasMailchimpCredentials) {
   try {
-    // Validate that the server contains the dc suffix (e.g., 'us1')
-    const server = process.env.MAILCHIMP_SERVER;
-    
     mailchimp.setConfig({
       apiKey: process.env.MAILCHIMP_API_KEY,
-      server: server, 
+      server: process.env.MAILCHIMP_SERVER || 'us1', 
     });
-    
-    mailchimpInitialized = true;
     console.log('Mailchimp client initialized successfully');
-    console.log(`Using server: ${server}, audience ID: ${process.env.MAILCHIMP_AUDIENCE_ID}`);
   } catch (error) {
     console.error('Failed to initialize Mailchimp client:', error);
   }
 } else {
-  const missingCredentials = [];
-  if (!process.env.MAILCHIMP_API_KEY) missingCredentials.push('MAILCHIMP_API_KEY');
-  if (!process.env.MAILCHIMP_SERVER) missingCredentials.push('MAILCHIMP_SERVER');
-  if (!process.env.MAILCHIMP_AUDIENCE_ID) missingCredentials.push('MAILCHIMP_AUDIENCE_ID');
-  
-  console.log(`Mailchimp credentials not found or incomplete - missing: ${missingCredentials.join(', ')} - email marketing features will be disabled`);
+  console.log('Mailchimp credentials not found or incomplete - email marketing features will be disabled');
 }
 
 /**
@@ -53,8 +38,8 @@ export async function addSubscriberToMailchimp(
   phone?: string
 ): Promise<any> {
   // Skip Mailchimp integration if credentials aren't available
-  if (!hasMailchimpCredentials || !mailchimpInitialized) {
-    console.log('Skipping Mailchimp subscription - credentials not available or client not initialized');
+  if (!hasMailchimpCredentials) {
+    console.log('Skipping Mailchimp subscription - credentials not available');
     return {
       status: 'skipped',
       message: 'Mailchimp integration not configured',
@@ -63,25 +48,14 @@ export async function addSubscriberToMailchimp(
   }
   
   try {
-    // Input validation
-    if (!email || !email.includes('@')) {
-      return {
-        status: 'error',
-        message: 'Invalid email address format',
-        email_address: email
-      };
-    }
-    
-    console.log(`Attempting to add ${email} to Mailchimp audience ${process.env.MAILCHIMP_AUDIENCE_ID}`);
-    
     const response = await mailchimp.lists.addListMember(
       process.env.MAILCHIMP_AUDIENCE_ID as string,
       {
         email_address: email,
         status: 'subscribed',
         merge_fields: {
-          FNAME: firstName || '',
-          LNAME: lastName || '',
+          FNAME: firstName,
+          LNAME: lastName,
           PHONE: phone || '',
         },
       }
@@ -100,36 +74,8 @@ export async function addSubscriberToMailchimp(
       };
     }
     
-    // Handle API key related errors
-    if (error.response && error.response.body && 
-       (error.response.body.title === 'API Key Invalid' || 
-        error.response.body.status === 401)) {
-      console.error('Mailchimp API key appears to be invalid. Please check your MAILCHIMP_API_KEY environment variable.');
-      return {
-        status: 'error',
-        message: 'Mailchimp authentication failed',
-        email_address: email
-      };
-    }
-    
-    // Handle audience ID related errors
-    if (error.response && error.response.body && error.response.body.status === 404) {
-      console.error('Mailchimp audience not found. Please check your MAILCHIMP_AUDIENCE_ID environment variable.');
-      return {
-        status: 'error',
-        message: 'Mailchimp audience not found',
-        email_address: email
-      };
-    }
-    
     console.error(`Failed to add contact to Mailchimp audience: ${error.message}`);
-    console.error('Full error:', error);
-    
-    return {
-      status: 'error',
-      message: `Mailchimp subscription failed: ${error.message}`,
-      email_address: email
-    };
+    throw error;
   }
 }
 

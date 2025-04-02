@@ -2,30 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Premium mobile car detailing services in Irvine, Orange County & Southern California. Professional auto detailing at your location by Hardys Wash N' Wax.">
-  <meta name="keywords" content="Car Detailing Irvine, Mobile Car Detailing Orange County, Auto Detailing SoCal, Interior Car Detailing, Exterior Car Detailing, Ceramic Coating, Paint Correction">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="Premium mobile car detailing services in California. Luxury Where It Matters Most: Your Home on the Road. Professional detailing right at your doorstep by Hardys Wash N' Wax.">
+  <meta name="keywords" content="Car Detailing, Mobile Car Detailing, Auto Detailing California, Interior Car Detailing, Exterior Car Detailing, Ceramic Coating, Paint Correction, Davis, Irvine, Sacramento">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Hardys Wash N' Wax">
-  <meta property="og:title" content="Hardys Wash N' Wax - Mobile Car Detailing Irvine & Orange County">
-  <meta property="og:description" content="Premium mobile car detailing services in Irvine, Orange County & Southern California. Professional auto detailing at your location.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="Hardys Wash N' Wax - Mobile Car Detailing Services California">
+  <meta property="og:description" content="Luxury Where It Matters Most: Your Home on the Road. Professional detailing right at your doorstep with three premium service tiers.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://hardyswashnwax.com">
+  <meta property="og:image" content="/logo-og.png">
+  <meta property="og:site_name" content="Hardys Wash N' Wax">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hardys Wash N' Wax - Mobile Car Detailing">
+  <meta name="twitter:description" content="Luxury Where It Matters Most: Your Home on the Road. Mobile detailing services throughout California.">
+  <meta name="twitter:image" content="/logo-twitter.png">
   
   <!-- Accessibility improvements -->
   <meta name="theme-color" content="#FFB375">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
+  <!-- Fonts with display=swap for better performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
-  <title>Hardys Wash N' Wax - Mobile Car Detailing Irvine & Orange County</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   
-  <!-- Preload critical assets for performance -->
+  <title>Hardys Wash N' Wax - Mobile Car Detailing Services California</title>
+  
+  <!-- Resource hints for performance -->
   <link rel="preload" href="/src/main.tsx" as="script">
+  <link rel="preload" as="style" href="/src/index.css">
   <link rel="canonical" href="https://hardyswashnwax.com">
+  
+  <!-- JSON-LD structured data for better SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Hardys Wash N' Wax",
+      "image": "/logo.png",
+      "url": "https://hardyswashnwax.com",
+      "telephone": "+1-800-123-4567",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main Street",
+        "addressLocality": "Irvine",
+        "addressRegion": "CA",
+        "postalCode": "92602",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 33.6846,
+        "longitude": -117.8265
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/hardyswashnwax",
+        "https://www.instagram.com/hardyswashnwax"
+      ],
+      "priceRange": "$$$"
+    }
+  </script>
+  
+  <!-- Script for removing FOUC (Flash of Unstyled Content) -->
+  <script>
+    (function() {
+      // Briefly hide the body until CSS is loaded
+      document.documentElement.classList.add('loading');
+      window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+      });
+    })();
+  </script>
+  <style>
+    .loading { opacity: 0; }
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
 <body>
   <div id="root"></div>
+  <noscript>
+    <div style="padding: 2rem; text-align: center; max-width: 600px; margin: 0 auto;">
+      <h1>JavaScript Required</h1>
+      <p>This website requires JavaScript to function properly. Please enable JavaScript in your browser settings to continue.</p>
+    </div>
+  </noscript>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

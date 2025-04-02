@@ -73,44 +73,88 @@ export default function LocationSearch({ value, onChange, onAddressValidated, fi
   };
 
   // Initialize Mapbox Geocoder
+  // Track geocoder instance for cleanup
+  const geocoderRef = useRef<any>(null);
+
   useEffect(() => {
+    // Clear any existing geocoder in the container
+    if (geocoderContainerRef.current) {
+      // Remove any previous geocoder instances
+      while (geocoderContainerRef.current.firstChild) {
+        geocoderContainerRef.current.removeChild(geocoderContainerRef.current.firstChild);
+      }
+    }
+    
     if (!geocoderContainerRef.current || geocoderInitialized) return;
     
     // Dynamically load Mapbox GL JS and Geocoder if needed
     const loadMapboxScripts = async () => {
-      // Load Mapbox GL JS if not already loaded
-      if (!window.mapboxgl) {
-        const mapboxScript = document.createElement('script');
-        mapboxScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js';
-        document.head.appendChild(mapboxScript);
+      try {
+        // Check if scripts are already being loaded by another instance
+        const mapboxLoading = document.getElementById('mapbox-gl-script');
+        const geocoderLoading = document.getElementById('mapbox-geocoder-script');
         
-        const mapboxCss = document.createElement('link');
-        mapboxCss.rel = 'stylesheet';
-        mapboxCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css';
-        document.head.appendChild(mapboxCss);
+        // Load Mapbox GL JS if not already loaded
+        if (!window.mapboxgl && !mapboxLoading) {
+          const mapboxScript = document.createElement('script');
+          mapboxScript.id = 'mapbox-gl-script';
+          mapboxScript.src = 'https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js';
+          document.head.appendChild(mapboxScript);
+          
+          const mapboxCss = document.createElement('link');
+          mapboxCss.id = 'mapbox-gl-css';
+          mapboxCss.rel = 'stylesheet';
+          mapboxCss.href = 'https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css';
+          document.head.appendChild(mapboxCss);
+          
+          await new Promise(resolve => {
+            mapboxScript.onload = resolve;
+          });
+        } else if (mapboxLoading && !window.mapboxgl) {
+          // Wait for the other instance to finish loading
+          await new Promise(resolve => {
+            const checkInterval = setInterval(() => {
+              if (window.mapboxgl) {
+                clearInterval(checkInterval);
+                resolve(true);
+              }
+            }, 100);
+          });
+        }
         
-        await new Promise(resolve => {
-          mapboxScript.onload = resolve;
-        });
+        // Load Mapbox Geocoder if not already loaded
+        if (!window.MapboxGeocoder && !geocoderLoading) {
+          const geocoderScript = document.createElement('script');
+          geocoderScript.id = 'mapbox-geocoder-script';
+          geocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js';
+          document.head.appendChild(geocoderScript);
+          
+          const geocoderCss = document.createElement('link');
+          geocoderCss.id = 'mapbox-geocoder-css';
+          geocoderCss.rel = 'stylesheet';
+          geocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css';
+          document.head.appendChild(geocoderCss);
+          
+          await new Promise(resolve => {
+            geocoderScript.onload = resolve;
+          });
+        } else if (geocoderLoading && !window.MapboxGeocoder) {
+          // Wait for the other instance to finish loading
+          await new Promise(resolve => {
+            const checkInterval = setInterval(() => {
+              if (window.MapboxGeocoder) {
+                clearInterval(checkInterval);
+                resolve(true);
+              }
+            }, 100);
+          });
+        }
+        
+        return true;
+      } catch (error) {
+        console.error("Error loading Mapbox scripts:", error);
+        return false;
       }
-      
-      // Load Mapbox Geocoder if not already loaded
-      if (!window.MapboxGeocoder) {
-        const geocoderScript = document.createElement('script');
-        geocoderScript.src = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js';
-        document.head.appendChild(geocoderScript);
-        
-        const geocoderCss = document.createElement('link');
-        geocoderCss.rel = 'stylesheet';
-        geocoderCss.href = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css';
-        document.head.appendChild(geocoderCss);
-        
-        await new Promise(resolve => {
-          geocoderScript.onload = resolve;
-        });
-      }
-      
-      return true;
     };
     
     const initGeocoder = async () => {
@@ -261,7 +305,9 @@ export default function LocationSearch({ value, onChange, onAddressValidated, fi
           }
         });
         
+        // Save references for later cleanup
         setMap(mapInstance);
+        geocoderRef.current = geocoder;
         setGeocoderInitialized(true);
       } catch (error) {
         console.error("Error initializing Mapbox:", error);
@@ -270,9 +316,30 @@ export default function LocationSearch({ value, onChange, onAddressValidated, fi
     
     initGeocoder();
     
+    // Comprehensive cleanup function
     return () => {
-      if (map) {
-        map.remove();
+      try {
+        // Remove the geocoder UI if it exists
+        if (geocoderRef.current) {
+          if (typeof geocoderRef.current.onRemove === 'function') {
+            geocoderRef.current.onRemove();
+          }
+          geocoderRef.current = null;
+        }
+        
+        // Clean up the map instance
+        if (map) {
+          map.remove();
+        }
+        
+        // Clean the container
+        if (geocoderContainerRef.current) {
+          while (geocoderContainerRef.current.firstChild) {
+            geocoderContainerRef.current.removeChild(geocoderContainerRef.current.firstChild);
+          }
+        }
+      } catch (err) {
+        console.error('Error during map cleanup:', err);
       }
     };
   }, [onChange, onAddressValidated, geocoderInitialized, value]);

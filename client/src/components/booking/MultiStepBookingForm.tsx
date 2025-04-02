@@ -58,27 +58,55 @@ const serviceCategories = [
   { value: "complete", label: "Complete Package", icon: <Sparkles className="w-6 h-6 text-primary-red" />, description: "Full interior and exterior detailing" }
 ];
 
-// Base service prices that will be adjusted based on vehicle type
-const baseServicePrices = {
-  interior: {
-    "interior-deep-clean": { price: 225, duration: "3-4 hours" }
+// Service prices for each vehicle tier (static pricing)
+const servicePrices = {
+  // Sedan/Coupe Tier (Tier 1)
+  sedan: {
+    interior: {
+      "interior-deep-clean": { price: 199, duration: "3-4 hours" }
+    },
+    exterior: {
+      "express-detail": { price: 99, duration: "1-1.5 hours" },
+      "exterior-wash-wax": { price: 149, duration: "2-3 hours" },
+      "exterior-polish-wax": { price: 249, duration: "3-4 hours" }
+    },
+    complete: {
+      "luxury-full-detail": { price: 399, duration: "5-6 hours" },
+      "showroom-prep": { price: 599, duration: "7-8 hours" }
+    }
   },
-  exterior: {
-    "express-detail": { price: 125, duration: "1-1.5 hours" },
-    "exterior-wash-wax": { price: 175, duration: "2-3 hours" },
-    "exterior-polish-wax": { price: 275, duration: "3-4 hours" }
+  
+  // SUV/Truck Tier (Tier 2)
+  suv: {
+    interior: {
+      "interior-deep-clean": { price: 249, duration: "3-4 hours" }
+    },
+    exterior: {
+      "express-detail": { price: 129, duration: "1-1.5 hours" },
+      "exterior-wash-wax": { price: 179, duration: "2-3 hours" },
+      "exterior-polish-wax": { price: 299, duration: "3-4 hours" }
+    },
+    complete: {
+      "luxury-full-detail": { price: 479, duration: "5-6 hours" },
+      "showroom-prep": { price: 729, duration: "7-8 hours" }
+    }
   },
-  complete: {
-    "luxury-full-detail": { price: 425, duration: "5-6 hours" },
-    "showroom-prep": { price: 575, duration: "7-8 hours" }
+  
+  // Van/Luxury Tier (Tier 3)
+  luxury: {
+    interior: {
+      "interior-deep-clean": { price: 299, duration: "3-4 hours" }
+    },
+    exterior: {
+      "express-detail": { price: 159, duration: "1-1.5 hours" },
+      "exterior-wash-wax": { price: 219, duration: "2-3 hours" },
+      "exterior-polish-wax": { price: 349, duration: "3-4 hours" }
+    },
+    complete: {
+      "luxury-full-detail": { price: 549, duration: "5-6 hours" },
+      "showroom-prep": { price: 849, duration: "7-8 hours" }
+    }
   }
-};
-
-// Price multipliers based on vehicle type
-const priceTierMultipliers = {
-  low: 1, // sedan/coupe
-  mid: 1.25, // SUV/truck
-  high: 1.5 // van/luxury
 };
 
 // Service Packages (displayed options)
@@ -87,8 +115,8 @@ const servicePackages = {
     { 
       value: "interior-deep-clean", 
       label: "Interior Detail Deep Clean", 
-      basePrice: baseServicePrices.interior["interior-deep-clean"].price,
-      duration: baseServicePrices.interior["interior-deep-clean"].duration, 
+      basePrice: servicePrices.sedan.interior["interior-deep-clean"].price,
+      duration: servicePrices.sedan.interior["interior-deep-clean"].duration, 
       description: "Thorough cleaning of all interior surfaces, carpet & upholstery cleaning, stain removal, leather conditioning, and protection" 
     }
   ],
@@ -96,22 +124,22 @@ const servicePackages = {
     { 
       value: "express-detail", 
       label: "Express Detail", 
-      basePrice: baseServicePrices.exterior["express-detail"].price,
-      duration: baseServicePrices.exterior["express-detail"].duration, 
+      basePrice: servicePrices.sedan.exterior["express-detail"].price,
+      duration: servicePrices.sedan.exterior["express-detail"].duration, 
       description: "Quick exterior wash, tire shine, and basic wax protection" 
     },
     { 
       value: "exterior-wash-wax", 
       label: "Exterior Wash & Wax", 
-      basePrice: baseServicePrices.exterior["exterior-wash-wax"].price,
-      duration: baseServicePrices.exterior["exterior-wash-wax"].duration, 
+      basePrice: servicePrices.sedan.exterior["exterior-wash-wax"].price,
+      duration: servicePrices.sedan.exterior["exterior-wash-wax"].duration, 
       description: "Thorough wash, premium wax application, wheel cleaning, and tire shine" 
     },
     { 
       value: "exterior-polish-wax", 
       label: "Exterior Polish & Wax", 
-      basePrice: baseServicePrices.exterior["exterior-polish-wax"].price,
-      duration: baseServicePrices.exterior["exterior-polish-wax"].duration, 
+      basePrice: servicePrices.sedan.exterior["exterior-polish-wax"].price,
+      duration: servicePrices.sedan.exterior["exterior-polish-wax"].duration, 
       description: "Full exterior polish to remove minor scratches and swirls, followed by premium wax protection" 
     }
   ],
@@ -119,16 +147,15 @@ const servicePackages = {
     { 
       value: "luxury-full-detail", 
       label: "Luxury Full Detail", 
-      basePrice: baseServicePrices.complete["luxury-full-detail"].price,
-      duration: baseServicePrices.complete["luxury-full-detail"].duration, 
+      basePrice: servicePrices.sedan.complete["luxury-full-detail"].price,
+      duration: servicePrices.sedan.complete["luxury-full-detail"].duration, 
       description: "Complete interior and exterior detailing with premium products and extra attention to detail" 
     },
     { 
       value: "showroom-prep", 
       label: "Showroom Prep", 
-      basePrice: baseServicePrices.complete["showroom-prep"].price,
-      additionalPrice: 150,
-      duration: baseServicePrices.complete["showroom-prep"].duration, 
+      basePrice: servicePrices.sedan.complete["showroom-prep"].price,
+      duration: servicePrices.sedan.complete["showroom-prep"].duration, 
       description: "Our most comprehensive package bringing your vehicle to like-new condition with ceramic coating" 
     }
   ]
@@ -237,27 +264,43 @@ export default function MultiStepBookingForm() {
   };
   
   // Calculate price based on vehicle type
-  const calculateServicePrice = (basePrice: number, vehicleType: string): number => {
-    // Get the vehicle price tier
-    const vehicle = vehicleTypes.find(v => v.value === vehicleType);
-    if (!vehicle) return basePrice;
+  // Get the price for a service based on the vehicle type
+  const getServicePrice = (serviceValue: string, serviceCategory: string, vehicleType: string): number => {
+    // Map vehicle type to one of our three pricing tiers
+    const priceTier = vehicleType === 'sedan' ? 'sedan' : 
+                     (vehicleType === 'suv' || vehicleType === 'truck') ? 'suv' : 'luxury';
     
-    // Apply the multiplier
-    const multiplier = priceTierMultipliers[vehicle.priceTier as keyof typeof priceTierMultipliers];
-    return basePrice * multiplier;
+    try {
+      // Type-safe price lookup
+      if (priceTier === 'sedan' && serviceCategory in servicePrices.sedan && 
+          serviceValue in servicePrices.sedan[serviceCategory as keyof typeof servicePrices.sedan]) {
+        return servicePrices.sedan[serviceCategory as keyof typeof servicePrices.sedan][serviceValue].price;
+      } 
+      else if (priceTier === 'suv' && serviceCategory in servicePrices.suv && 
+               serviceValue in servicePrices.suv[serviceCategory as keyof typeof servicePrices.suv]) {
+        return servicePrices.suv[serviceCategory as keyof typeof servicePrices.suv][serviceValue].price;
+      }
+      else if (priceTier === 'luxury' && serviceCategory in servicePrices.luxury && 
+               serviceValue in servicePrices.luxury[serviceCategory as keyof typeof servicePrices.luxury]) {
+        return servicePrices.luxury[serviceCategory as keyof typeof servicePrices.luxury][serviceValue].price;
+      }
+      
+      console.error('Unable to find price for this service/vehicle combination');
+      return 0;
+    } catch (error) {
+      console.error('Error getting service price:', error);
+      return 0;
+    }
   };
 
   // Calculate total price including add-ons
   const calculateTotalPrice = (serviceInfo: any, vehicleType: string, addOns: {id: string, price: string}[]): string => {
-    // Calculate service price based on vehicle type
+    // Get the static price based on service and vehicle type
     let basePrice = 0;
     
-    if (serviceInfo) {
-      basePrice = calculateServicePrice(serviceInfo.basePrice, vehicleType);
-      // Add additional price for Showroom Prep if applicable
-      if (serviceInfo.value === 'showroom-prep' && serviceInfo.additionalPrice) {
-        basePrice += serviceInfo.additionalPrice;
-      }
+    if (serviceInfo && vehicleType) {
+      // Get price from our fixed price tiers
+      basePrice = getServicePrice(serviceInfo.value, form.getValues().serviceCategory, vehicleType);
     }
     
     // Add the add-on costs
@@ -265,7 +308,8 @@ export default function MultiStepBookingForm() {
       return total + extractPrice(addon.price);
     }, 0);
     
-    return `$${(basePrice + addOnTotal).toFixed(2)}`;
+    // Return price as a whole number (no decimal places)
+    return `$${Math.round(basePrice + addOnTotal)}`;
   };
   
   // Calculate reference number
@@ -646,18 +690,18 @@ export default function MultiStepBookingForm() {
   
   // Get service price adjusted for vehicle type
   const getAdjustedPrice = (serviceInfo: any, vehicleType: string): string => {
-    if (!serviceInfo || !vehicleType) return "$0.00";
+    if (!serviceInfo || !vehicleType) return "$0";
     
-    // Calculate the base price adjusted for vehicle type
-    const basePriceAdjusted = calculateServicePrice(serviceInfo.basePrice, vehicleType);
-    
-    // Add additional price for special packages like Showroom Prep
-    let finalPrice = basePriceAdjusted;
-    if (serviceInfo.value === 'showroom-prep' && serviceInfo.additionalPrice) {
-      finalPrice += serviceInfo.additionalPrice;
+    try {
+      // Get price from our pricing tiers
+      const price = getServicePrice(serviceInfo.value, form.getValues().serviceCategory, vehicleType);
+      
+      // Format as whole dollar amount (no decimals)
+      return `$${price}`;
+    } catch (error) {
+      console.error('Error in getAdjustedPrice:', error);
+      return "$0";
     }
-    
-    return `$${finalPrice.toFixed(2)}`;
   };
   
   // Find selected service details with adjusted price based on vehicle type

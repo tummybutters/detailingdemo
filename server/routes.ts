@@ -9,7 +9,12 @@ import {
   prepareCustomerEmailConfirmation, 
   sendEmailNotification 
 } from "./emailService";
-import { syncBookingsToGoogleSheets, addBookingToGoogleSheets, checkGoogleSheetsCredentials } from "./googleSheetsSync";
+import { 
+  syncBookingsToGoogleSheets, 
+  addBookingToGoogleSheets, 
+  addContactToGoogleSheets, 
+  checkGoogleSheetsCredentials 
+} from "./googleSheetsSync";
 
 // Type for enhanced booking data
 interface EnhancedBookingData {
@@ -225,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Contact form endpoint (Mailchimp integration removed)
+  // Contact form endpoint with Google Sheets integration
   app.post('/api/subscribe', async (req, res) => {
     try {
       const { email, firstName, lastName, phone, subject, message } = req.body;
@@ -250,6 +255,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       
       console.log('Contact form submission received:', contactSubmission);
+      
+      // Add to Google Sheets (don't await, do this in the background)
+      addContactToGoogleSheets(contactSubmission)
+        .then(success => {
+          if (success) {
+            console.log(`Contact form submission successfully added to Google Sheets`);
+          } else {
+            console.warn(`Failed to add contact form submission to Google Sheets`);
+          }
+        })
+        .catch(error => {
+          console.error(`Error adding contact form to Google Sheets:`, error);
+        });
       
       return res.status(200).json({
         success: true,

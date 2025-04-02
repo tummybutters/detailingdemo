@@ -704,41 +704,63 @@ export default function MultiStepBookingForm() {
           break;
       }
       
+      // Handle step navigation differently based on which step we're on
+      const isServiceToDateTransition = currentStep === 3; // Service packages to date/time section
+      
       // Update step first
       setCurrentStep(prev => prev + 1);
       
-      // Enhanced scrolling logic with both immediate and delayed scrolling
-      // Immediate scroll to get closer to the top
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-      });
-      
-      // Use multiple attempts with different techniques
-      setTimeout(() => {
-        // Mobile-optimized approach - scroll to absolute position
+      // Extra aggressive handling for problematic transitions (especially service to date transition)
+      if (isServiceToDateTransition) {
+        console.log('Critical transition: Service packages to date/time section - using enhanced scrolling');
+        
+        // Most aggressive approach - force scroll to absolute top
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        
+        // Force layout recalculation
+        void document.documentElement.offsetHeight;
+        
+        // Multiple scroll attempts with increasing delays
+        window.scrollTo(0, 0);
+        
+        // Continue with multiple attempts to ensure scrolling works on all devices
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+            if (stepsRef.current) {
+              stepsRef.current.scrollIntoView({block: 'start', inline: 'nearest'});
+            }
+          }, i * 50); // 0ms, 50ms, 100ms
+        }
+      } else {
+        // Standard approach for other transitions
         window.scrollTo({
           top: 0,
           behavior: 'auto'
         });
         
-        // Fallback scrolling with a small delay
         setTimeout(() => {
-          if (stepsRef.current) {
-            // Try native approach first
-            window.scrollTo({
-              top: stepsRef.current.offsetTop - 20,
-              behavior: 'auto'
-            });
-            
-            // Then element method
-            stepsRef.current.scrollIntoView({
-              behavior: 'auto',
-              block: 'start'
-            });
-          }
+          window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+          });
+          
+          setTimeout(() => {
+            if (stepsRef.current) {
+              window.scrollTo({
+                top: stepsRef.current.offsetTop - 20,
+                behavior: 'auto'
+              });
+              
+              stepsRef.current.scrollIntoView({
+                behavior: 'auto',
+                block: 'start'
+              });
+            }
+          }, 50);
         }, 50);
-      }, 50);
+      }
     }
   };
   
@@ -792,39 +814,68 @@ export default function MultiStepBookingForm() {
     console.log('NAVIGATION: Going back from step', currentStep, 'to step', currentStep-1);
     
     if (currentStep > 0) {
+      // Check if we're navigating from date/time back to service packages
+      const isDateToServiceTransition = currentStep === 4; // Going from date/time back to service packages
+      
       setCurrentStep(prev => prev - 1);
       
-      // Immediate scroll to get closer to the top
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-      });
-      
-      // Use multiple attempts with different techniques
-      setTimeout(() => {
-        // Mobile-optimized approach - scroll to absolute position
+      // Special handling for problematic transitions
+      if (isDateToServiceTransition) {
+        console.log('Critical transition: Date/time back to service packages - using enhanced scrolling');
+        
+        // Most aggressive approach - force scroll to absolute top
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        
+        // Force layout recalculation
+        void document.documentElement.offsetHeight;
+        
+        // Multiple scroll attempts with increasing delays
+        window.scrollTo(0, 0);
+        
+        // Continue with multiple attempts to ensure scrolling works on all devices
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+            if (stepsRef.current) {
+              stepsRef.current.scrollIntoView({block: 'start', inline: 'nearest'});
+            }
+          }, i * 50); // 0ms, 50ms, 100ms
+        }
+      } else {
+        // Standard approach for other transitions
+        // Immediate scroll to get closer to the top
         window.scrollTo({
           top: 0,
           behavior: 'auto'
         });
         
-        // Fallback scrolling with a small delay
+        // Use multiple attempts with different techniques
         setTimeout(() => {
-          if (stepsRef.current) {
-            // Try native approach first
-            window.scrollTo({
-              top: stepsRef.current.offsetTop - 20,
-              behavior: 'auto'
-            });
-            
-            // Then element method
-            stepsRef.current.scrollIntoView({
-              behavior: 'auto',
-              block: 'start'
-            });
-          }
+          // Mobile-optimized approach - scroll to absolute position
+          window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+          });
+          
+          // Fallback scrolling with a small delay
+          setTimeout(() => {
+            if (stepsRef.current) {
+              // Try native approach first
+              window.scrollTo({
+                top: stepsRef.current.offsetTop - 20,
+                behavior: 'auto'
+              });
+              
+              // Then element method
+              stepsRef.current.scrollIntoView({
+                behavior: 'auto',
+                block: 'start'
+              });
+            }
+          }, 50);
         }, 50);
-      }, 50);
+      }
     }
   };
   

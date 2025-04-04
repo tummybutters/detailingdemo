@@ -1,4 +1,6 @@
 import { users, type User, type InsertUser, bookings, type Booking, type InsertBooking } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -15,92 +17,24 @@ export interface IStorage {
   updateBookingStatus(id: number, status: string): Promise<Booking | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private bookingsStore: Map<number, Booking>;
-  currentUserId: number;
-  currentBookingId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.bookingsStore = new Map();
-    this.currentUserId = 1;
-    this.currentBookingId = 1;
-    
-    // Add a test booking
-    this.addTestBooking();
-  }
-  
-  // Helper method to add test booking data
-  private addTestBooking() {
-    // First test booking - pending
-    const testBooking1: Booking = {
-      id: this.currentBookingId++,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phone: "(555) 123-4567",
-      location: "123 Main St, Davis, CA 95616",
-      vehicleType: "SUV",
-      serviceCategory: "Premium",
-      mainService: "Luxury Detail",
-      addOns: "Interior Sanitization",
-      totalPrice: "249.99",
-      totalDuration: "180",
-      appointmentDate: "2025-04-15",
-      appointmentTime: "10:00 AM",
-      conditionNotes: "Minor scratches on driver side door",
-      createdAt: new Date(),
-      status: "pending",
-      bookingReference: `HWW-${Date.now().toString().slice(-6)}-001`
-    };
-    
-    // Second test booking - confirmed
-    const testBooking2: Booking = {
-      id: this.currentBookingId++,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane.smith@example.com",
-      phone: "(555) 987-6543",
-      location: "456 Oak Ave, Irvine, CA 92617",
-      vehicleType: "Sedan",
-      serviceCategory: "Basic",
-      mainService: "Express Detail",
-      addOns: "Tire Shine",
-      totalPrice: "149.99",
-      totalDuration: "90",
-      appointmentDate: "2025-04-10",
-      appointmentTime: "2:30 PM",
-      conditionNotes: "Pet hair throughout interior",
-      createdAt: new Date(Date.now() - 86400000), // 1 day ago
-      status: "confirmed",
-      bookingReference: `HWW-${Date.now().toString().slice(-6)}-002`
-    };
-    
-    this.bookingsStore.set(testBooking1.id, testBooking1);
-    this.bookingsStore.set(testBooking2.id, testBooking2);
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const results = await db.select().from(users).where(eq(users.id, id));
+    return results.length > 0 ? results[0] : undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const results = await db.select().from(users).where(eq(users.username, username));
+    return results.length > 0 ? results[0] : undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const inserted = await db.insert(users).values(insertUser).returning();
+    return inserted[0];
   }
-
+  
   // Booking methods
   async createBooking(insertBooking: InsertBooking): Promise<Booking> {
-    const id = this.currentBookingId++;
     const now = new Date();
     
     // Generate a booking reference if not provided
@@ -111,36 +45,36 @@ export class MemStorage implements IStorage {
     const addOns = insertBooking.addOns || null;
     const conditionNotes = insertBooking.conditionNotes || null;
     
-    const booking: Booking = { 
+    const bookingData = {
       ...insertBooking,
       addOns,
-      conditionNotes, 
-      id, 
-      createdAt: now, 
-      status: "pending",
-      bookingReference
+      conditionNotes,
+      bookingReference,
+      status: "pending"
     };
     
-    this.bookingsStore.set(id, booking);
-    return booking;
+    const inserted = await db.insert(bookings).values(bookingData).returning();
+    return inserted[0];
   }
-
+  
   async getBookings(): Promise<Booking[]> {
-    return Array.from(this.bookingsStore.values());
+    return await db.select().from(bookings).orderBy(desc(bookings.createdAt));
   }
-
+  
   async getBooking(id: number): Promise<Booking | undefined> {
-    return this.bookingsStore.get(id);
+    const results = await db.select().from(bookings).where(eq(bookings.id, id));
+    return results.length > 0 ? results[0] : undefined;
   }
-
+  
   async updateBookingStatus(id: number, status: string): Promise<Booking | undefined> {
-    const booking = this.bookingsStore.get(id);
-    if (!booking) return undefined;
+    const updated = await db
+      .update(bookings)
+      .set({ status })
+      .where(eq(bookings.id, id))
+      .returning();
     
-    const updatedBooking = { ...booking, status };
-    this.bookingsStore.set(id, updatedBooking);
-    return updatedBooking;
+    return updated.length > 0 ? updated[0] : undefined;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

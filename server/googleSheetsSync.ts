@@ -470,6 +470,65 @@ export async function addContactToGoogleSheets(contactData: {
   }
 }
 
+// Function to import bookings from Google Sheets
+export async function importBookingsFromGoogleSheets(): Promise<any[]> {
+  // Get auth client
+  const auth = await getAuthClient();
+  if (!auth) {
+    console.error('Failed to get Google auth client for import');
+    return [];
+  }
+
+  try {
+    // Create sheets API instance
+    const sheets = google.sheets({ version: 'v4', auth });
+    
+    // Get the data from Google Sheets
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_NAME}!A1:P1000`, // Get all data
+    });
+    
+    // Get the rows from the response (excluding the header row)
+    const rows = response.data.values || [];
+    if (rows.length <= 1) {
+      console.log('No booking data found in Google Sheets or only header row exists');
+      return [];
+    }
+
+    // The first row is headers, skip it
+    const dataRows = rows.slice(1);
+    
+    // Convert rows to booking objects
+    return dataRows.map(row => {
+      // Match the order from bookingToSheetRow function
+      return {
+        id: parseInt(row[0], 10),                   // ID
+        bookingReference: row[1] || '',             // Reference
+        createdAt: row[2] ? new Date(row[2]) : new Date(), // Timestamp
+        location: row[3] || '',                     // Location
+        vehicleType: row[4] || '',                  // Vehicle Type
+        conditionNotes: row[5] || '',               // Vehicle Condition
+        serviceCategory: row[6] || '',              // Service Category
+        mainService: row[7] || '',                  // Main Service
+        addOns: row[8] || '',                       // Add-ons
+        totalPrice: row[9] || '',                   // Total Price
+        appointmentDate: row[10] || '',             // Appointment Date
+        appointmentTime: row[11] || '',             // Appointment Time
+        firstName: row[12] || '',                   // First Name
+        lastName: row[13] || '',                    // Last Name
+        email: row[14] || '',                       // Email
+        phone: row[15] || '',                       // Phone
+        status: 'pending',                          // Default status
+        totalDuration: '120 minutes',               // Default duration if not available
+      };
+    });
+  } catch (error) {
+    console.error('Error importing bookings from Google Sheets:', error);
+    return [];
+  }
+}
+
 // Check for Google Sheets credentials on startup and ensure sheets exist
 export async function checkGoogleSheetsCredentials(): Promise<boolean> {
   try {

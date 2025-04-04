@@ -2,6 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { checkGoogleSheetsCredentials, syncBookingsToGoogleSheets } from "./googleSheetsSync";
+import { storage } from "./storage";
 
 const app = express();
 app.use(express.json());
@@ -72,10 +73,24 @@ app.use((req, res, next) => {
     try {
       const googleSheetsEnabled = await checkGoogleSheetsCredentials();
       if (googleSheetsEnabled) {
-        // Perform initial sync of all bookings to Google Sheets
+        // First, attempt to restore bookings from Google Sheets if database is empty
+        // This is crucial for preserving booking data across redeployments
+        try {
+          const restoredCount = await storage.restoreBookingsFromGoogleSheets();
+          if (restoredCount > 0) {
+            log(`✓ Successfully restored ${restoredCount} bookings from Google Sheets`);
+          } else {
+            log('No bookings needed to be restored from Google Sheets');
+          }
+        } catch (restoreError) {
+          console.error('Error restoring bookings from Google Sheets:', restoreError);
+        }
+
+        // Then, sync all bookings back to Google Sheets
+        // This ensures both systems have the latest data
         const syncResult = await syncBookingsToGoogleSheets();
         if (syncResult) {
-          log('Initial sync of bookings to Google Sheets completed successfully');
+          log('✓ Initial sync of bookings to Google Sheets completed successfully');
         } else {
           log('Initial sync of bookings to Google Sheets failed');
         }

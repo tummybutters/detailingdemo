@@ -1,6 +1,7 @@
 import { users, type User, type InsertUser, bookings, type Booking, type InsertBooking } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
+import { importBookingsFromGoogleSheets } from "./googleSheetsSync";
 
 // modify the interface with any CRUD methods
 // you might need
@@ -15,6 +16,9 @@ export interface IStorage {
   getBookings(): Promise<Booking[]>;
   getBooking(id: number): Promise<Booking | undefined>;
   updateBookingStatus(id: number, status: string): Promise<Booking | undefined>;
+  
+  // Data recovery method
+  restoreBookingsFromGoogleSheets(): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -74,6 +78,75 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updated.length > 0 ? updated[0] : undefined;
+  }
+  
+  /**
+   * Restores booking data from Google Sheets if the database is empty
+   * This is crucial for preserving booking data across redeployments
+   * @returns The number of bookings restored from Google Sheets
+   */
+  async restoreBookingsFromGoogleSheets(): Promise<number> {
+    try {
+      // First, check if we have any bookings in the database
+      const existingBookings = await this.getBookings();
+      
+      if (existingBookings.length > 0) {
+        console.log(`Database already contains ${existingBookings.length} bookings. No need to restore from Google Sheets.`);
+        return 0;
+      }
+      
+      // If no bookings exist in the database, fetch them from Google Sheets
+      console.log('No bookings found in database. Attempting to restore from Google Sheets...');
+      const sheetsBookings = await importBookingsFromGoogleSheets();
+      
+      if (sheetsBookings.length === 0) {
+        console.log('No bookings found in Google Sheets to restore.');
+        return 0;
+      }
+      
+      // Insert each booking from Google Sheets into the database
+      let restoredCount = 0;
+      for (const bookingData of sheetsBookings) {
+        try {
+          // Prepare the booking data for insertion
+          const insertData: InsertBooking = {
+            firstName: bookingData.firstName,
+            lastName: bookingData.lastName,
+            email: bookingData.email,
+            phone: bookingData.phone,
+            location: bookingData.location,
+            vehicleType: bookingData.vehicleType,
+            serviceCategory: bookingData.serviceCategory,
+            mainService: bookingData.mainService,
+            addOns: bookingData.addOns,
+            totalPrice: bookingData.totalPrice,
+            totalDuration: bookingData.totalDuration,
+            appointmentDate: bookingData.appointmentDate,
+            appointmentTime: bookingData.appointmentTime,
+            conditionNotes: bookingData.conditionNotes,
+            bookingReference: bookingData.bookingReference
+          };
+          
+          // Insert the booking into the database
+          await db.insert(bookings).values({
+            ...insertData,
+            status: bookingData.status || 'pending',
+            createdAt: bookingData.createdAt,
+          });
+          
+          restoredCount++;
+        } catch (error) {
+          console.error(`Error restoring booking ${bookingData.id || 'unknown'} from Google Sheets:`, error);
+          // Continue with the next booking even if one fails
+        }
+      }
+      
+      console.log(`Successfully restored ${restoredCount} bookings from Google Sheets.`);
+      return restoredCount;
+    } catch (error) {
+      console.error('Error restoring bookings from Google Sheets:', error);
+      return 0;
+    }
   }
 }
 

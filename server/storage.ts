@@ -1,8 +1,8 @@
 import { users, type User, type InsertUser, bookings, type Booking, type InsertBooking } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
-// modify the interface with any CRUD methods
-// you might need
-
+// The storage interface remains the same to ensure compatibility with existing code
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
@@ -15,6 +15,11 @@ export interface IStorage {
   updateBookingStatus(id: number, status: string): Promise<Booking | undefined>;
 }
 
+/**
+ * Memory Storage implementation - used for development and testing
+ * Keeps data in memory (JavaScript Map objects)
+ * Data is lost when server restarts
+ */
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private bookingsStore: Map<number, Booking>;
@@ -27,7 +32,7 @@ export class MemStorage implements IStorage {
     this.currentUserId = 1;
     this.currentBookingId = 1;
     
-    // Add a test booking
+    // Add sample test bookings
     this.addTestBooking();
   }
   
@@ -143,4 +148,91 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+/**
+ * Database Storage implementation - used for production
+ * Stores data persistently in PostgreSQL database
+ * Implements the same interface as MemStorage for easy swapping
+ */
+export class DatabaseStorage implements IStorage {
+  /**
+   * Get a user by ID
+   */
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  /**
+   * Get a user by username
+   */
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  /**
+   * Create a new user
+   */
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  /**
+   * Create a new booking
+   */
+  async createBooking(insertBooking: InsertBooking): Promise<Booking> {
+    const now = new Date();
+    
+    // Generate a booking reference if not provided
+    const bookingReference = insertBooking.bookingReference || 
+      `HWW-${now.getTime().toString().slice(-6)}-${Math.floor(Math.random() * 1000)}`;
+    
+    // Insert the booking with default values for status and createdAt
+    const [booking] = await db
+      .insert(bookings)
+      .values({
+        ...insertBooking,
+        status: "pending",
+        bookingReference,
+        createdAt: now
+      })
+      .returning();
+    
+    return booking;
+  }
+
+  /**
+   * Get all bookings
+   */
+  async getBookings(): Promise<Booking[]> {
+    return await db.select().from(bookings).orderBy(bookings.id);
+  }
+
+  /**
+   * Get a booking by ID
+   */
+  async getBooking(id: number): Promise<Booking | undefined> {
+    const [booking] = await db.select().from(bookings).where(eq(bookings.id, id));
+    return booking || undefined;
+  }
+
+  /**
+   * Update a booking's status
+   */
+  async updateBookingStatus(id: number, status: string): Promise<Booking | undefined> {
+    const [updatedBooking] = await db
+      .update(bookings)
+      .set({ status })
+      .where(eq(bookings.id, id))
+      .returning();
+    
+    return updatedBooking || undefined;
+  }
+}
+
+// Use DatabaseStorage for production (persistent storage)
+export const storage = new DatabaseStorage();

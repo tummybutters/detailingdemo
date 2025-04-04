@@ -61,6 +61,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom theme colors for Hardys Wash N' Wax
+        'body-bg': '#F3F4E6',
+        'orange-primary': '#FFB375',
+        'orange-light': '#FFD7B5',
+        'red-primary': '#EE432C',
       },
       keyframes: {
         "accordion-down": {

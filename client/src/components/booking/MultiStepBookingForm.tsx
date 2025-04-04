@@ -13,6 +13,7 @@ import { CheckCircle, ArrowRight, ArrowLeft, MapPin, Calendar, Car, Settings,
 import LocationSearch from "./LocationSearch";
 import { ThreeDButton } from "@/components/ui/3d-button";
 import { ThreeDStepIcon, BackButton } from "@/components/ui/3d-step-icon";
+import { CustomCheckbox, SelectCard } from "@/components/ui/custom-checkbox";
 
 import {
   Form,
@@ -1082,40 +1083,15 @@ export default function MultiStepBookingForm() {
                               className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                             >
                               {vehicleTypes.map((vehicle) => (
-                                <div 
-                                  key={vehicle.value} 
-                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
-                                    ${field.value === vehicle.value 
-                                      ? 'border-2 border-primary transform -translate-y-1' 
-                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
-                                    }
-                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
-                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
-                                  `}
+                                <SelectCard
+                                  key={vehicle.value}
+                                  id={vehicle.value}
+                                  label={vehicle.label}
+                                  description={vehicle.description}
+                                  icon={vehicle.icon}
+                                  selected={field.value === vehicle.value}
                                   onClick={() => field.onChange(vehicle.value)}
-                                >
-                                  <div className="p-4">
-                                    <RadioGroupItem
-                                      value={vehicle.value}
-                                      id={vehicle.value}
-                                      className="sr-only"
-                                    />
-                                    <div className="flex items-center">
-                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === vehicle.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
-                                        {vehicle.icon}
-                                      </div>
-                                      <div>
-                                        <label 
-                                          htmlFor={vehicle.value}
-                                          className="block font-medium cursor-pointer"
-                                        >
-                                          {vehicle.label}
-                                        </label>
-                                        <span className="text-sm text-gray-500">{vehicle.description}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                />
                               ))}
                             </RadioGroup>
                           </FormControl>
@@ -1147,40 +1123,15 @@ export default function MultiStepBookingForm() {
                               className="flex flex-col space-y-3"
                             >
                               {serviceCategories.map((category) => (
-                                <div 
-                                  key={category.value} 
-                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
-                                    ${field.value === category.value 
-                                      ? 'border-2 border-primary transform -translate-y-1' 
-                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
-                                    }
-                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
-                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
-                                  `}
+                                <SelectCard
+                                  key={category.value}
+                                  id={category.value}
+                                  label={category.label}
+                                  description={category.description}
+                                  icon={category.icon}
+                                  selected={field.value === category.value}
                                   onClick={() => field.onChange(category.value)}
-                                >
-                                  <div className="p-4">
-                                    <RadioGroupItem
-                                      value={category.value}
-                                      id={category.value}
-                                      className="sr-only"
-                                    />
-                                    <div className="flex items-center">
-                                      <div className={`mr-3 text-2xl p-2 rounded-full ${field.value === category.value ? 'bg-primary/10' : 'bg-gray-100'}`}>
-                                        {category.icon}
-                                      </div>
-                                      <div>
-                                        <label 
-                                          htmlFor={category.value}
-                                          className="block font-medium cursor-pointer"
-                                        >
-                                          {category.label}
-                                        </label>
-                                        <span className="text-sm text-gray-500">{category.description}</span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                                />
                               ))}
                             </RadioGroup>
                           </FormControl>
@@ -1212,43 +1163,22 @@ export default function MultiStepBookingForm() {
                               className="flex flex-col space-y-3"
                             >
                               {servicePackages[selectedCategory as keyof typeof servicePackages].map((service) => (
-                                <div 
-                                  key={service.value} 
-                                  className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
-                                    ${field.value === service.value 
-                                      ? 'border-2 border-primary transform -translate-y-1' 
-                                      : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
-                                    }
-                                    before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
-                                    before:bg-gray-100 before:-z-10 before:border before:border-gray-200
-                                  `}
+                                <SelectCard
+                                  key={service.value}
+                                  id={service.value}
+                                  label={service.label}
+                                  description={
+                                    <>
+                                      <div>{service.description}</div>
+                                      <div className="text-sm text-gray-500 mt-1">Duration: {service.duration}</div>
+                                    </>
+                                  }
+                                  price={form.getValues().vehicleType 
+                                    ? getAdjustedPrice(service, form.getValues().vehicleType)
+                                    : `$${service.basePrice.toFixed(2)}`}
+                                  selected={field.value === service.value}
                                   onClick={() => field.onChange(service.value)}
-                                >
-                                  <div className="p-4">
-                                    <div className="flex justify-between items-start">
-                                      <div>
-                                        <RadioGroupItem
-                                          value={service.value}
-                                          id={service.value}
-                                          className="sr-only"
-                                        />
-                                        <label 
-                                          htmlFor={service.value}
-                                          className="block font-bold cursor-pointer"
-                                        >
-                                          {service.label}
-                                        </label>
-                                        <p className="text-sm text-gray-600 mt-1">{service.description}</p>
-                                        <p className="text-sm text-gray-500 mt-1">Duration: {service.duration}</p>
-                                      </div>
-                                      <span className="text-primary font-bold text-lg bg-primary/5 px-3 py-1 rounded-md">
-                                        {form.getValues().vehicleType 
-                                          ? getAdjustedPrice(service, form.getValues().vehicleType)
-                                          : `$${service.basePrice.toFixed(2)}`}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
+                                />
                               ))}
                             </RadioGroup>
                           </FormControl>
@@ -1265,39 +1195,15 @@ export default function MultiStepBookingForm() {
                           {addOnServices.map((addon) => {
                             const isSelected = selectedAddOns.includes(addon.id);
                             return (
-                              <div 
-                                key={addon.id}
-                                className={`relative bg-white rounded-lg cursor-pointer transition-all shadow-sm 
-                                  ${isSelected 
-                                    ? 'border-2 border-primary transform -translate-y-1' 
-                                    : 'border border-gray-200 hover:border-gray-300 hover:-translate-y-1'
-                                  }
-                                  before:absolute before:rounded-lg before:inset-0 before:bottom-[-5px] 
-                                  before:bg-gray-100 before:-z-10 before:border before:border-gray-200
-                                `}
-                                onClick={() => handleAddOnChange(addon.id, !isSelected)}
-                              >
-                                <div className="p-3">
-                                  <div className="flex items-start">
-                                    <Checkbox
-                                      id={addon.id}
-                                      checked={isSelected}
-                                      onCheckedChange={(checked) => {
-                                        handleAddOnChange(addon.id, checked as boolean);
-                                      }}
-                                      className={`mt-1 mr-3 ${isSelected ? 'bg-primary text-primary-foreground border-primary' : ''}`}
-                                    />
-                                    <div className="flex-1">
-                                      <div
-                                        className="flex justify-between w-full font-medium cursor-pointer"
-                                      >
-                                        <span>{addon.label}</span>
-                                        <span className="text-primary font-bold px-2 py-0.5 bg-primary/5 rounded-md">{addon.price}</span>
-                                      </div>
-                                      <p className="text-sm text-gray-500 mt-1">{addon.description}</p>
-                                    </div>
-                                  </div>
-                                </div>
+                              <div key={addon.id} className="p-2">
+                                <CustomCheckbox
+                                  id={addon.id}
+                                  label={addon.label}
+                                  price={addon.price}
+                                  description={addon.description}
+                                  checked={isSelected}
+                                  onChange={(checked) => handleAddOnChange(addon.id, checked)}
+                                />
                               </div>
                             );
                           })}

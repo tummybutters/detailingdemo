@@ -230,25 +230,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Endpoint to manually restore bookings from Google Sheets
-  app.post('/api/restore-bookings-from-sheets', async (req, res) => {
-    try {
-      const restoredCount = await storage.restoreBookingsFromGoogleSheets();
-      
-      return res.status(200).json({
-        success: true,
-        message: `Restored ${restoredCount} bookings from Google Sheets`,
-        count: restoredCount
-      });
-    } catch (error: any) {
-      console.error('Error restoring bookings from Google Sheets:', error);
-      return res.status(500).json({
-        success: false,
-        message: error.message || 'Error restoring bookings from Google Sheets'
-      });
-    }
-  });
-  
   // Contact form endpoint (with Google Sheets integration)
   app.post('/api/subscribe', async (req, res) => {
     try {

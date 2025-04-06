@@ -51,6 +51,7 @@ export class MemStorage implements IStorage {
       appointmentTime: "10:00 AM",
       conditionNotes: "Minor scratches on driver side door",
       createdAt: new Date(),
+      updatedAt: new Date(),
       status: "pending",
       bookingReference: `HWW-${Date.now().toString().slice(-6)}-001`
     };
@@ -73,6 +74,7 @@ export class MemStorage implements IStorage {
       appointmentTime: "2:30 PM",
       conditionNotes: "Pet hair throughout interior",
       createdAt: new Date(Date.now() - 86400000), // 1 day ago
+      updatedAt: new Date(Date.now() - 43200000), // 12 hours ago
       status: "confirmed",
       bookingReference: `HWW-${Date.now().toString().slice(-6)}-002`
     };
@@ -117,6 +119,7 @@ export class MemStorage implements IStorage {
       conditionNotes, 
       id, 
       createdAt: now, 
+      updatedAt: now,
       status: "pending",
       bookingReference
     };
@@ -137,10 +140,96 @@ export class MemStorage implements IStorage {
     const booking = this.bookingsStore.get(id);
     if (!booking) return undefined;
     
-    const updatedBooking = { ...booking, status };
+    const updatedBooking = { 
+      ...booking, 
+      status,
+      updatedAt: new Date()
+    };
     this.bookingsStore.set(id, updatedBooking);
     return updatedBooking;
   }
 }
 
-export const storage = new MemStorage();
+// Import the database storage
+import { dbStorage } from "./db/storage";
+import { checkDatabaseAvailability } from "./db/operations";
+
+// Define a namespace for our global variables to avoid polluting global scope
+declare global {
+  var appStorage: {
+    selectedStorage: IStorage | null;
+    storageType: 'memory' | 'database';
+  };
+}
+
+// Initialize the global namespace if not already set
+global.appStorage = global.appStorage || {
+  selectedStorage: null,
+  storageType: 'memory'
+};
+
+// Initialize storage based on database availability
+// This will be called when the server starts
+async function initializeStorage() {
+  try {
+    // Check if the database is available
+    const isDatabaseAvailable = await checkDatabaseAvailability();
+    
+    if (isDatabaseAvailable) {
+      console.log("Database is available. Using DatabaseStorage.");
+      global.appStorage.selectedStorage = dbStorage;
+      global.appStorage.storageType = 'database';
+    } else {
+      console.log("Database is not available. Falling back to in-memory storage.");
+      global.appStorage.selectedStorage = new MemStorage();
+      global.appStorage.storageType = 'memory';
+    }
+  } catch (error) {
+    console.error("Error initializing storage:", error);
+    console.log("Falling back to in-memory storage due to initialization error.");
+    global.appStorage.selectedStorage = new MemStorage();
+    global.appStorage.storageType = 'memory';
+  }
+}
+
+// Initialize storage
+initializeStorage()
+  .catch(err => {
+    console.error("Failed to initialize storage:", err);
+  });
+
+// Create MemStorage instance to use initially and as fallback
+const memStorage = new MemStorage();
+
+// Storage proxy to dynamically route to the selected storage implementation
+export const storage: IStorage = {
+  // User functions
+  getUser: async (id: number) => {
+    return (global.appStorage.selectedStorage || memStorage).getUser(id);
+  },
+  
+  getUserByUsername: async (username: string) => {
+    return (global.appStorage.selectedStorage || memStorage).getUserByUsername(username);
+  },
+  
+  createUser: async (user: InsertUser) => {
+    return (global.appStorage.selectedStorage || memStorage).createUser(user);
+  },
+  
+  // Booking functions
+  createBooking: async (booking: InsertBooking) => {
+    return (global.appStorage.selectedStorage || memStorage).createBooking(booking);
+  },
+  
+  getBookings: async () => {
+    return (global.appStorage.selectedStorage || memStorage).getBookings();
+  },
+  
+  getBooking: async (id: number) => {
+    return (global.appStorage.selectedStorage || memStorage).getBooking(id);
+  },
+  
+  updateBookingStatus: async (id: number, status: string) => {
+    return (global.appStorage.selectedStorage || memStorage).updateBookingStatus(id, status);
+  }
+};

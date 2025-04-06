@@ -47,6 +47,7 @@ export const bookings = pgTable("bookings", {
   
   // System fields
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at"),
   status: text("status").default("pending"),
   bookingReference: text("booking_reference"),
 });
@@ -54,6 +55,7 @@ export const bookings = pgTable("bookings", {
 export const insertBookingSchema = createInsertSchema(bookings).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
   status: true,
 });
 

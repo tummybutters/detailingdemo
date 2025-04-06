@@ -15,6 +15,7 @@ import {
   checkGoogleSheetsCredentials,
   addContactToGoogleSheets 
 } from "./googleSheetsSync";
+import { dbHealthCheck } from "./db/health";
 
 // Type for enhanced booking data
 interface EnhancedBookingData {
@@ -50,6 +51,31 @@ interface EnhancedBookingData {
 export async function registerRoutes(app: Express): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
+  
+  // Database health check endpoint
+  app.get('/api/health/database', dbHealthCheck);
+  
+  // General health check endpoint
+  app.get('/api/health', async (req, res) => {
+    try {
+      // Return basic health information
+      return res.status(200).json({
+        status: "ok",
+        message: "API server is running",
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || "development",
+        storageType: global.appStorage?.storageType || "memory",
+        version: "1.0.0" // Update with actual version when available
+      });
+    } catch (error) {
+      console.error("Health check error:", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Health check failed",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
 
   // Booking endpoints
   app.post('/api/bookings', async (req, res) => {

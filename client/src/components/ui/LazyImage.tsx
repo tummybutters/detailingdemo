@@ -82,6 +82,7 @@ export default function LazyImage({
           width={width}
           height={height}
           loading="lazy"
+          decoding="async"
           onLoad={handleImageLoad}
           style={{ ...style, objectFit: "cover" }}
         />

@@ -1,17 +1,12 @@
-const CACHE_NAME = 'hardys-wash-n-wax-v1';
+const CACHE_NAME = 'hardys-wash-n-wax-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/css/styles.css',
-  '/js/main.js',
-  '/assets/logo.png',
-  '/assets/hero-bg.jpg',
-  '/assets/express.jpg',
-  '/assets/ext.jpg',
-  '/assets/lux.jpg',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/offline.html',
+  // Add only essential assets that should be available offline
+  '/src/main.tsx',
+  '/src/index.css'
 ];
 
 // Install service worker and cache assets
@@ -45,7 +40,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Serve cached content when offline
+// Serve cached content when offline with network-first strategy
 self.addEventListener('fetch', event => {
   // Skip non-GET requests and cross-origin requests
   if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
@@ -57,40 +52,57 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // For HTML pages, use a network-first strategy
+  const isHTMLRequest = event.request.headers.get('accept')?.includes('text/html');
+  
+  if (isHTMLRequest) {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match(event.request)
+            .then(cachedResponse => {
+              return cachedResponse || caches.match('/offline.html');
+            });
+        })
+    );
+    return;
+  }
+
+  // For other assets, use a cache-first strategy
   event.respondWith(
     caches.match(event.request)
-      .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
+      .then(cachedResponse => {
+        if (cachedResponse) {
+          // If we have a cached version, return it
+          return cachedResponse;
         }
-
-        // Clone the request to use it twice
-        const fetchRequest = event.request.clone();
-
-        return fetch(fetchRequest)
+        
+        // Otherwise try to fetch it from the network
+        return fetch(event.request)
           .then(response => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (!response || response.status !== 200) {
               return response;
             }
-
-            // Clone the response to use it twice
+            
+            // Clone the response to cache it for later
             const responseToCache = response.clone();
-
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
+              })
+              .catch(err => {
+                console.error('Failed to cache response:', err);
               });
-
+            
             return response;
           })
-          .catch(() => {
-            // If the network is unavailable and we don't have a cached response,
-            // try to serve the offline page for HTML requests
-            if (event.request.headers.get('accept').includes('text/html')) {
-              return caches.match('/offline.html');
+          .catch(error => {
+            console.error('Fetch failed:', error);
+            // For images, return a fallback if we have one
+            if (event.request.destination === 'image') {
+              return caches.match('/icons/fallback.png');
             }
+            throw error;
           });
       })
   );

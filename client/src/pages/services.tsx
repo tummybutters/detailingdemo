@@ -35,9 +35,6 @@ export default function Services() {
               <p className="text-gray-700 mb-4">
                 Comprehensive interior cleaning, stain removal, and protection to refresh your vehicle's cabin and restore that new car feel.
               </p>
-              <Link href="/services/interior-detailing" className="inline-flex items-center text-primary font-bold">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
             </div>
             
             <div className="bg-[#FFD7B5]/30 rounded-lg p-6 shadow-md">
@@ -45,9 +42,6 @@ export default function Services() {
               <p className="text-gray-700 mb-4">
                 Professional washing, waxing, and exterior protection to restore your vehicle's showroom shine and preserve its finish.
               </p>
-              <Link href="/services/exterior-detailing" className="inline-flex items-center text-primary font-bold">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
             </div>
             
             <div className="bg-[#FFD7B5]/30 rounded-lg p-6 shadow-md">
@@ -55,9 +49,6 @@ export default function Services() {
               <p className="text-gray-700 mb-4">
                 Long-lasting paint protection with our professional ceramic coating services for superior gloss and durability.
               </p>
-              <Link href="/services/ceramic-coating" className="inline-flex items-center text-primary font-bold">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
             </div>
             
             <div className="bg-[#FFD7B5]/30 rounded-lg p-6 shadow-md">
@@ -65,9 +56,6 @@ export default function Services() {
               <p className="text-gray-700 mb-4">
                 Remove scratches, swirl marks, and imperfections to restore your vehicle's paint to a perfect, mirror-like finish.
               </p>
-              <Link href="/services/paint-correction" className="inline-flex items-center text-primary font-bold">
-                Learn More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
             </div>
           </div>
         </div>

@@ -35,16 +35,11 @@ const services: Service[] = [
     discount: "",
     duration: "1.5-2.5 Hours",
     features: [
-      { text: "Interior blowout" },
-      { text: "Vacuuming surface level, seats, etc" },
-      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, doors, etc." },
-      { text: "Windows streak free" },
-      { text: "Leather conditioner" },
-      { text: "All purpose cleaner pre soak" },
-      { text: "Wheel and tire cleaning" },
-      { text: "Foam and contact wash" },
-      { text: "Towel dry" },
-      { text: "Tire dressing" }
+      { text: "Full interior vacuum and blowout with surface cleaning" },
+      { text: "Complete dashboard, infotainment, plastics, and door panel cleaning" },
+      { text: "Streak-free window cleaning and leather conditioning" },
+      { text: "Foam wash, wheel & tire cleaning with pre-soak" },
+      { text: "Towel dry and tire dressing for a finished look" }
     ],
     bonuses: [
       { text: "Optional: Spray wax", value: "$49-89" },
@@ -62,14 +57,11 @@ const services: Service[] = [
     discount: "",
     duration: "3-4 Hours",
     features: [
-      { text: "Interior blowout" },
-      { text: "Vacuuming surface level, seats, etc" },
-      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, doors, etc." },
-      { text: "Leather conditioner" },
-      { text: "Carpet shampoo" },
-      { text: "Stain removal, seats, carpets, etc" },
-      { text: "Interior dressing" },
-      { text: "Headliner cleaning" }
+      { text: "Interior blowout with deep vacuuming of all surfaces and seats" },
+      { text: "Comprehensive dashboard, infotainment, plastics, and door panel cleaning" },
+      { text: "Professional carpet shampoo and stain removal treatment" },
+      { text: "Premium leather conditioning and headliner cleaning" },
+      { text: "Complete interior dressing for a factory-fresh appearance" }
     ],
     bonuses: [
       { text: "Sedan/Coupe", value: "$199-$229" },
@@ -86,13 +78,11 @@ const services: Service[] = [
     discount: "",
     duration: "3-4.5 Hours",
     features: [
-      { text: "Iron Decon/All purpose cleaner pre soak" },
-      { text: "Wheel and tire cleaning" },
-      { text: "Foam and contact wash" },
-      { text: "Clay bar decontamination" },
-      { text: "Towel dry" },
-      { text: "Machine Polisher Ceramic Wax (2-3 years protection) OR Ceramic Spray Wax (3-6 months protection at ½ price)" },
-      { text: "Tire dressing" }
+      { text: "Iron decontamination and professional pre-treatment soak" },
+      { text: "Complete wheel & tire cleaning with foam and contact wash" },
+      { text: "Clay bar decontamination to remove embedded contaminants" },
+      { text: "Machine Polisher Ceramic Wax (2-3 years protection) or Ceramic Spray Wax" },
+      { text: "Professional drying and tire dressing for a showroom finish" }
     ],
     bonuses: [
       { text: "Sedan/Coupe", value: "$249-$299" },
@@ -110,18 +100,11 @@ const services: Service[] = [
     discount: "",
     duration: "4-6 Hours",
     features: [
-      { text: "Interior blowout" },
-      { text: "Vacuuming surface level, seats, etc" },
-      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, etc" },
-      { text: "Leather conditioner" },
-      { text: "Carpet shampoo" },
-      { text: "Stain removal, seats, carpets, etc" },
-      { text: "Iron Decon/All purpose cleaner pre soak" },
-      { text: "Wheel and tire cleaning" },
-      { text: "Foam and contact wash" },
-      { text: "Clay bar decontamination" },
-      { text: "Towel dry" },
-      { text: "Machine Polisher Ceramic Wax or Ceramic Spray Wax" }
+      { text: "Complete interior deep cleaning with shampoo and stain removal" },
+      { text: "Premium interior conditioning for all surfaces and materials" },
+      { text: "Full exterior decontamination with clay bar treatment" },
+      { text: "Professional foam wash and thorough wheel/tire cleaning" },
+      { text: "Machine polish ceramic wax application for long-lasting shine" }
     ],
     bonuses: [
       { text: "Sedan/Coupe", value: "$549-$649" },
@@ -138,13 +121,11 @@ const services: Service[] = [
     discount: "",
     duration: "5-8 Hours",
     features: [
-      { text: "Iron Decon/All purpose cleaner pre soak" },
-      { text: "Wheel and tire cleaning" },
-      { text: "Foam and contact wash" },
-      { text: "Clay bar decontamination" },
-      { text: "Towel dry" },
-      { text: "Polish paint correction to remove swirls/scratches" },
-      { text: "Ceramic 7-10 year protection application with foam pad" }
+      { text: "Complete exterior preparation with iron removal and pre-treatment" },
+      { text: "Professional foam wash and clay bar decontamination" },
+      { text: "Paint correction to remove swirls, scratches and imperfections" },
+      { text: "Meticulous surface preparation for ceramic coating adhesion" },
+      { text: "Premium ceramic 7-10 year protection application with foam pad" }
     ],
     bonuses: [
       { text: "Sedan/Coupe", value: "$549-$649" },

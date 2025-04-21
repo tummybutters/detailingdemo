@@ -297,7 +297,7 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
                 <ul className="space-y-3">
                   {services[2].bonuses.map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
@@ -342,7 +342,7 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
                 <ul className="space-y-3">
                   {services[3].bonuses.map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
@@ -386,7 +386,7 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING & ADD-ONS</div>
                 <ul className="space-y-3">
                   {services[4].bonuses.map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">

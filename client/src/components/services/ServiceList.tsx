@@ -25,102 +25,133 @@ interface Service {
   bgColor: string;
 }
 
-// Based on the provided pricing sheet
+// Based on the updated pricing sheet
 const services: Service[] = [
   {
     id: 1,
     title: "Express Detail",
-    originalPrice: "$160-$220",
-    salePrice: "$125-175",
-    discount: "20% OFF",
-    duration: "2 Hour Job",
+    originalPrice: "$149-$199",
+    salePrice: "$149-$199",
+    discount: "",
+    duration: "1.5-2.5 Hours",
     features: [
-      { text: "A comprehensive surface-level interior vacuum" },
-      { text: "Exterior pressure wash pre-foam rinse and contact wash foam bath for a spotless finish" },
-      { text: "Microfiber towel dry with full wax spray" }
+      { text: "Interior blowout" },
+      { text: "Vacuuming surface level, seats, etc" },
+      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, doors, etc." },
+      { text: "Windows streak free" },
+      { text: "Leather conditioner" },
+      { text: "All purpose cleaner pre soak" },
+      { text: "Wheel and tire cleaning" },
+      { text: "Foam and contact wash" },
+      { text: "Towel dry" },
+      { text: "Tire dressing" }
     ],
     bonuses: [
-      { text: "Key Fob Refurbishment/Cleaning", value: "$30 Value" },
-      { text: "Dashboard and Infotainment Detail", value: "$15 Value" },
-      { text: "Streak-free Window Detail", value: "$15 Value" }
+      { text: "Optional: Spray wax", value: "$49-89" },
+      { text: "Optional: Clay bar decontamination", value: "$49-89" },
+      { text: "Optional: Headlight restoration", value: "$49-89" },
+      { text: "Optional: Plastic trim restore", value: "$49-89" }
     ],
     bgColor: "bg-[#FFAA75]"
   },
   {
     id: 2,
-    title: "Interior Detail Deep Clean",
-    originalPrice: "$190-$440",
-    salePrice: "$150-350",
-    discount: "20% OFF",
-    duration: "2-4 Hour Job",
+    title: "Interior Deep Detail",
+    originalPrice: "$199-$349",
+    salePrice: "$199-$349",
+    discount: "",
+    duration: "3-4 Hours",
     features: [
-      { text: "Deep surface vacuuming to remove dirt and debris from all areas of your car" },
-      { text: "Your choice of carpet or leather conditioning to restore and protect interior surfaces" },
-      { text: "Spot stain removal to eliminate unsightly blemishes and refresh your car's interior" }
+      { text: "Interior blowout" },
+      { text: "Vacuuming surface level, seats, etc" },
+      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, doors, etc." },
+      { text: "Leather conditioner" },
+      { text: "Carpet shampoo" },
+      { text: "Stain removal, seats, carpets, etc" },
+      { text: "Interior dressing" },
+      { text: "Headliner cleaning" }
     ],
     bonuses: [
-      { text: "All previous bonuses", value: "$40 Value" },
-      { text: "Trunk and spot cleaning", value: "$15 Value" },
-      { text: "Air vent dusting and cleaning", value: "$10 Value" },
-      { text: "Door jams and door panel detailing", value: "$15 Value" }
+      { text: "Sedan/Coupe", value: "$199-$229" },
+      { text: "SUV/Truck", value: "$229-$279" },
+      { text: "Suburban/Large Truck/Mini Van", value: "$279-$349" }
     ],
     bgColor: "bg-[#FFAA75]"
   },
   {
     id: 3,
     title: "Exterior Wash & Wax",
-    originalPrice: "$250-$500",
-    salePrice: "$200-400",
-    discount: "20% OFF",
-    duration: "2-4 Hour Job",
+    originalPrice: "$249-$399",
+    salePrice: "$249-$399",
+    discount: "",
+    duration: "3-4.5 Hours",
     features: [
-      { text: "Machine buffer Ceramic Wax application to protect your paint for 6-12 months and leave a stunning mirror-shine finish" },
-      { text: "Iron-embedded paint decontamination to ensure a smooth, clean surface before waxing" },
-      { text: "Pre-contact wash foam treatment for thorough dirt removal and paint preparation" }
+      { text: "Iron Decon/All purpose cleaner pre soak" },
+      { text: "Wheel and tire cleaning" },
+      { text: "Foam and contact wash" },
+      { text: "Clay bar decontamination" },
+      { text: "Towel dry" },
+      { text: "Machine Polisher Ceramic Wax (2-3 years protection) OR Ceramic Spray Wax (3-6 months protection at ½ price)" },
+      { text: "Tire dressing" }
     ],
     bonuses: [
-      { text: "Wheel and wheel barrel cleaning", value: "$20 value" },
-      { text: "Tire cleaning and dressing", value: "$15 value" },
-      { text: "Full Contact wash with microfiber towel", value: "$35 value" }
+      { text: "Sedan/Coupe", value: "$249-$299" },
+      { text: "SUV/Truck", value: "$299-$349" },
+      { text: "Suburban/Mini Van/Large Truck", value: "$349-$399" },
+      { text: "Optional: Polishing (Paint Correction)", value: "$150" }
     ],
     bgColor: "bg-[#FFAA75]"
   },
   {
     id: 4,
-    title: "Exterior Detail Polish & Wax",
-    originalPrice: "$440-$560",
-    salePrice: "$350-450",
-    discount: "20% OFF",
-    duration: "3-6 Hour Job",
+    title: "Luxury Detail: Interior & Exterior Perfection",
+    originalPrice: "$549-$849",
+    salePrice: "$549-$849",
+    discount: "",
+    duration: "4-6 Hours",
     features: [
-      { text: "Machine buffer Ceramic Wax: Protects your paint for 6-12 months and leaves a mirror-shine finish" },
-      { text: "Machine buffer compound polish: Removes scratches and swirls, restoring your car's paint" },
-      { text: "Iron-embedded paint decontamination" },
-      { text: "Contact wash with microfiber towel dry: Ensures a streak-free, professional finish" }
+      { text: "Interior blowout" },
+      { text: "Vacuuming surface level, seats, etc" },
+      { text: "Clean dashboard, infotainment, all plastics, foot wells, pedals, etc" },
+      { text: "Leather conditioner" },
+      { text: "Carpet shampoo" },
+      { text: "Stain removal, seats, carpets, etc" },
+      { text: "Iron Decon/All purpose cleaner pre soak" },
+      { text: "Wheel and tire cleaning" },
+      { text: "Foam and contact wash" },
+      { text: "Clay bar decontamination" },
+      { text: "Towel dry" },
+      { text: "Machine Polisher Ceramic Wax or Ceramic Spray Wax" }
     ],
     bonuses: [
-      { text: "Includes ALL previous Express Detail & Exterior Wax Key Fob Refurbishment/Cleaning, Pre-contact wash foam treatment, wheels and wheel barrel cleaning, tire cleaning and dressing, door jams and door panel detailing", value: "$100 Value" }
+      { text: "Sedan/Coupe", value: "$549-$649" },
+      { text: "SUV/Truck", value: "$649-$749" },
+      { text: "Suburban/Mini Van/Large Truck", value: "$749-$849" }
     ],
     bgColor: "bg-[#FFAA75]"
   },
   {
     id: 5,
-    title: "Luxury Full Detail: Interior & Exterior Perfection",
-    originalPrice: "$690-$1060",
-    salePrice: "$550-850",
-    discount: "20% OFF",
-    duration: "4-8 Hour Job",
+    title: "7-10 Year Protection Ceramic Coat",
+    originalPrice: "$549-$849",
+    salePrice: "$549-$849",
+    discount: "",
+    duration: "5-8 Hours",
     features: [
-      { text: "Machine buffer Ceramic Wax to protect your paint for 6-12 months and leave a mirror-shine finish" },
-      { text: "Deep surface vacuuming to remove dirt and debris" },
-      { text: "Carpet or leather conditioning to restore and protect your surfaces" },
-      { text: "Spot stain removal for a refreshed and flawless interior" },
-      { text: "Dashboard and infotainment detailing" },
-      { text: "Door jams and panels deep clean" },
-      { text: "Entire Machine buffer compound polish" }
+      { text: "Iron Decon/All purpose cleaner pre soak" },
+      { text: "Wheel and tire cleaning" },
+      { text: "Foam and contact wash" },
+      { text: "Clay bar decontamination" },
+      { text: "Towel dry" },
+      { text: "Polish paint correction to remove swirls/scratches" },
+      { text: "Ceramic 7-10 year protection application with foam pad" }
     ],
     bonuses: [
-      { text: "Includes ALL previous bonuses: iron-embedded paint decontamination, pre-contact wash foam treatment, wheels and wheel barrel cleaning, tire cleaning and dressing, contact wash with microfiber towel dry, air vent cleaning, and trunk cleaning with spot removal", value: "$150 Value" }
+      { text: "Sedan/Coupe", value: "$549-$649" },
+      { text: "SUV/Truck", value: "$649-$749" },
+      { text: "Suburban/Mini Van/Large Truck", value: "$749-$849" },
+      { text: "Optional: Carpet conditioning", value: "$100" },
+      { text: "Optional: Leather Conditioning", value: "$50" }
     ],
     bgColor: "bg-[#FFAA75]"
   }
@@ -150,12 +181,8 @@ export default function ServiceList() {
           <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
             {/* Card Header */}
             <div className={`${services[0].bgColor} p-5 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[0].title}</h3>
-              <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="line-through text-gray-700">{services[0].originalPrice}</span>
-                <span className="font-bold text-red-600">{services[0].discount}</span>
-              </div>
-              <div className="text-3xl font-black mt-1 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{services[0].title}</h3>
+              <div className="text-3xl font-black mb-4">
                 {services[0].salePrice}
               </div>
               <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
@@ -182,7 +209,7 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">OPTIONAL ADD-ONS</div>
                 <ul className="space-y-3">
                   {services[0].bonuses.map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
@@ -198,12 +225,8 @@ export default function ServiceList() {
           <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
             {/* Card Header */}
             <div className={`${services[1].bgColor} p-5 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[1].title}</h3>
-              <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="line-through text-gray-700">{services[1].originalPrice}</span>
-                <span className="font-bold text-red-600">{services[1].discount}</span>
-              </div>
-              <div className="text-3xl font-black mt-1 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{services[1].title}</h3>
+              <div className="text-3xl font-black mb-4">
                 {services[1].salePrice}
               </div>
               <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
@@ -230,7 +253,7 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">FREE BONUS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
                 <ul className="space-y-3">
                   {services[1].bonuses.map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
@@ -246,12 +269,8 @@ export default function ServiceList() {
           <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
             {/* Card Header */}
             <div className={`${services[2].bgColor} p-5 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[2].title}</h3>
-              <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="line-through text-gray-700">{services[2].originalPrice}</span>
-                <span className="font-bold text-red-600">{services[2].discount}</span>
-              </div>
-              <div className="text-3xl font-black mt-1 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{services[2].title}</h3>
+              <div className="text-3xl font-black mb-4">
                 {services[2].salePrice}
               </div>
               <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
@@ -295,12 +314,8 @@ export default function ServiceList() {
           <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
             {/* Card Header */}
             <div className={`${services[3].bgColor} p-5 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[3].title}</h3>
-              <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="line-through text-gray-700">{services[3].originalPrice}</span>
-                <span className="font-bold text-red-600">{services[3].discount}</span>
-              </div>
-              <div className="text-3xl font-black mt-1 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{services[3].title}</h3>
+              <div className="text-3xl font-black mb-4">
                 {services[3].salePrice}
               </div>
               <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">
@@ -343,12 +358,8 @@ export default function ServiceList() {
           <div className="relative overflow-hidden rounded-lg shadow-lg flex flex-col">
             {/* Card Header */}
             <div className={`${services[4].bgColor} p-5 text-center`}>
-              <h3 className="text-2xl font-bold text-gray-900 mb-1">{services[4].title}</h3>
-              <div className="flex items-center justify-center space-x-2 text-sm">
-                <span className="line-through text-gray-700">{services[4].originalPrice}</span>
-                <span className="font-bold text-red-600">{services[4].discount}</span>
-              </div>
-              <div className="text-3xl font-black mt-1 mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">{services[4].title}</h3>
+              <div className="text-3xl font-black mb-4">
                 {services[4].salePrice}
               </div>
               <div className="bg-white/40 px-4 py-2 rounded-md text-center text-xs font-bold text-gray-700 mb-4">

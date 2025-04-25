@@ -67,15 +67,17 @@ export function DiscountModal() {
               <div className="discount">20% OFF</div>
               <div className="subtext">YOUR FIRST PREMIUM DETAIL</div>
               
-              <img 
-                src="/assets/ext.jpg" 
-                alt="Premium car detailing" 
-                className="modal-image"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "https://www.freepnglogos.com/uploads/car-png/car-png-large-images-40.png";
-                }}
-              />
+              <div className="image-container">
+                <img 
+                  src="/attached_assets/express.jpg" 
+                  alt="Premium car detailing" 
+                  className="modal-image"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://www.freepnglogos.com/uploads/car-png/car-png-large-images-40.png";
+                  }}
+                />
+              </div>
               
               <button className="claim-button" onClick={handleClaimClick}>
                 CLAIM 20% OFF

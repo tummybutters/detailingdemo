@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import DiscountModal from "../marketing/DiscountModal";
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,7 +12,6 @@ export default function Layout({ children }: LayoutProps) {
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
-      <DiscountModal />
     </div>
   );
 }

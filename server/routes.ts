@@ -15,7 +15,6 @@ import {
   checkGoogleSheetsCredentials,
   addContactToGoogleSheets 
 } from "./googleSheetsSync";
-import { sendContactSmsNotification } from "./smsService";
 import { dbHealthCheck } from "./db/health";
 
 // Type for enhanced booking data
@@ -278,7 +277,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Contact form endpoint (with Google Sheets integration and SMS notification)
+  // Contact form endpoint (with Google Sheets integration)
   app.post('/api/subscribe', async (req, res) => {
     try {
       const { email, firstName, lastName, phone, subject, message } = req.body;
@@ -315,25 +314,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
         .catch(error => {
           console.error(`Error adding contact submission to Google Sheets:`, error);
-        });
-      
-      // Send SMS notification to Ian (don't await, do this in background)
-      sendContactSmsNotification({
-        name: `${firstName} ${lastName}`.trim(),
-        email,
-        phone,
-        message,
-        subject
-      })
-        .then(success => {
-          if (success) {
-            console.log('SMS notification sent successfully');
-          } else {
-            console.warn('Failed to send SMS notification');
-          }
-        })
-        .catch(error => {
-          console.error('Error sending SMS notification:', error);
         });
       
       return res.status(200).json({

@@ -50,70 +50,13 @@
 .continuous-carousel {
   display: flex;
   flex-wrap: nowrap;
-  animation: carousel 65s linear infinite;
+  animation: carousel 45s linear infinite;
 }
 
 .continuous-carousel-reverse {
   display: flex;
   flex-wrap: nowrap;
-  animation: carousel-reverse 60s linear infinite;
-}
-
-/* Neo Brutalism card design */
-.review-card {
-  width: 340px;
-  height: 280px;
-  background: #FFD7B5;
-  padding: 1.2rem;
-  border-radius: 1rem;
-  border: 0.4vmin solid #05060f;
-  box-shadow: 0.4rem 0.4rem #05060f;
-  overflow: hidden;
-  color: black;
-  margin: 0 12px;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.2s ease;
-}
-
-.review-card:hover {
-  transform: translate(-0.05rem, -0.05rem);
-  box-shadow: 0.45rem 0.45rem #05060f;
-}
-
-/* Review content */
-.review-content {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.review-author {
-  color: #05060f;
-  font-size: 1.1rem;
-  line-height: 1.25;
-  font-weight: 700;
-}
-
-.review-time {
-  font-size: 0.85rem;
-  opacity: 0.8;
-}
-
-.review-text {
-  margin-top: 0.5rem;
-  flex: 1;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-}
-
-.review-footer {
-  margin-top: auto;
-  font-size: 0.85rem;
-  opacity: 0.8;
+  animation: carousel-reverse 45s linear infinite;
 }
 
 /* Google review button */
@@ -121,17 +64,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 28px;
-  background-color: #EE432C;
-  color: white;
-  border: 0.5vmin solid #05060f;
+  gap: 8px;
+  padding: 10px 24px;
+  background-color: white;
+  color: #444444;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  box-shadow: 0.3rem 0.3rem #05060f;
-  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .google-review-btn:hover {
-  transform: translate(-0.05rem, -0.05rem);
-  box-shadow: 0.35rem 0.35rem #05060f;
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

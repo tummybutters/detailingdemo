@@ -181,29 +181,27 @@ const googleReviews = [
 
 const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
   return (
-    <div className="review-card">
-      <div className="review-content">
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-0.5">
-            {Array(5).fill(0).map((_, i) => (
-              <Star 
-                key={i} 
-                size={16} 
-                fill="#EE432C" 
-                className="text-[#EE432C]" 
-              />
-            ))}
-          </div>
-          <div className="review-time">{review.time}</div>
+    <div className="flex flex-col h-[280px] bg-white p-5 rounded-lg shadow-md mx-2 min-w-[320px] w-[320px]">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex space-x-0.5">
+          {Array(5).fill(0).map((_, i) => (
+            <Star 
+              key={i} 
+              size={16} 
+              fill="#EE432C" 
+              className="text-[#EE432C]" 
+            />
+          ))}
         </div>
-        
-        <div className="review-author">{review.author}</div>
-        
-        <div className="review-text">"{review.content}"</div>
-        
-        <div className="review-footer">
-          Posted on Google
-        </div>
+        <div className="text-gray-500 text-sm">{review.time}</div>
+      </div>
+      
+      <h4 className="font-medium text-gray-900 mb-2">{review.author}</h4>
+      
+      <p className="text-gray-700 flex-grow line-clamp-4 mb-3 overflow-hidden">"{review.content}"</p>
+      
+      <div className="mt-auto">
+        <span className="text-sm text-gray-500">Posted on Google</span>
       </div>
     </div>
   );
@@ -215,15 +213,11 @@ export default function GoogleReviews() {
   const rowTwo = googleReviews.slice(Math.ceil(googleReviews.length / 2));
 
   return (
-    <div className="bg-[#F3F4E6] py-16 relative">
-      {/* Neo Brutalism background element */}
-      <div className="absolute top-0 left-0 right-0 h-20 bg-[#FFB375] border-b-[0.5vmin] border-black"></div>
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12 mt-8">
-          <div className="inline-block px-6 py-4 mb-4 bg-[#EE432C] border-[0.4vmin] border-black shadow-[0.4rem_0.4rem_0_#05060f]">
-            <h2 className="text-3xl font-extrabold text-white">What Our Customers Are Saying</h2>
-          </div>
-          <div className="flex items-center justify-center mb-2 mt-4">
+    <div className="bg-gradient-to-br from-[#F3F4E6] to-[#FFD7B5] py-16">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Customers Are Saying</h2>
+          <div className="flex items-center justify-center mb-2">
             <div className="flex space-x-1">
               <Star fill="#EE432C" className="text-[#EE432C]" />
               <Star fill="#EE432C" className="text-[#EE432C]" />
@@ -231,8 +225,8 @@ export default function GoogleReviews() {
               <Star fill="#EE432C" className="text-[#EE432C]" />
               <Star fill="#EE432C" className="text-[#EE432C]" />
             </div>
-            <span className="ml-2 text-xl font-extrabold text-gray-900">5.0</span>
-            <span className="ml-2 text-gray-700 font-medium">on Google Reviews</span>
+            <span className="ml-2 text-lg font-bold text-gray-900">5.0</span>
+            <span className="ml-2 text-gray-700">on Google Reviews</span>
           </div>
         </div>
 

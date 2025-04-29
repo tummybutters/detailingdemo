@@ -4,12 +4,9 @@ import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
 import carSunsetBg from "@assets/ChatGPT Image Mar 31, 2025, 05_35_46 PM.png";
 import mobileHeroBg from "@assets/mobile hero image.png";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
 
 export default function Hero() {
   const isMobile = useIsMobile();
-  const [miniBookingLoaded, setMiniBookingLoaded] = useState(false);
   
   return (
     <div className="relative bg-secondary min-h-[85vh] overflow-hidden">
@@ -60,38 +57,16 @@ export default function Hero() {
                 <div className="py-3 px-4 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white">
                   <h3 className="text-lg font-bold">Book Your Detail</h3>
                 </div>
-                
-                {/* Loading state for mini booking widget */}
-                {!miniBookingLoaded && (
-                  <div className="flex flex-col items-center justify-center h-[400px] bg-white p-4 space-y-4">
-                    <Loader2 className="h-8 w-8 text-[#EE432C] animate-spin" />
-                    <p className="text-gray-600 text-center text-sm">
-                      Loading quick booking form...
-                    </p>
-                    <div className="w-full space-y-4">
-                      <div className="h-10 bg-gray-100 rounded-md animate-pulse"></div>
-                      <div className="h-10 bg-gray-100 rounded-md animate-pulse"></div>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="h-10 bg-gray-100 rounded-md animate-pulse"></div>
-                        <div className="h-10 bg-gray-100 rounded-md animate-pulse"></div>
-                      </div>
-                      <div className="h-10 bg-gray-100 rounded-md animate-pulse"></div>
-                    </div>
-                  </div>
-                )}
-                
                 <iframe 
                   src="https://hardyswashnwax.fieldd.co" 
                   style={{
                     width: "100%", 
                     height: "400px",
                     border: "none",
-                    overflow: "hidden",
-                    display: miniBookingLoaded ? "block" : "none"
+                    overflow: "hidden"
                   }}
                   title="Hardys Wash N' Wax Quick Booking"
                   loading="lazy"
-                  onLoad={() => setMiniBookingLoaded(true)}
                 ></iframe>
               </div>
             </div>

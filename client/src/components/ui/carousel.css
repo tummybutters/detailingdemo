@@ -1,0 +1,46 @@
+/* Carousel Animation Styles */
+@keyframes carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-340px * 5)); /* Adjust based on card width + margin */
+  }
+}
+
+@keyframes carousel-reverse {
+  0% {
+    transform: translateX(calc(-340px * 5)); /* Adjust based on card width + margin */
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-carousel {
+  animation: carousel 30s linear infinite;
+}
+
+.animate-carousel-reverse {
+  animation: carousel-reverse 30s linear infinite;
+}
+
+/* Pause animation on hover */
+.animate-carousel:hover,
+.animate-carousel-reverse:hover {
+  animation-play-state: paused;
+}
+
+/* Embla Carousel Overrides */
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+}
+
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+}

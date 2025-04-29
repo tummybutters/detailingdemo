@@ -2,8 +2,10 @@ import Hero from "@/components/home/Hero";
 import FeaturedServicesNew from "@/components/home/FeaturedServicesNew";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Testimonials from "@/components/home/Testimonials";
+import GoogleReviews from "@/components/home/GoogleReviews";
 import CallToAction from "@/components/home/CallToAction";
 import { Helmet } from "react-helmet";
+import "@/components/ui/carousel.css";
 
 export default function Home() {
   return (

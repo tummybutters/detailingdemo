@@ -1,9 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import * as EmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
-
-// Fix for embla-carousel-react import
-const useEmblaCarousel = EmblaCarousel.default || EmblaCarousel;
+import { Star } from 'lucide-react';
 
 // Reviews data from Google
 const googleReviews = [
@@ -186,7 +181,7 @@ const googleReviews = [
 
 const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
   return (
-    <div className="flex flex-col h-full bg-white p-5 rounded-lg shadow-md mr-4 min-w-[300px] max-w-[340px]">
+    <div className="flex flex-col h-[280px] bg-white p-5 rounded-lg shadow-md mx-2 min-w-[320px] w-[320px]">
       <div className="flex items-center mb-3">
         <div className="flex space-x-0.5">
           {Array(5).fill(0).map((_, i) => (
@@ -210,7 +205,7 @@ const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
         </div>
       </div>
       
-      <p className="text-gray-700 flex-grow line-clamp-4 mb-3">"{review.content}"</p>
+      <p className="text-gray-700 flex-grow line-clamp-4 mb-3 overflow-hidden">"{review.content}"</p>
       
       <div className="flex items-center mt-auto">
         <img 
@@ -225,85 +220,9 @@ const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
 };
 
 export default function GoogleReviews() {
-  // Create two separate instances of the carousel
-  const [emblaRef1, emblaApi1] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    direction: 'ltr' // Left to right
-  });
-  
-  const [emblaRef2, emblaApi2] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    direction: 'rtl' // Right to left for opposite direction
-  });
-  
-  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
-  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
-  const autoplay1IntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const autoplay2IntervalRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const scrollPrev = () => {
-    if (emblaApi1) emblaApi1.scrollPrev();
-  };
-  
-  const scrollNext = () => {
-    if (emblaApi1) emblaApi1.scrollNext();
-  };
-
   // Split reviews into two rows
   const rowOne = googleReviews.slice(0, Math.ceil(googleReviews.length / 2));
   const rowTwo = googleReviews.slice(Math.ceil(googleReviews.length / 2));
-
-  // Initialize or cleanup the Embla instances
-  useEffect(() => {
-    if (!emblaApi1 || !emblaApi2) return;
-
-    const onSelect = () => {
-      setPrevBtnEnabled(emblaApi1.canScrollPrev());
-      setNextBtnEnabled(emblaApi1.canScrollNext());
-    };
-
-    emblaApi1.on('select', onSelect);
-    onSelect();
-    
-    // First carousel - automatic scroll
-    const startAutoplay1 = () => {
-      if (autoplay1IntervalRef.current) clearInterval(autoplay1IntervalRef.current);
-      
-      autoplay1IntervalRef.current = setInterval(() => {
-        if (emblaApi1.canScrollNext()) {
-          emblaApi1.scrollNext();
-        } else {
-          emblaApi1.scrollTo(0);
-        }
-      }, 4000); // Scroll every 4 seconds
-    };
-    
-    // Second carousel - automatic scroll in opposite direction
-    const startAutoplay2 = () => {
-      if (autoplay2IntervalRef.current) clearInterval(autoplay2IntervalRef.current);
-      
-      autoplay2IntervalRef.current = setInterval(() => {
-        if (emblaApi2.canScrollNext()) {
-          emblaApi2.scrollNext();
-        } else {
-          emblaApi2.scrollTo(0);
-        }
-      }, 4500); // Different timing to create an interesting effect
-    };
-    
-    // Start autoplay initially
-    startAutoplay1();
-    startAutoplay2();
-    
-    // Clear intervals on component unmount
-    return () => {
-      if (autoplay1IntervalRef.current) clearInterval(autoplay1IntervalRef.current);
-      if (autoplay2IntervalRef.current) clearInterval(autoplay2IntervalRef.current);
-      emblaApi1.off('select', onSelect);
-    };
-  }, [emblaApi1, emblaApi2]);
 
   return (
     <div className="bg-gradient-to-br from-[#F3F4E6] to-[#FFD7B5] py-16">
@@ -324,48 +243,46 @@ export default function GoogleReviews() {
         </div>
 
         <div className="space-y-10">
-          {/* First Row */}
+          {/* First Row - Continuous scroll */}
           <div className="relative">
-            <div className="overflow-hidden" ref={emblaRef1}>
-              <div className="flex">
-                {rowOne.map((review) => (
-                  <GoogleReviewCard key={review.id} review={review} />
+            <div className="overflow-hidden">
+              <div className="continuous-carousel">
+                {/* Double the cards for seamless loop effect */}
+                {[...rowOne, ...rowOne].map((review, index) => (
+                  <GoogleReviewCard key={`${review.id}-${index}`} review={review} />
                 ))}
               </div>
             </div>
           </div>
           
-          {/* Second Row - Reverse Direction */}
+          {/* Second Row - Continuous scroll in reverse direction */}
           <div className="relative">
-            <div className="overflow-hidden" ref={emblaRef2}>
-              <div className="flex">
-                {rowTwo.map((review) => (
-                  <GoogleReviewCard key={review.id} review={review} />
+            <div className="overflow-hidden">
+              <div className="continuous-carousel-reverse">
+                {/* Double the cards for seamless loop effect */}
+                {[...rowTwo, ...rowTwo].map((review, index) => (
+                  <GoogleReviewCard key={`${review.id}-${index}`} review={review} />
                 ))}
               </div>
             </div>
           </div>
         </div>
         
-        {/* Navigation Buttons */}
-        <div className="flex justify-center mt-8 space-x-4">
-          <button
-            className="bg-white text-[#EE432C] border border-[#EE432C] hover:bg-[#EE432C] hover:text-white transition-colors duration-300 rounded-full w-12 h-12 flex items-center justify-center shadow-sm"
-            onClick={scrollPrev}
-            disabled={!prevBtnEnabled}
-            aria-label="Previous reviews"
+        {/* Google Reviews Button */}
+        <div className="flex justify-center mt-10">
+          <a 
+            href="https://www.google.com/maps/place/Hardy's+Wash+N'+Wax/@36.021654,-119.6405944,7z/data=!4m16!1m9!3m8!1s0xb7923c2630ca509:0x5009d49d618f9525!2sHardy's+Wash+N'+Wax!8m2!3d36.021654!4d-119.6405944!9m1!1b1!16s%2Fg%2F11lw10v4qc!3m5!1s0xb7923c2630ca509:0x5009d49d618f9525!8m2!3d36.021654!4d-119.6405944!16s%2Fg%2F11lw10v4qc?entry=ttu"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="google-review-btn"
           >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          
-          <button
-            className="bg-white text-[#EE432C] border border-[#EE432C] hover:bg-[#EE432C] hover:text-white transition-colors duration-300 rounded-full w-12 h-12 flex items-center justify-center shadow-sm"
-            onClick={scrollNext}
-            disabled={!nextBtnEnabled}
-            aria-label="Next reviews"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+              alt="Google Logo" 
+              className="h-6" 
+            />
+            <span>See All Reviews on Google</span>
+          </a>
         </div>
       </div>
     </div>

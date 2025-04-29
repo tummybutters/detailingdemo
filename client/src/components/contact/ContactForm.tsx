@@ -74,7 +74,9 @@ export default function ContactForm() {
     setIsSubmitting(true);
 
     try {
+      console.log('Attempting to send email with values:', values);
       const result = await sendContactEmail(values);
+      console.log('Email send result:', result);
 
       if (result.success) {
         toast({
@@ -90,12 +92,12 @@ export default function ContactForm() {
         });
       }
     } catch (error) {
+      console.error('Error in onSubmit function:', error);
       toast({
         title: "Error",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

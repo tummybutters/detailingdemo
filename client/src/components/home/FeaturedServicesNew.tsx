@@ -47,13 +47,13 @@ export default function FeaturedServicesNew() {
             <Link 
               href={service.link} 
               key={service.id}
-              className="relative group overflow-hidden rounded-lg cursor-pointer"
+              className="relative group overflow-hidden rounded-lg cursor-pointer h-full flex"
               onMouseEnter={() => setHoveredCard(service.id)}
               onMouseLeave={() => setHoveredCard(null)}
             >
               {/* Elegant Card with smooth transition effect */}
               <div 
-                className="relative rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
+                className="relative rounded-lg overflow-hidden transition-all duration-500 ease-in-out flex flex-col w-full h-full"
                 style={{
                   boxShadow: hoveredCard === service.id 
                     ? '0 20px 30px -10px rgba(238, 67, 44, 0.3), 0 0 0 2px rgba(238, 67, 44, 0.7)' 
@@ -74,7 +74,7 @@ export default function FeaturedServicesNew() {
                 ></div>
                 
                 {/* Service Image */}
-                <div className="h-52 overflow-hidden relative">
+                <div className="h-64 overflow-hidden relative">
                   <img 
                     src={service.image} 
                     alt={service.title} 
@@ -94,16 +94,16 @@ export default function FeaturedServicesNew() {
                 </div>
                 
                 {/* Content */}
-                <div className="p-6 bg-white relative">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 transition-colors duration-300"
+                <div className="p-6 bg-white relative flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 transition-colors duration-300 h-[56px] flex items-center"
                       style={{
                         color: hoveredCard === service.id ? '#EE432C' : ''
                       }}
                   >{service.title}</h3>
                   
-                  <p className="text-gray-700 mb-4 text-sm">{service.description}</p>
+                  <p className="text-gray-700 mb-4 text-sm flex-grow min-h-[80px]">{service.description}</p>
                   
-                  <div className="inline-flex items-center text-sm font-medium transition-all duration-300"
+                  <div className="inline-flex items-center text-sm font-medium transition-all duration-300 mt-auto"
                        style={{
                          color: hoveredCard === service.id ? '#EE432C' : '#777'
                        }}

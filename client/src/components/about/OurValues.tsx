@@ -32,8 +32,8 @@ export default function OurValues() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {values.map((value, index) => (
             <div key={index} className="bg-white p-8 rounded-lg shadow-md text-center">
-              <div className="bg-primary/10 text-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                {value.icon}
+              <div className="bg-primary/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                <span className="text-[#EE432C]">{value.icon}</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
               <p className="text-gray-600">{value.description}</p>

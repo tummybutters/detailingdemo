@@ -3,7 +3,6 @@ import OurStory from "@/components/about/OurStory";
 import OurValues from "@/components/about/OurValues";
 import Certifications from "@/components/about/Certifications";
 import ContactCTA from "@/components/about/ContactCTA";
-import Location from "@/components/about/Location";
 import { Helmet } from "react-helmet";
 
 export default function About() {
@@ -20,7 +19,6 @@ export default function About() {
       <OurValues />
       <Certifications />
       <ContactCTA />
-      <Location />
     </>
   );
 }

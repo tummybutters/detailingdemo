@@ -26,10 +26,9 @@ interface ContactFormData {
 
 export const sendContactEmail = async (formData: ContactFormData) => {
   try {
-    // Using your actual EmailJS credentials from environment variables
-    // These were added as secrets and are now available
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
+    // Using the specific service ID and template ID you provided
+    const serviceId = 'hardy_serviceid';
+    const templateId = 'hardyww_contactus_temp';
     const userId = 'k6KdWLBsB-i4uUIa8'; // Public key
 
     console.log('Sending email with service ID:', serviceId);

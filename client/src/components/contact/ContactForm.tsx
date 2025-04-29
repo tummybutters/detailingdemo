@@ -45,29 +45,49 @@ export default function ContactForm() {
     },
   });
 
-  // Form submission handler - alternative version without EmailJS
+  // Form submission handler using server API endpoint
   async function onSubmit(values: ContactFormValues) {
     setIsSubmitting(true);
 
     try {
       console.log('Form submitted with values:', values);
       
-      // Simulate submission success
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Message Received",
-        description: "Thank you for your message. We'll get back to you soon!",
+      // Send data to the server endpoint
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          firstName: values.name.split(' ')[0], // Simple name splitting
+          lastName: values.name.split(' ').slice(1).join(' '),
+          phone: values.phone || '',
+          subject: values.subject || 'Contact Form Submission',
+          message: values.message
+        }),
       });
+
+      const data = await response.json();
       
-      form.reset();
-      setSubmitSuccess(true);
-      
+      if (response.ok && data.success) {
+        toast({
+          title: "Message Received",
+          description: "Thank you for your message. We'll get back to you soon!",
+        });
+        
+        form.reset();
+        setSubmitSuccess(true);
+      } else {
+        throw new Error(data.message || 'Failed to submit contact form');
+      }
     } catch (error) {
       console.error('Error in form submission:', error);
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again or contact us directly by phone.",
+        description: error instanceof Error 
+          ? error.message 
+          : "Something went wrong. Please try again or contact us directly by phone.",
         variant: "destructive",
       });
     } finally {

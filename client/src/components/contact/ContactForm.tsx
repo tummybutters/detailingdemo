@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
+import { initEmailJS, sendContactEmail } from '@/lib/emailService';
 
 // Form validation schema
 const contactFormSchema = z.object({
@@ -31,7 +32,20 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [emailJSInitialized, setEmailJSInitialized] = useState(false);
   const { toast } = useToast();
+
+  // Initialize EmailJS
+  useEffect(() => {
+    const initialized = initEmailJS();
+    setEmailJSInitialized(initialized);
+    
+    if (!initialized) {
+      console.warn("EmailJS initialization failed. Will use server-side submission.");
+    } else {
+      console.log("EmailJS initialized successfully.");
+    }
+  }, []);
 
   // Form definition
   const form = useForm<ContactFormValues>({
@@ -45,14 +59,30 @@ export default function ContactForm() {
     },
   });
 
-  // Form submission handler using server API endpoint
+  // Form submission handler (dual approach: EmailJS + server API)
   async function onSubmit(values: ContactFormValues) {
     setIsSubmitting(true);
 
     try {
       console.log('Form submitted with values:', values);
       
-      // Send data to the server endpoint
+      // First attempt: Try to send via EmailJS
+      if (emailJSInitialized) {
+        try {
+          const emailResult = await sendContactEmail(values);
+          console.log('EmailJS result:', emailResult);
+          
+          if (emailResult.success) {
+            console.log('Email sent successfully via EmailJS');
+          } else {
+            console.warn('EmailJS failed, falling back to server API:', emailResult.error);
+          }
+        } catch (emailError) {
+          console.error('EmailJS error, falling back to server API:', emailError);
+        }
+      }
+      
+      // Always send to the server endpoint as backup and for record-keeping
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {

@@ -26,36 +26,51 @@ interface ContactFormData {
 
 export const sendContactEmail = async (formData: ContactFormData) => {
   try {
-    // Hardcoded service and template IDs (these values are meant to be public)
-    const serviceId = 'service_9o6a9hq';
-    const templateId = 'template_njn095q';
+    // The service ID should be your actual EmailJS service ID
+    // These values should come from environment variables in production
+    const serviceId = 'service_9o6a9hq'; // Replace with your service ID
+    const templateId = 'template_njn095q'; // Replace with your template ID
+    const userId = 'k6KdWLBsB-i4uUIa8'; // Your public key
 
     console.log('Sending email with service ID:', serviceId);
     console.log('Sending email with template ID:', templateId);
+    console.log('Using user ID:', userId);
 
-    // Create template parameters
-    const templateParams = {
-      from_name: formData.name,
-      from_email: formData.email,
-      message: formData.message,
-      phone: formData.phone || 'Not provided',
-      subject: formData.subject || 'Contact Form Submission',
+    // Create data object according to EmailJS API format
+    const data = {
+      service_id: serviceId,
+      template_id: templateId,
+      user_id: userId,
+      template_params: {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        phone: formData.phone || 'Not provided',
+        subject: formData.subject || 'Contact Form Submission',
+      }
     };
     
-    console.log('Email template params:', templateParams);
+    console.log('Email data:', data);
 
-    // Send the email
-    const response = await emailjs.send(
-      serviceId,
-      templateId,
-      templateParams
-    );
+    // Send the email using fetch directly to the EmailJS API
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
 
-    return {
-      success: true,
-      status: response.status,
-      text: response.text
-    };
+    if (response.ok) {
+      return {
+        success: true,
+        status: response.status,
+        text: await response.text()
+      };
+    } else {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to send email');
+    }
   } catch (error) {
     console.error('Error sending email:', error);
     return {

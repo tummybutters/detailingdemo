@@ -1,79 +1,65 @@
-import { init, send } from '@emailjs/browser';
+import emailjs from '@emailjs/browser';
 
-/**
- * Initialize EmailJS with the public key from environment variables
- * @returns boolean indicating whether initialization was successful
- */
-export function initEmailJS(): boolean {
+// Initialize EmailJS with the public key
+export const initEmailJS = () => {
   try {
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || process.env.EMAILJS_PUBLIC_KEY;
     
     if (!publicKey) {
-      console.error('EmailJS public key is missing. Please check your environment variables.');
+      console.error('EmailJS public key not found');
       return false;
     }
     
-    init(publicKey);
-    console.log('EmailJS initialized successfully');
+    emailjs.init(publicKey);
     return true;
   } catch (error) {
     console.error('Error initializing EmailJS:', error);
     return false;
   }
-}
+};
 
-/**
- * Send a contact form email using EmailJS
- * @param formData The contact form data to send
- * @returns An object indicating success or failure
- */
-export async function sendContactEmail(formData: {
+interface ContactFormData {
   name: string;
   email: string;
+  message: string;
   phone?: string;
   subject?: string;
-  message: string;
-}): Promise<{ success: boolean; error?: string }> {
+}
+
+export const sendContactEmail = async (formData: ContactFormData) => {
   try {
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || process.env.EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || process.env.EMAILJS_TEMPLATE_ID;
     
     if (!serviceId || !templateId) {
-      console.error('EmailJS service ID or template ID is missing. Please check your environment variables.');
-      return { 
-        success: false, 
-        error: 'Email service configuration is incomplete.' 
-      };
+      throw new Error('EmailJS service ID or template ID not found');
     }
 
-    // Format the email data to match the template shown in the screenshot
+    // Create template parameters
     const templateParams = {
-      subject: formData.subject || `Contact Us: ${formData.name}`,
-      name: formData.name,
-      email: formData.email,
+      from_name: formData.name,
+      from_email: formData.email,
+      message: formData.message,
       phone: formData.phone || 'Not provided',
-      message: formData.message
+      subject: formData.subject || 'Contact Form Submission',
     };
 
-    const response = await send(
+    const response = await emailjs.send(
       serviceId,
       templateId,
       templateParams
     );
 
-    if (response.status === 200) {
-      return { success: true };
-    } else {
-      return { 
-        success: false, 
-        error: `Failed to send email. Status: ${response.status}` 
-      };
-    }
+    return {
+      success: true,
+      status: response.status,
+      text: response.text
+    };
   } catch (error) {
     console.error('Error sending email:', error);
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
     };
   }
-}
+};

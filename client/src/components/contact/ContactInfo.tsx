@@ -34,9 +34,9 @@ const ContactInfo = () => {
           <MapPin className="h-5 w-5 text-red-500 mt-1 mr-3" />
           <div>
             <h3 className="font-medium">Service Area</h3>
-            <p className="text-gray-700">Orange County, CA</p>
+            <p className="text-gray-700">Davis, CA | Orange County | Greater SoCal</p>
             <p className="text-sm text-gray-500 mt-1">
-              We come to you! Our mobile detailing service travels throughout Orange County.
+              We come to you! Our mobile detailing service travels throughout Davis, Orange County, and the Greater Southern California area.
             </p>
           </div>
         </div>

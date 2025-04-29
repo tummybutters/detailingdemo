@@ -182,7 +182,7 @@ const googleReviews = [
 const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
   return (
     <div className="flex flex-col h-[280px] bg-white p-5 rounded-lg shadow-md mx-2 min-w-[320px] w-[320px]">
-      <div className="flex items-center mb-3">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex space-x-0.5">
           {Array(5).fill(0).map((_, i) => (
             <Star 
@@ -193,17 +193,10 @@ const GoogleReviewCard = ({ review }: { review: typeof googleReviews[0] }) => {
             />
           ))}
         </div>
+        <div className="text-gray-500 text-sm">{review.time}</div>
       </div>
       
-      <div className="flex items-center mb-3">
-        <div className="mr-3 flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center text-white font-bold">
-          {review.author.charAt(0)}
-        </div>
-        <div>
-          <h4 className="font-medium text-gray-900">{review.author}</h4>
-          <p className="text-sm text-gray-500">{review.time}</p>
-        </div>
-      </div>
+      <h4 className="font-medium text-gray-900 mb-2">{review.author}</h4>
       
       <p className="text-gray-700 flex-grow line-clamp-4 mb-3 overflow-hidden">"{review.content}"</p>
       

@@ -29,44 +29,95 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
   
-  <!-- Structured Data for Rich Results -->
+  <!-- Structured Data for Rich Results - LocalBusiness -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Hardys Wash N' Wax",
-      "image": "https://hardyswashnwax.com/logo.png",
+      "@type": "AutoWash",
+      "name": "HardysWashn'Wax",
       "url": "https://hardyswashnwax.com",
-      "telephone": "+1-555-123-4567",
-      "priceRange": "$$$",
+      "image": "https://hardyswashnwax.com/logo.png",
+      "telephone": "+1-949-734-0201",
+      "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Irvine",
+        "streetAddress": "123 Davis Blvd",
+        "addressLocality": "Davis",
         "addressRegion": "CA",
+        "postalCode": "95616",
         "addressCountry": "US"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 33.6846,
-        "longitude": -117.8265
+      "geo": { 
+        "@type": "GeoCoordinates", 
+        "latitude": 38.5449, 
+        "longitude": -121.7405 
       },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday"
-        ],
-        "opens": "08:00",
-        "closes": "18:00"
-      },
+      "areaServed": [
+        { "@type": "Place", "name": "Davis, CA"},
+        { "@type": "Place", "name": "Woodland, CA"},
+        { "@type": "Place", "name": "Dixon, CA"},
+        { "@type": "Place", "name": "Winters, CA"},
+        { "@type": "Place", "name": "West Sacramento, CA"}
+      ],
+      "openingHoursSpecification":[
+        { 
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
+      ],
       "sameAs": [
         "https://www.facebook.com/hardyswashnwax",
         "https://www.instagram.com/hardyswashnwax"
       ]
+    }
+  </script>
+  
+  <!-- FAQ Page Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How far will you travel from Davis, CA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We proudly serve Davis, Woodland, Dixon, Winters & West Sacramento – if you're within 30 minutes of Davis, we'll come to you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to provide water for mobile detailing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you'll need to provide access to a water spigot for our services. We bring all other equipment and supplies needed for your professional detailing service."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does a full detail take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A full detail typically takes 2-4 hours depending on your vehicle size, condition, and selected package. We'll provide a more specific timeframe when you book your appointment."
+          }
+        }
+      ]
+    }
+  </script>
+  
+  <!-- Speakable Structured Data for Voice Search -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [".speakable-content"]
+      },
+      "url": "https://hardyswashnwax.com"
     }
   </script>
 </head>

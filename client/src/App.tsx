@@ -19,6 +19,10 @@ import ExteriorDetailing from "@/pages/services/exterior-detailing";
 import CeramicCoating from "@/pages/services/ceramic-coating";
 import PaintCorrection from "@/pages/services/paint-correction";
 
+// Import location pages for SEO
+import DavisCarDetailing from "@/pages/davis-car-detailing";
+import WoodlandCarDetailing from "@/pages/woodland-car-detailing";
+
 function Router() {
   return (
     <Switch>
@@ -37,6 +41,11 @@ function Router() {
             <Route path="/subscriptions" component={Subscriptions} />
             <Route path="/contact" component={Contact} />
             <Route path="/card-demo" component={CardDemo} />
+            
+            {/* Location pages for SEO */}
+            <Route path="/davis-car-detailing" component={DavisCarDetailing} />
+            <Route path="/woodland-car-detailing" component={WoodlandCarDetailing} />
+            
             <Route component={NotFound} />
           </Switch>
         </Layout>

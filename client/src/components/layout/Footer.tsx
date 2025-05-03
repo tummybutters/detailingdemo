@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer className="bg-secondary text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Company Info */}
           <div>
             <h3 className="text-xl font-bold mb-4 font-heading">Hardys Wash N' Wax</h3>
@@ -44,8 +44,19 @@ export default function Footer() {
               <li><Link href="/services" className="text-white hover:text-[#FFB375] transition-colors">Services</Link></li>
               <li><Link href="/booking" className="text-white hover:text-[#FFB375] transition-colors">Book Now</Link></li>
               <li><Link href="/about" className="text-white hover:text-[#FFB375] transition-colors">About Us</Link></li>
-              <li><a href="#" className="text-white hover:text-[#FFB375] transition-colors">Gallery</a></li>
-              <li><a href="#" className="text-white hover:text-[#FFB375] transition-colors">Reviews</a></li>
+              <li><Link href="/contact" className="text-white hover:text-[#FFB375] transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+          
+          {/* Service Areas */}
+          <div>
+            <h3 className="text-xl font-bold mb-4 font-heading">Service Areas</h3>
+            <ul className="space-y-2">
+              <li><Link href="/davis-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">Davis</Link></li>
+              <li><Link href="/woodland-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">Woodland</Link></li>
+              <li><Link href="/dixon-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">Dixon</Link></li>
+              <li><Link href="/winters-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">Winters</Link></li>
+              <li><Link href="/west-sacramento-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">West Sacramento</Link></li>
             </ul>
           </div>
           
@@ -55,7 +66,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="mr-2 text-[#FFB375] mt-1" size={18} />
-                <span className="text-white">Irvine, Orange County, CA</span>
+                <span className="text-white">Davis, CA 95616</span>
               </li>
               <li className="flex items-start">
                 <Phone className="mr-2 text-[#FFB375] mt-1" size={18} />
@@ -66,6 +77,9 @@ export default function Footer() {
                 <span className="text-white">hardyswashnwax@gmail.com</span>
               </li>
             </ul>
+            <p className="text-white/80 mt-3 text-sm">
+              Proudly serving Davis, Woodland, Dixon, Winters & West Sacramento – if you're within 30 minutes we'll come to you.
+            </p>
           </div>
           
           {/* Business Hours */}

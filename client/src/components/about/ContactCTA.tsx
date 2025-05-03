@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function ContactCTA() {
   return (
-    <div className="bg-[#FFD7B5] py-16">
+    <div className="bg-[#FFB375] py-16">
       <div className="container mx-auto px-4">
         <div className="text-center">
           <h2 className="text-3xl font-bold font-heading text-gray-900 mb-4">Have Questions? Contact Us</h2>

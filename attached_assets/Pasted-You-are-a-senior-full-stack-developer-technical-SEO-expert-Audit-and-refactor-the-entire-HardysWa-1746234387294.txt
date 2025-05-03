@@ -1,0 +1,97 @@
+You are a senior full‑stack developer + technical SEO expert. Audit and refactor the entire HardysWashn'Wax site so that it is fully optimized for LOCAL + TECHNICAL SEO targeting Davis, California (ZIP 95616) and every township within a 30‑minute drive (Woodland, Dixon, Winters, West Sacramento, Esparto, Sacramento International Airport).
+
+**Objectives**
+1. Achieve “Good” scores for all THREE Core Web Vitals after March 12 2024 (LCP ≤2.5 s, CLS ≤0.1, INP ≤200 ms).
+2. Maximise visibility in Google’s Search Generative Experience (SGE) and voice search results.
+3. Rank top‑3 organically for queries such as:
+   - “car wash Davis CA”
+   - “mobile detailing Davis”
+   - “auto detailing Woodland”
+   - “ceramic coating Dixon”
+   - “hand wash near UC Davis”
+
+**Mandatory Technical Tasks**
+- Replace any legacy FID code comments with INP optimisation: minimise JavaScript main‑thread blocking, break up long tasks, use `scheduler.yield()` where helpful, and deliver critical CSS inline.
+- Serve images as WebP/AVIF, include explicit width/height, `loading="lazy"`, and `fetchpriority="high"` for the hero image.
+- Use HTTP/3 and enable `Early Hints` + `rel="preload"` for fonts and primary CSS.
+- Generate an XML sitemap + robots.txt and link from `robots.txt`.
+- Add `<link rel="canonical">` on every page; prevent duplicate URL parameters with canonicalisation rules.
+- Implement PWA basics (service worker with stale‑while‑revalidate) so the site passes “installable” in Lighthouse.
+- Follow accessibility best‑practices (WCAG 2.2 AA): semantic HTML5, ARIA landmarks, contrast ≥4.5:1.
+
+**Local SEO & Content Tasks**
+- Replace all existing Irvine/SoCal mentions with Davis‑area phrasing. Include UC Davis references on home + service pages for contextual relevance.
+- Create a short, unique service‑area paragraph on every major page:  
+  “Proudly serving Davis, Woodland, Dixon, Winters & West Sacramento – if you’re within 30 minutes we’ll come to you.”
+- Embed a Google Map centered on Davis (lat 38.5449, lon ‑121.7405) with a ‘Service Area’ polygon.
+- Build individual location landing pages (`/woodland-car-detailing`, etc.) and cross‑link them in the footer.
+
+**Structured Data (JSON‑LD)**
+```html
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "AutoWash",
+ "name": "HardysWashn'Wax",
+ "url": "https://hardyswashnwax.com",
+ "image": "https://hardyswashnwax.com/logo.png",
+ "telephone": "+1-530-555‑1234",
+ "priceRange": "$$",
+ "address": {
+   "@type": "PostalAddress",
+   "streetAddress": "123 Davis Blvd",
+   "addressLocality": "Davis",
+   "addressRegion": "CA",
+   "postalCode": "95616",
+   "addressCountry": "US"
+ },
+ "geo": { "@type": "GeoCoordinates", "latitude": 38.5449, "longitude": -121.7405 },
+ "areaServed": [
+   { "@type": "Place", "name": "Davis, CA"},
+   { "@type": "Place", "name": "Woodland, CA"},
+   { "@type": "Place", "name": "Dixon, CA"},
+   { "@type": "Place", "name": "Winters, CA"},
+   { "@type": "Place", "name": "West Sacramento, CA"}
+ ],
+ "openingHoursSpecification":[
+   { "@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"08:00","closes":"18:00"}
+ ],
+ "sameAs":[ "https://www.facebook.com/hardyswashnwax","https://www.instagram.com/hardyswashnwax" ]
+}
+</script>
+Add FAQPage markup with at least 3 Q&As (e.g., “How far will you travel from Davis?”).
+
+Mark the lead paragraph on the home page with Speakable schema so Google Assistant can read it aloud.
+
+Include aggregateRating and Review snippets once you have ≥3 verified customer reviews.
+
+On‑Page Tweaks
+
+Unique <title> tags ≤60 chars & meta descriptions ≤155 chars emphasising “Davis CA”.
+
+H1 only once per page; H2 for supporting headings. Sprinkle long‑tail keywords naturally (no stuffing).
+
+Optimise internal linking: service pages ⇌ blog posts ⇌ location pages using descriptive anchor text.
+
+AI/SGE Readiness
+
+Provide concise, fact‑rich introductory paragraphs (≤280 chars) on each page to increase likelihood of being quoted in AI overviews.
+
+Strengthen E‑E‑A‑T signals: publish an “About the Owner” bio with certifications & 5‑star review widgets.
+
+Deliverables
+
+Updated responsive codebase pushed to the Replit project.
+
+Lighthouse report showing ‘green’ for Performance, Accessibility, Best Practices & SEO.
+
+Screenshots of the Rich Results Test confirming valid LocalBusiness, FAQPage & Speakable markup.
+
+Return a changelog summarising every file touched.
+
+pgsql
+Copy
+Edit
+
+The items above incorporate the latest Core Web Vitals (INP) requirements :contentReference[oaicite:0]{index=0}, LocalBusiness/areaServed and Speakable schema specs :contentReference[oaicite:1]{index=1}, and the 2025 shift toward AI‑generated search results and E‑E‑A‑T signals :contentReference[oaicite:2]{index=2}. Just swap in your real address, phone, and image URLs before you deploy.
+::contentReference[oaicite:3]{index=3}

@@ -10,32 +10,32 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Hardys Wash N' Wax | Mobile Car Detailing Irvine & Orange County</title>
-        <meta name="description" content="Premium mobile car detailing in Irvine and Orange County. Our professional car detailing services come to your location for convenience and quality results." />
-        <meta name="keywords" content="Car Detailing Irvine, Mobile Car Detailing Orange County, Auto Detailing SoCal, Premium Mobile Detailing" />
+        <title>Mobile Car Detailing in Davis, CA | Hardys Wash N' Wax</title>
+        <meta name="description" content="Premium mobile car detailing in Davis, CA and surrounding areas including Woodland, Dixon, Winters, and UC Davis. We bring professional auto detailing services to your location." />
+        <meta name="keywords" content="Car Detailing Davis CA, Mobile Car Detailing UC Davis, Auto Detailing Woodland, Premium Mobile Detailing Yolo County, Car Wash Near UC Davis" />
         <link rel="canonical" href="https://hardyswashnwax.com/" />
         
-        {/* Structured Data for Local Business */}
+        {/* Structured Data for Local Business with speakable content */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "LocalBusiness",
+            "@type": "AutoWash",
             "name": "Hardys Wash N' Wax",
             "image": "https://hardyswashnwax.com/logo.png",
-            "description": "Premium mobile car detailing service that comes to your location in Irvine and throughout Orange County.",
+            "description": "Premium mobile car detailing service that comes to your location in Davis and throughout Yolo County.",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "Irvine",
+              "addressLocality": "Davis",
               "addressRegion": "CA",
-              "postalCode": "92618",
+              "postalCode": "95616",
               "addressCountry": "US"
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": 33.6846,
-              "longitude": -117.8265
+              "latitude": 38.5449,
+              "longitude": -121.7405
             },
-            "telephone": "+17145551234",
+            "telephone": "+19497340201",
             "priceRange": "$$$",
             "openingHoursSpecification": [
               {
@@ -56,6 +56,13 @@ export default function Home() {
                 "opens": "09:00",
                 "closes": "16:00"
               }
+            ],
+            "areaServed": [
+              { "@type": "Place", "name": "Davis, CA"},
+              { "@type": "Place", "name": "Woodland, CA"},
+              { "@type": "Place", "name": "Dixon, CA"},
+              { "@type": "Place", "name": "Winters, CA"},
+              { "@type": "Place", "name": "West Sacramento, CA"}
             ],
             "sameAs": [
               "https://www.facebook.com/hardyswashnwax",

@@ -61,7 +61,7 @@ export default function Contact() {
           <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="font-bold text-lg mb-2 text-red-primary">How far do you travel?</h3>
-              <p className="text-gray-700">We service all of Orange County and parts of neighboring counties. Contact us with your location for confirmation.</p>
+              <p className="text-gray-700">We service all of Davis, Woodland, Dixon, Winters, West Sacramento and throughout Yolo County. We typically travel up to 30 minutes from our Davis base. Contact us with your location for confirmation.</p>
             </div>
             
             <div className="bg-white p-6 rounded-lg shadow-md">

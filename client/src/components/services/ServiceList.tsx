@@ -30,8 +30,8 @@ const services: Service[] = [
   {
     id: 1,
     title: "Express Detail",
-    originalPrice: "$149-$199",
-    salePrice: "$149-$199",
+    originalPrice: "$199-$279",
+    salePrice: "$199-$279",
     discount: "",
     duration: "1.5-2.5 Hours",
     features: [

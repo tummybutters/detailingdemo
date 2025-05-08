@@ -36,7 +36,7 @@ export default function Hero() {
               "You'll spend thousands of Hours in your Car, Let Us Spend Two making it perfect"
             </p>
             <p className="text-gray-100 text-base sm:text-lg mb-4 sm:mb-6 font-light speakable-content">
-              Proudly serving <span className="font-medium">Davis, Woodland, Dixon, Winters & West Sacramento</span> - mobile car detailing comes to your location!
+              Proudly serving <span className="font-medium">Davis, Woodland, Dixon, Winters & West Sacramento and more.</span>
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 sm:mt-6">

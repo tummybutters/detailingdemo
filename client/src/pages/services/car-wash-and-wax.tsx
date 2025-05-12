@@ -280,9 +280,9 @@ export default function CarWashAndWax() {
               </div>
               
               <div className="flex justify-center mt-6">
-                <Service3DButton asChild>
-                  <Link href="/booking">Book Your Wash & Wax</Link>
-                </Service3DButton>
+                <Link href="/booking">
+                  <Service3DButton>Book Your Wash & Wax</Service3DButton>
+                </Link>
               </div>
             </div>
             
@@ -330,9 +330,9 @@ export default function CarWashAndWax() {
               </div>
               
               <div className="flex justify-center mt-6">
-                <Button asChild variant="outline">
-                  <Link href="/booking">Check Availability in Your Area</Link>
-                </Button>
+                <Link href="/booking">
+                  <Button variant="outline">Check Availability in Your Area</Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -348,9 +348,9 @@ export default function CarWashAndWax() {
               <p className="text-gray-100/90 text-lg">Our mobile wash and wax service comes directly to your location.</p>
             </div>
             <div>
-              <Service3DButton asChild>
-                <Link href="/booking">Book Your Wash & Wax</Link>
-              </Service3DButton>
+              <Link href="/booking">
+                <Service3DButton>Book Your Wash & Wax</Service3DButton>
+              </Link>
             </div>
           </div>
         </div>

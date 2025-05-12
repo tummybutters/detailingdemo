@@ -316,9 +316,9 @@ export default function CeramicCoatingPage() {
               </div>
               
               <div className="flex justify-center mt-6">
-                <Button asChild variant="outline">
-                  <Link href="/booking">Check Availability in Your Area</Link>
-                </Button>
+                <Link href="/booking">
+                  <Button variant="outline">Check Availability in Your Area</Button>
+                </Link>
               </div>
             </div>
           </div>

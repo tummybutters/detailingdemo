@@ -19,6 +19,11 @@ import ExteriorDetailing from "@/pages/services/exterior-detailing";
 import CeramicCoating from "@/pages/services/ceramic-coating";
 import PaintCorrection from "@/pages/services/paint-correction";
 
+// Import SEO-focused service pages
+import InteriorCarDetailing from "@/pages/services/interior-car-detailing";
+import FullServiceCarWash from "@/pages/services/full-service-car-wash";
+import CarWashAndWax from "@/pages/services/car-wash-and-wax";
+
 // Import location pages for SEO
 import DavisCarDetailing from "@/pages/davis-car-detailing";
 import WoodlandCarDetailing from "@/pages/woodland-car-detailing";
@@ -39,6 +44,11 @@ function Router() {
             <Route path="/services/exterior-detailing" component={ExteriorDetailing} />
             <Route path="/services/ceramic-coating" component={CeramicCoating} />
             <Route path="/services/paint-correction" component={PaintCorrection} />
+            
+            {/* SEO-focused service pages */}
+            <Route path="/services/interior-car-detailing" component={InteriorCarDetailing} />
+            <Route path="/services/full-service-car-wash" component={FullServiceCarWash} />
+            <Route path="/services/car-wash-and-wax" component={CarWashAndWax} />
             <Route path="/booking" component={Booking} />
             <Route path="/about" component={About} />
             <Route path="/subscriptions" component={Subscriptions} />

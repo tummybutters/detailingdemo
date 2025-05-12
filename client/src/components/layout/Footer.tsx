@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer className="bg-secondary text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           {/* Company Info */}
           <div>
             <h3 className="text-xl font-bold mb-4 font-heading">Hardys Wash N' Wax</h3>
@@ -45,6 +45,17 @@ export default function Footer() {
               <li><Link href="/booking" className="text-white hover:text-[#FFB375] transition-colors">Book Now</Link></li>
               <li><Link href="/about" className="text-white hover:text-[#FFB375] transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="text-white hover:text-[#FFB375] transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+          
+          {/* Services */}
+          <div>
+            <h3 className="text-xl font-bold mb-4 font-heading">Services</h3>
+            <ul className="space-y-2">
+              <li><Link href="/services/interior-car-detailing" className="text-white hover:text-[#FFB375] transition-colors">Interior Car Detailing</Link></li>
+              <li><Link href="/services/ceramic-coating" className="text-white hover:text-[#FFB375] transition-colors">Ceramic Coating</Link></li>
+              <li><Link href="/services/full-service-car-wash" className="text-white hover:text-[#FFB375] transition-colors">Full Service Car Wash</Link></li>
+              <li><Link href="/services/car-wash-and-wax" className="text-white hover:text-[#FFB375] transition-colors">Car Wash & Wax</Link></li>
             </ul>
           </div>
           

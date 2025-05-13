@@ -1,0 +1,57 @@
+Set up a scalable blog system for HardysWashn'Wax.
+
+### Blog Architecture:
+
+1. **Base Blog Directory**
+   - Route all blog posts under `/blog`
+   - Each blog post will be at `/blog/[slug]` (e.g. /blog/interior-detailing-for-pet-hair)
+
+2. **Blog Index Page**
+   - Create `/blog` as a central index page
+   - It should list all blog posts dynamically or from a JSON/posts array
+   - For each post, show:
+     - Title
+     - 1–2 sentence excerpt/summary
+     - Publish date
+     - Link to full post (`/blog/[slug]`)
+
+3. **Single Blog Post Template**
+   - Reusable blog template file (e.g. `BlogPost.js`)
+   - Each post should:
+     - Use proper semantic HTML (`<h1>`, `<h2>`, etc.)
+     - Include dynamic metadata (title, meta description, OG tags)
+     - Support inserting custom components (like from uiverse.io)
+     - Allow FAQ schema and Article schema via embedded JSON-LD
+
+4. **Content Input Method**
+   - Create a way to define each blog post in JSON, Markdown, or JS object format like:
+     ```js
+     {
+       slug: "ceramic-coating-tesla-san-diego",
+       title: "Ceramic Coating for Teslas in San Diego",
+       metaDescription: "...",
+       date: "2025-05-15",
+       content: [ ...structured content or markdown blocks... ],
+       uiComponent: "ToggleTips",
+       faqSchema: [ ... ],
+       serviceLink: "/services/ceramic-coating"
+     }
+     ```
+
+5. **Design Rules**
+   - Keep styling consistent with the rest of the site
+   - Mobile responsive
+   - Use the same font system and CTA button design
+   - Include footer with internal links to main site sections and blog
+
+6. **SEO Features**
+   - Auto-generate meta `<title>` and `<meta description>` from blog object
+   - Insert structured data (`Article`, `FAQPage`) from blog object
+   - Each post must be crawlable and included in the sitemap
+   - Sitemap should auto-update with new posts if possible
+
+7. **Ready for Future Posts**
+   - Leave placeholder example content for one blog post (can be generic)
+   - Make it easy for me to duplicate and replace with real post info
+
+This is just the setup. Don’t create real content yet — I’ll plug that in manually when ready.

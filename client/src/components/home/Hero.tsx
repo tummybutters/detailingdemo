@@ -60,7 +60,10 @@ export default function Hero() {
               <div className="bg-white/95 backdrop-blur rounded-lg shadow-[5px_5px_0_0_#000] border-2 border-black overflow-hidden neo-brutalist-card">
                 {/* Header with booking title and call button */}
                 <div className="py-3 px-4 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white flex justify-between items-center border-b-2 border-black">
-                  <h3 className="text-lg font-bold">Book Your Detail</h3>
+                  <div>
+                    <h3 className="text-lg font-bold">Book Your Detail</h3>
+                    <p className="text-xs text-white/90">We'll call to confirm once booked</p>
+                  </div>
                   <CallOption 
                     phone="19497340201" 
                     variant="header"
@@ -84,7 +87,7 @@ export default function Hero() {
                 {/* Call option banner below iframe for better visibility */}
                 <div className="py-3 px-4 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
                   <div className="text-black">
-                    <p className="font-medium text-sm">Need help booking?</p>
+                    <p className="font-medium text-sm">Have questions?</p>
                     <p className="text-xs text-gray-700 hidden sm:block">Our team is ready to assist you</p>
                   </div>
                   <CallOption 

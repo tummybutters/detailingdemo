@@ -4,6 +4,7 @@ import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
 import carSunsetBg from "@assets/ChatGPT Image Mar 31, 2025, 05_35_46 PM.png";
 import mobileHeroBg from "@assets/mobile hero image.png";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CallOption from "./CallOption";
 
 export default function Hero() {
   const isMobile = useIsMobile();
@@ -56,9 +57,10 @@ export default function Hero() {
           {/* Right side with mini booking iframe */}
           <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
             <div className={`w-full ${isMobile ? 'max-w-full' : 'max-w-md'}`}>
-              <div className="bg-white/95 backdrop-blur rounded-lg shadow-lg overflow-hidden">
-                <div className="py-3 px-4 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white">
+              <div className="bg-white/95 backdrop-blur rounded-lg shadow-[5px_5px_0_0_#000] border-2 border-black overflow-hidden neo-brutalist-card">
+                <div className="py-3 px-4 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white flex justify-between items-center border-b-2 border-black">
                   <h3 className="text-lg font-bold">Book Your Detail</h3>
+                  <CallOption phone="19497340201" text="" className="ml-auto" />
                 </div>
                 <iframe 
                   src="https://hardyswashnwax.fieldd.co" 
@@ -71,6 +73,14 @@ export default function Hero() {
                   title="Hardys Wash N' Wax Quick Booking"
                   loading="lazy"
                 ></iframe>
+                
+                {/* Call option banner below iframe for mobile visibility */}
+                <div className="py-3 px-4 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
+                  <div className="text-black text-sm">
+                    <p className="font-medium">Need help booking?</p>
+                  </div>
+                  <CallOption phone="19497340201" text="" />
+                </div>
               </div>
             </div>
           </div>

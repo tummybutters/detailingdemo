@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { blogPosts } from "@/data/blogPosts";
 import { formatDate } from "@/lib/utils";
+import { BlogPost } from "@/types/blogTypes";
 
 export default function BlogIndex() {
   return (
@@ -50,7 +51,7 @@ export default function BlogIndex() {
       <div className="py-16 bg-[#F3F4E6]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
+            {blogPosts.map((post: BlogPost) => (
               <article key={post.slug} className="bg-white rounded-lg overflow-hidden shadow-md border-2 border-black">
                 {post.coverImage && (
                   <div className="h-48 overflow-hidden border-b-2 border-black">

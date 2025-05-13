@@ -8,8 +8,8 @@ export default function CarWashAndWax() {
   return (
     <>
       <Helmet>
-        <title>Car Wash and Wax Services – Add Shine & Protection</title>
-        <meta name="description" content="Professional car wash and wax services that come to your location. Our Exterior Wash & Wax package includes foam wash, clay bar treatment, and premium wax for long-lasting shine and protection." />
+        <title>Car Wash and Wax Services – Add Shine & Protection To Your Home On The Road</title>
+        <meta name="description" content="Professional car wash and wax services that come to your location. Our Exterior Wash & Wax package includes foam wash, clay bar treatment, and premium wax for long-lasting shine and protection to your home on the road." />
         <meta name="keywords" content="car wash near me, car wash and wax, car waxing service, mobile car wash" />
         <link rel="canonical" href="https://hardyswashnwax.com/services/car-wash-and-wax" />
         
@@ -18,7 +18,7 @@ export default function CarWashAndWax() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            "name": "Car Wash and Wax Service",
+            "name": "Car Wash and Wax Service - Your Home On The Road",
             "serviceType": "Car Detailing",
             "provider": {
               "@type": "LocalBusiness",
@@ -39,7 +39,7 @@ export default function CarWashAndWax() {
               "price": "249.00",
               "priceCurrency": "USD"
             },
-            "description": "Professional car wash and wax service that includes foam wash, clay bar treatment, and premium wax application for long-lasting shine and protection."
+            "description": "Professional car wash and wax service that includes foam wash, clay bar treatment, and premium wax application for long-lasting shine and protection to your home on the road."
           })}
         </script>
         
@@ -91,7 +91,7 @@ export default function CarWashAndWax() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Car Wash and Wax Services</h1>
-            <p className="text-xl text-gray-800 mb-8 speakable-content">Professional exterior cleaning and protection that comes to you. Our premium wash and wax service includes foam wash, clay bar treatment, and long-lasting ceramic wax for unmatched shine and protection.</p>
+            <p className="text-xl text-gray-800 mb-8 speakable-content">Professional exterior cleaning and protection for your home on the road. Our premium wash and wax service includes foam wash, clay bar treatment, and long-lasting ceramic wax for unmatched shine and protection.</p>
             <Link href="/booking">
               <Service3DButton>Schedule Your Wash & Wax</Service3DButton>
             </Link>

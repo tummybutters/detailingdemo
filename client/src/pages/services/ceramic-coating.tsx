@@ -8,8 +8,8 @@ export default function CeramicCoatingPage() {
   return (
     <>
       <Helmet>
-        <title>Ceramic Coating Near You – 7–10 Year Protection for Your Vehicle</title>
-        <meta name="description" content="Professional ceramic coating services that provide 7-10 years of protection for your vehicle's paint. Our mobile service comes to your location for convenient, premium paint protection." />
+        <title>Ceramic Coating Near You – 7–10 Year Protection for Your Luxury Vehicle</title>
+        <meta name="description" content="Professional ceramic coating services that provide 7-10 years of protection for your luxury vehicle's paint. Our mobile service comes to your location for convenient, premium paint protection." />
         <meta name="keywords" content="ceramic coating near me, paint correction near me, car paint protection, mobile ceramic coating" />
         <link rel="canonical" href="https://hardyswashnwax.com/services/ceramic-coating" />
         
@@ -18,7 +18,7 @@ export default function CeramicCoatingPage() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            "name": "7-10 Year Ceramic Coating",
+            "name": "7-10 Year Ceramic Coating for Luxury Vehicles",
             "serviceType": "Car Detailing",
             "provider": {
               "@type": "LocalBusiness",
@@ -39,7 +39,7 @@ export default function CeramicCoatingPage() {
               "price": "549.00",
               "priceCurrency": "USD"
             },
-            "description": "Professional ceramic coating service that provides 7-10 years of protection for your vehicle's paint. Includes paint correction, decontamination, and premium ceramic coating application."
+            "description": "Professional ceramic coating service that provides 7-10 years of protection for your luxury vehicle's paint. Includes paint correction, decontamination, and premium ceramic coating application."
           })}
         </script>
         
@@ -91,7 +91,7 @@ export default function CeramicCoatingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Ceramic Coating Near You</h1>
-            <p className="text-xl text-gray-800 mb-8 speakable-content">7-10 years of premium paint protection with our mobile ceramic coating service. Enhance gloss, maintain resale value, and protect against environmental damage.</p>
+            <p className="text-xl text-gray-800 mb-8 speakable-content">7-10 years of premium paint protection for your luxury vehicle with our mobile ceramic coating service. Enhance gloss, maintain resale value, and protect against environmental damage.</p>
             <Link href="/booking">
               <Service3DButton>Schedule Your Ceramic Coating</Service3DButton>
             </Link>

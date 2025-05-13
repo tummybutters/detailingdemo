@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
 import { BlogPost as BlogPostType } from "@/types/blogTypes";
 import { CalendarIcon, ClockIcon, TagIcon } from "lucide-react";
+import WaterBehaviorVisualizer from "./WaterBehaviorVisualizer";
 
 interface BlogPostProps {
   post: BlogPostType;
@@ -167,18 +168,23 @@ export function BlogPost({ post }: BlogPostProps) {
                         </blockquote>
                       );
                     } else if (section.type === 'component' && section.name) {
-                      // This would need to be implemented based on your component system
-                      // For now we'll just return a placeholder
-                      return (
-                        <div key={index} className="my-8 p-4 bg-[#FFD7B5] rounded-lg border-2 border-black">
-                          [Custom Component: {section.name}]
-                          {section.props && Object.keys(section.props).length > 0 && (
-                            <pre className="text-xs mt-2">
-                              {JSON.stringify(section.props, null, 2)}
-                            </pre>
-                          )}
-                        </div>
-                      );
+                      // Render specific components based on name
+                      switch (section.name) {
+                        case 'WaterBehaviorVisualizer':
+                          return <WaterBehaviorVisualizer key={index} />;
+                        default:
+                          // Fallback for unknown components
+                          return (
+                            <div key={index} className="my-8 p-4 bg-[#FFD7B5] rounded-lg border-2 border-black">
+                              [Custom Component: {section.name}]
+                              {section.props && Object.keys(section.props).length > 0 && (
+                                <pre className="text-xs mt-2">
+                                  {JSON.stringify(section.props, null, 2)}
+                                </pre>
+                              )}
+                            </div>
+                          );
+                      }
                     }
                     return null;
                   })}

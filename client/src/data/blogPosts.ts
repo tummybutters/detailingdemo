@@ -42,6 +42,11 @@ export const blogPosts: BlogPost[] = [
         ]
       },
       {
+        type: "component",
+        name: "WaterBehaviorVisualizer",
+        props: {}
+      },
+      {
         type: "heading",
         level: 2,
         content: "Maintaining Your Ceramic Coated Vehicle"

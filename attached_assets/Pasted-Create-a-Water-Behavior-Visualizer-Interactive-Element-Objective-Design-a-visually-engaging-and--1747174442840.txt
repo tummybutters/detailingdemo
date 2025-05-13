@@ -1,0 +1,21 @@
+Create a "Water Behavior Visualizer" Interactive Element
+
+Objective: Design a visually engaging and interactive component for a blog post that powerfully demonstrates the difference in how water reacts to an unprotected car paint surface versus a professionally ceramic-coated surface.
+
+How It Should Look & Work:
+
+Main Display Area: Imagine a sleek, premium display area on the webpage, perhaps shaped like a section of a car's hood or a clean, flat panel. It should convey a sense of high-quality automotive finish.
+Side-by-Side Comparison: This display area should be clearly divided into two distinct sections, arranged side-by-side.
+Left Section: Clearly labeled "Unprotected Paint" or "Before Coating." It represents a standard car finish.
+Right Section: Clearly labeled "Ceramic Coated" or "After Coating." It represents a surface treated with ceramic coating.
+User Interaction: Within each section, there should be a very clear, simple trigger that the user can activate (e.g., a button, or clicking directly on the panel itself). This trigger should initiate a visual "water application" simulation for that specific section.
+Visual Behavior - Unprotected Side:
+When the trigger for this side is activated, water should appear on the surface.
+The water should visibly sheet across the panel. This means it should spread out broadly and relatively flat, appearing to cling to the surface. It might linger for a moment before slowly dissipating.
+Visual Behavior - Coated Side:
+When the trigger for this side is activated, water should appear on the surface.
+The water should immediately form into distinct, tight, highly rounded beads (like perfect little spheres).
+These beads should then visibly and quickly roll off the surface, leaving minimal to no residue behind. The movement should be fluid and effortless.
+Visual Aesthetic: The overall design should be clean, modern, and visually appealing. The water effects should be smooth and convincing, enhancing the sense of clarity and protection on the coated side.
+Responsiveness: The entire interactive element should adjust gracefully and function perfectly on various screen sizes, from large desktop monitors down to mobile phones.
+The goal is for the user to clearly see, at a glance, the superior water repellency and easy-clean properties that ceramic coating provides.

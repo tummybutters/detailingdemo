@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
+import CallOption from "../home/CallOption";
 import "../ui/custom-nav-button.css";
 
 const navLinks = [
@@ -40,7 +41,7 @@ export default function Header() {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center justify-end">
+          <div className="hidden md:flex items-center justify-end space-x-2">
             {navLinks.map((link) => (
               <Link 
                 key={link.href}
@@ -51,6 +52,12 @@ export default function Header() {
                 </button>
               </Link>
             ))}
+            {/* Call button in header */}
+            <CallOption 
+              phone="19497340201" 
+              variant="compact" 
+              className="ml-2" 
+            />
           </div>
           
           {/* Mobile Navigation Button */}
@@ -74,6 +81,16 @@ export default function Header() {
                     </button>
                   </Link>
                 ))}
+                
+                {/* Call option for mobile menu */}
+                <div className="mt-4 pt-4 border-t border-black/10">
+                  <div className="text-center mb-2 text-sm font-medium">Give us a call</div>
+                  <CallOption 
+                    phone="19497340201" 
+                    text="" 
+                    className="mx-auto justify-center"
+                  />
+                </div>
               </div>
             </SheetContent>
           </Sheet>

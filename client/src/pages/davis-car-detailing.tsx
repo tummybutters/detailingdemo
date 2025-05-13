@@ -8,9 +8,51 @@ export default function DavisCarDetailing() {
   return (
     <>
       <Helmet>
-        <title>Mobile Car Detailing Services in Davis, CA | Hardys Wash N' Wax</title>
-        <meta name="description" content="Premium mobile car detailing services in Davis, California. We come to your home or office for convenient, professional auto detailing near UC Davis." />
+        <title>Mobile Car Detailing in Davis | First-Class Service at Home</title>
+        <meta name="description" content="Return to perfection in Davis. Premium hand wash and full service detailing, right in your driveway. Book in 60 seconds." />
         <link rel="canonical" href="https://hardyswashnwax.com/davis-car-detailing" />
+        
+        {/* Structured Data for Local Business */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Hardys Wash N' Wax - Davis Car Detailing",
+            "image": "https://hardyswashnwax.com/logo.png",
+            "telephone": "+19497340201",
+            "url": "https://hardyswashnwax.com/davis-car-detailing",
+            "priceRange": "$$",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Davis",
+              "addressRegion": "CA",
+              "postalCode": "95616",
+              "addressCountry": "US"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 38.5449,
+              "longitude": -121.7405
+            },
+            "areaServed": [
+              { "@type": "City", "name": "Davis, CA" }
+            ],
+            "description": "Premium mobile car detailing in Davis. We bring our full-service detailing directly to your location.",
+            "serviceArea": {
+              "@type": "GeoCircle",
+              "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.5449,
+                "longitude": -121.7405
+              },
+              "geoRadius": "12000"
+            },
+            "sameAs": [
+              "https://www.facebook.com/hardyswashnwax",
+              "https://www.instagram.com/hardyswashnwax"
+            ]
+          })}
+        </script>
       </Helmet>
       
       {/* Hero Section */}

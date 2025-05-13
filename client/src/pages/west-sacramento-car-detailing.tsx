@@ -8,9 +8,9 @@ export default function WestSacramentoCarDetailing() {
   return (
     <>
       <Helmet>
-        <title>Mobile Car Detailing Services in West Sacramento, CA | Hardys Wash N' Wax</title>
-        <meta name="description" content="Premium mobile car detailing services in West Sacramento, CA. We bring professional auto detailing to your home or office - serving all West Sacramento neighborhoods with premium detailing packages." />
-        <meta name="keywords" content="Car Detailing West Sacramento CA, Mobile Car Detailing Southport, Auto Detailing Yolo County, Premium Mobile Detailing Broderick, Car Wash West Capitol" />
+        <title>Mobile Car Wash West Sacramento | Full Service Detailing</title>
+        <meta name="description" content="Premium mobile car detailing in West Sacramento. We hand wash, detail, and protect your vehicle—at your home. Concierge-level care, fast booking." />
+        <meta name="keywords" content="Mobile Car Wash West Sacramento, Full Service Detailing, Car Detailing West Sacramento CA, Mobile Car Detailing Southport, Auto Detailing Yolo County, Premium Mobile Detailing Broderick" />
         <link rel="canonical" href="https://hardyswashnwax.com/west-sacramento-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}

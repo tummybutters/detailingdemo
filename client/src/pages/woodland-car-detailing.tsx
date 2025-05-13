@@ -8,9 +8,9 @@ export default function WoodlandCarDetailing() {
   return (
     <>
       <Helmet>
-        <title>Mobile Car Detailing Services in Woodland, CA | Hardys Wash N' Wax</title>
-        <meta name="description" content="Premium mobile car detailing services in Woodland, CA. We bring professional auto detailing to your home or office - serving Spring Lake, Gibson Road, and all Woodland neighborhoods." />
-        <meta name="keywords" content="Car Detailing Woodland CA, Mobile Car Detailing Spring Lake, Auto Detailing Yolo County, Premium Mobile Detailing Gibson Road, Car Wash Woodland" />
+        <title>Woodland Mobile Car Detailing | Premium at Your Doorstep</title>
+        <meta name="description" content="First-class car wash and interior detailing in Woodland. Showroom results with mobile service convenience. Book in 60 seconds—we come to you." />
+        <meta name="keywords" content="Woodland Mobile Car Detailing, Premium Doorstep Car Detailing, Car Detailing Woodland CA, Mobile Car Detailing Spring Lake, Auto Detailing Yolo County, Car Wash Woodland" />
         <link rel="canonical" href="https://hardyswashnwax.com/woodland-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}

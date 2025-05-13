@@ -116,18 +116,18 @@ export default function Hero() {
         {/* Stats section - simplified for mobile */}
         <div className={`grid grid-cols-3 gap-2 sm:gap-4 mt-8 sm:mt-12 ${isMobile ? 'max-w-full' : 'max-w-3xl'} mx-auto`}>
           <div className="rounded-lg sm:rounded-xl p-3 sm:p-5 text-center border-2 border-black overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#EE432C] to-[#FFB375] opacity-90"></div>
-            <div className={`relative z-10 text-white font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>5★</div>
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div className={`relative z-10 text-[#FFB375] font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>5★</div>
             <div className={`relative z-10 text-white text-xs sm:text-sm mt-1 ${isMobile ? 'mobile-hero-text' : ''}`}>Rated Service</div>
           </div>
           <div className="rounded-lg sm:rounded-xl p-3 sm:p-5 text-center border-2 border-black overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#EE432C] to-[#FFB375] opacity-90"></div>
-            <div className={`relative z-10 text-white font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>2K+</div>
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div className={`relative z-10 text-[#FFB375] font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>2K+</div>
             <div className={`relative z-10 text-white text-xs sm:text-sm mt-1 ${isMobile ? 'mobile-hero-text' : ''}`}>Cars Detailed</div>
           </div>
           <div className="rounded-lg sm:rounded-xl p-3 sm:p-5 text-center border-2 border-black overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#EE432C] to-[#FFB375] opacity-90"></div>
-            <div className={`relative z-10 text-white font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>100%</div>
+            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div className={`relative z-10 text-[#FFB375] font-bold text-xl sm:text-3xl ${isMobile ? 'mobile-hero-text' : ''}`}>100%</div>
             <div className={`relative z-10 text-white text-xs sm:text-sm mt-1 ${isMobile ? 'mobile-hero-text' : ''}`}>Satisfaction</div>
           </div>
         </div>

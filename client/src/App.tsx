@@ -24,6 +24,10 @@ import InteriorCarDetailing from "@/pages/services/interior-car-detailing";
 import FullServiceCarWash from "@/pages/services/full-service-car-wash";
 import CarWashAndWax from "@/pages/services/car-wash-and-wax";
 
+// Import blog pages
+import BlogIndex from "@/pages/blog/index";
+import BlogPostPage from "@/pages/blog/[slug]";
+
 // Import location pages for SEO
 import DavisCarDetailing from "@/pages/davis-car-detailing";
 import SacramentoCarDetailing from "@/pages/sacramento-car-detailing";
@@ -56,6 +60,10 @@ function Router() {
             <Route path="/subscriptions" component={Subscriptions} />
             <Route path="/contact" component={Contact} />
             <Route path="/card-demo" component={CardDemo} />
+            
+            {/* Blog routes */}
+            <Route path="/blog" component={BlogIndex} />
+            <Route path="/blog/:slug" component={BlogPostPage} />
             
             {/* Location pages for SEO */}
             <Route path="/davis-car-detailing" component={DavisCarDetailing} />

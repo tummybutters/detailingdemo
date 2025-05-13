@@ -258,6 +258,17 @@ export default function CeramicCoatingPage() {
                 </div>
                 
                 <p className="text-gray-700 text-sm">*Pricing may vary based on vehicle condition and paint correction requirements.</p>
+                
+                <div className="mt-6 p-4 bg-[#EE432C]/10 border-l-4 border-[#EE432C] rounded">
+                  <h4 className="font-bold text-gray-900 mb-1 flex items-center">
+                    <span className="mr-2">📋</span> Premium Service Pricing Notice
+                  </h4>
+                  <p className="text-gray-800">
+                    The prices displayed are starting estimates for our ceramic coating services. Each luxury vehicle has unique 
+                    needs—paint condition, existing damage, and specific protection requirements all affect your final quote. 
+                    For a precise assessment and customized pricing, we recommend scheduling a consultation.
+                  </p>
+                </div>
               </div>
               
               <div className="mb-6">

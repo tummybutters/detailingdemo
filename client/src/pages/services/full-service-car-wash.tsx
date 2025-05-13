@@ -269,6 +269,17 @@ export default function FullServiceCarWash() {
                 </div>
                 
                 <p className="text-gray-700 text-sm">*Pricing may vary based on vehicle condition. Heavily soiled vehicles may require additional time and cleaning.</p>
+                
+                <div className="mt-6 p-4 bg-[#EE432C]/10 border-l-4 border-[#EE432C] rounded">
+                  <h4 className="font-bold text-gray-900 mb-1 flex items-center">
+                    <span className="mr-2">📋</span> Customized Service Pricing
+                  </h4>
+                  <p className="text-gray-800">
+                    Please note that all prices shown are estimates and may be adjusted based on your specific vehicle's needs. 
+                    Our full-service detailing is tailored to each vehicle's unique condition, size, and special requirements. 
+                    For an accurate quote that reflects your exact situation, we recommend booking a consultation with our team.
+                  </p>
+                </div>
               </div>
               
               <div className="mb-6">

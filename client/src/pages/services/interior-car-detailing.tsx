@@ -216,6 +216,16 @@ export default function InteriorCarDetailing() {
                 </div>
                 
                 <p className="text-gray-700 text-sm">*Pricing may vary based on vehicle condition. Severely soiled interiors may require additional cleaning.</p>
+                
+                <div className="mt-6 p-4 bg-[#EE432C]/10 border-l-4 border-[#EE432C] rounded">
+                  <h4 className="font-bold text-gray-900 mb-1 flex items-center">
+                    <span className="mr-2">📋</span> Personalized Quote Information
+                  </h4>
+                  <p className="text-gray-800">
+                    All prices shown are estimates only. For your exact quote, please book a consultation or contact us directly. 
+                    We provide custom pricing based on your specific vehicle condition, size, and service requirements.
+                  </p>
+                </div>
               </div>
               
               <div className="mb-6">

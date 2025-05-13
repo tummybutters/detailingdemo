@@ -272,6 +272,17 @@ export default function CarWashAndWax() {
                 </div>
                 
                 <p className="text-gray-700 text-sm">*Pricing may vary based on vehicle condition and size. Heavily contaminated vehicles may require additional decontamination services.</p>
+                
+                <div className="mt-6 p-4 bg-[#EE432C]/10 border-l-4 border-[#EE432C] rounded">
+                  <h4 className="font-bold text-gray-900 mb-1 flex items-center">
+                    <span className="mr-2">📋</span> Estimate Information
+                  </h4>
+                  <p className="text-gray-800">
+                    The pricing listed above represents estimated ranges for our Wash & Wax services. Your actual price 
+                    may differ based on your "home on the road"—its size, current condition, and specific protection needs. 
+                    For a definitive quote tailored to your vehicle, we invite you to schedule a consultation or reach out directly.
+                  </p>
+                </div>
               </div>
               
               <div className="mb-6">

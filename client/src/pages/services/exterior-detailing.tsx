@@ -11,7 +11,7 @@ export default function ExteriorDetailing() {
         <title>Exterior Car Detailing Irvine & Orange County | Hardys Wash N' Wax</title>
         <meta name="description" content="Professional exterior car detailing in Irvine and Orange County. Our mobile service brings showroom shine to your vehicle with premium wash, wax, and polish." />
         <meta name="keywords" content="Exterior Car Detailing Irvine, Car Wash and Wax Orange County, Mobile Exterior Detailing, Paint Protection" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/exterior-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/exterior-detailing" />
       </Helmet>
       
       {/* Hero Section */}

@@ -11,7 +11,7 @@ export default function ElkGroveCarDetailing() {
         <title>Luxury Car Detailing Elk Grove | We Come to You</title>
         <meta name="description" content="First-class mobile detailing in Elk Grove. Full service car wash, interior detail, and ceramic coating—right at your doorstep. Book in 60 seconds." />
         <meta name="keywords" content="Luxury Car Detailing Elk Grove, Mobile Car Wash, Auto Detailing Elk Grove CA, Premium Mobile Detailing Laguna, Car Wash Elk Grove" />
-        <link rel="canonical" href="https://hardyswashnwax.com/elk-grove-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/elk-grove-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

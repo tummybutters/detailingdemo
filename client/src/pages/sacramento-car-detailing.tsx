@@ -11,7 +11,7 @@ export default function SacramentoCarDetailing() {
         <title>Concierge Car Detailing Sacramento | Full Service at Your Doorstep</title>
         <meta name="description" content="Sacramento's premium mobile car wash and detailing. Interior care, hand wash, and ceramic coating delivered to your home. Book now." />
         <meta name="keywords" content="Concierge Car Detailing Sacramento, Full Service Mobile Detailing, Car Detailing Sacramento CA, Mobile Car Detailing Midtown, Auto Detailing East Sacramento, Premium Mobile Detailing Downtown" />
-        <link rel="canonical" href="https://hardyswashnwax.com/sacramento-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/sacramento-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

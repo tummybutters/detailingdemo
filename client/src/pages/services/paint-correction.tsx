@@ -11,7 +11,7 @@ export default function PaintCorrection() {
         <title>Paint Correction Services Irvine & Orange County | Hardys Wash N' Wax</title>
         <meta name="description" content="Professional paint correction in Irvine and Orange County. Remove scratches, swirl marks, and restore your vehicle's paint to a mirror finish with our mobile service." />
         <meta name="keywords" content="Paint Correction Irvine, Swirl Mark Removal Orange County, Scratch Removal, Professional Paint Restoration" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/paint-correction" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/paint-correction" />
       </Helmet>
       
       {/* Hero Section */}

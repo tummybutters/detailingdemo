@@ -11,7 +11,7 @@ export default function CeramicCoatingPage() {
         <title>Ceramic Coating Near You – 7–10 Year Protection for Your Luxury Vehicle</title>
         <meta name="description" content="Professional ceramic coating services that provide 7-10 years of protection for your luxury vehicle's paint. Our mobile service comes to your location for convenient, premium paint protection." />
         <meta name="keywords" content="ceramic coating near me, paint correction near me, car paint protection, mobile ceramic coating" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/ceramic-coating" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/ceramic-coating" />
         
         {/* Structured Data for Service */}
         <script type="application/ld+json">

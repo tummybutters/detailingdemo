@@ -11,7 +11,7 @@ export default function InteriorCarDetailing() {
         <title>Interior Car Detailing Near You – Deep Clean & Factory-Fresh Finish</title>
         <meta name="description" content="Professional interior car detailing that comes to your location. Restore your vehicle's cabin with our comprehensive deep cleaning, stain removal, and premium protection services." />
         <meta name="keywords" content="interior car detailing near me, professional car detailing, auto detailing near me" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/interior-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/interior-car-detailing" />
         
         {/* Structured Data for Service */}
         <script type="application/ld+json">

@@ -11,7 +11,7 @@ export default function RosevilleCarDetailing() {
         <title>Mobile Auto Detailing Roseville | Showroom Finish at Home</title>
         <meta name="description" content="Roseville's premium car wash and detailing service. Hand wash, interior detail, and paint protection without leaving home. Book now." />
         <meta name="keywords" content="Mobile Auto Detailing Roseville, Showroom Finish, Car Detailing Roseville CA, Mobile Car Wash Placer County, Premium Detailing Service" />
-        <link rel="canonical" href="https://hardyswashnwax.com/roseville-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/roseville-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

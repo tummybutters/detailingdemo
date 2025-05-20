@@ -8,7 +8,7 @@ export default function Booking() {
         <title>Book Mobile Car Detailing in Davis, Woodland & Yolo County | Hardys Wash N' Wax</title>
         <meta name="description" content="Schedule your mobile car detailing service in Davis, Woodland and Yolo County. Our professional auto detailers come to your location for convenient, premium service at your home or office." />
         <meta name="keywords" content="Book Car Detailing Davis CA, Schedule Mobile Detailing UC Davis, Car Wash Appointment Woodland CA, Mobile Auto Detailing Booking Yolo County" />
-        <link rel="canonical" href="https://hardyswashnwax.com/booking" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/booking" />
         
         {/* Structured Data for Reservation */}
         <script type="application/ld+json">

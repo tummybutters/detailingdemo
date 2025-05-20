@@ -11,7 +11,7 @@ export default function FolsomCarDetailing() {
         <title>Folsom Mobile Car Detailing | Hand Wash & Interior Care</title>
         <meta name="description" content="Get a flawless finish in Folsom. Hand car wash, ceramic coating, and interior detailing delivered to your driveway. Book in under 60 seconds." />
         <meta name="keywords" content="Folsom Mobile Car Detailing, Hand Wash, Interior Care, Car Detailing Folsom CA, Mobile Car Wash Sacramento County, Premium Detailing Service" />
-        <link rel="canonical" href="https://hardyswashnwax.com/folsom-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/folsom-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

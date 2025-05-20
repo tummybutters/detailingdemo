@@ -11,7 +11,7 @@ export default function WintersCarDetailing() {
         <title>Mobile Car Detailing Services in Winters, CA | Hardys Wash N' Wax</title>
         <meta name="description" content="Premium mobile car detailing services in Winters, CA. We bring professional auto detailing to your home or office - serving all Winters neighborhoods with premium detailing packages." />
         <meta name="keywords" content="Car Detailing Winters CA, Mobile Car Detailing Winters, Auto Detailing Yolo County, Premium Mobile Detailing Near Me, Car Wash Winters" />
-        <link rel="canonical" href="https://hardyswashnwax.com/winters-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/winters-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

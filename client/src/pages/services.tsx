@@ -14,7 +14,7 @@ export default function Services() {
         <title>Mobile Car Detailing Services in Davis, Woodland & Yolo County | Hardys Wash N' Wax</title>
         <meta name="description" content="Comprehensive mobile car detailing services in Davis, Woodland, and throughout Yolo County. Premium express detail, interior cleaning, exterior wash & wax, ceramic coating, and paint correction at your location." />
         <meta name="keywords" content="Car Detailing Services Davis CA, Mobile Car Wash Woodland CA, Auto Detail Packages UC Davis, Ceramic Coating Yolo County, Express Detail Near Me" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services" />
         
         {/* Structured Data for Service */}
         <script type="application/ld+json">

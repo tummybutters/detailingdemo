@@ -11,7 +11,7 @@ export default function FullServiceCarWash() {
         <title>Full Service Car Wash & Detailing – Interior & Exterior Perfection</title>
         <meta name="description" content="Complete interior and exterior car detailing service that comes to your location. We thoroughly clean, protect, and restore your vehicle's appearance inside and out." />
         <meta name="keywords" content="full service car wash near me, premium car detailing, car cleaner service, luxury car detailing" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/full-service-car-wash" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/full-service-car-wash" />
         
         {/* Structured Data for Service */}
         <script type="application/ld+json">

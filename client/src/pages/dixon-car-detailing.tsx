@@ -11,7 +11,7 @@ export default function DixonCarDetailing() {
         <title>Mobile Car Detailing Services in Dixon, CA | Hardys Wash N' Wax</title>
         <meta name="description" content="Premium mobile car detailing services in Dixon, CA. We bring professional auto detailing to your home or office - serving all Dixon neighborhoods with custom detailing packages." />
         <meta name="keywords" content="Car Detailing Dixon CA, Mobile Car Detailing Dixon, Auto Detailing Solano County, Premium Mobile Detailing Near Me, Car Wash Dixon" />
-        <link rel="canonical" href="https://hardyswashnwax.com/dixon-car-detailing" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/dixon-car-detailing" />
         
         {/* Structured Data for Local Business with service location */}
         <script type="application/ld+json">

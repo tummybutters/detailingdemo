@@ -10,9 +10,8 @@ app.use(express.urlencoded({ extended: false }));
 // Canonicalization middleware: redirect non-www to www
 app.use((req, res, next) => {
   const host = req.header('host');
-  // Check if production and non-www
-  if (process.env.NODE_ENV === 'production' && 
-      host && 
+  // Check for non-www domain, apply redirect regardless of environment
+  if (host && 
       host.match(/^hardyswashnwax\.com/) && 
       !host.match(/^www\./)) {
     return res.redirect(301, `https://www.${host}${req.url}`);

@@ -11,7 +11,7 @@ export default function CarWashAndWax() {
         <title>Car Wash and Wax Services – Add Shine & Protection To Your Home On The Road</title>
         <meta name="description" content="Professional car wash and wax services that come to your location. Our Exterior Wash & Wax package includes foam wash, clay bar treatment, and premium wax for long-lasting shine and protection to your home on the road." />
         <meta name="keywords" content="car wash near me, car wash and wax, car waxing service, mobile car wash" />
-        <link rel="canonical" href="https://hardyswashnwax.com/services/car-wash-and-wax" />
+        <link rel="canonical" href="https://www.hardyswashnwax.com/services/car-wash-and-wax" />
         
         {/* Structured Data for Service */}
         <script type="application/ld+json">

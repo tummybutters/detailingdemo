@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="relative container mx-auto px-4 py-12 md:py-16 lg:py-24">
         {/* Main headline - optimized for mobile and SEO */}
         <h1 className={`text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-heading leading-tight text-left mb-6 sm:mb-10 max-w-5xl ${isMobile ? 'mobile-hero-text' : ''}`}>
-          Mobile Car Detailing Near Me in Davis, CA
+          Mobile car detailing Davis, CA
         </h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 items-center min-h-[calc(70vh-12rem)] lg:min-h-[calc(80vh-12rem)]">

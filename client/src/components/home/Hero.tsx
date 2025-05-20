@@ -29,11 +29,11 @@ export default function Hero() {
           {/* Left side content */}
           <div className="flex flex-col justify-center">
             <h2 className={`text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading leading-tight ${isMobile ? 'mobile-hero-text' : ''}`}>
-              Mobile Car Detailing Specialists Serving Davis, Sacramento & Surrounding Areas
+              Interior Detailing, Paint Correction, Ceramic Coating & Full-Service Car Wash
             </h2>
             
-            <p className={`text-gray-100 text-lg sm:text-xl mt-4 sm:mt-6 mb-6 font-light ${isMobile ? 'mobile-hero-text' : ''}`}>
-              Interior Detailing, Paint Correction, Ceramic Coating & Full-Service Car Wash — all delivered with precision, care, and professional-grade results.
+            <p className={`text-gray-100 text-lg sm:text-xl mt-4 sm:mt-6 mb-6 font-medium ${isMobile ? 'mobile-hero-text' : ''}`}>
+              Mobile Car Detailing Specialists Serving Davis, Sacramento & Surrounding Areas — all delivered with precision, care, and professional-grade results.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 sm:mt-6">

@@ -199,9 +199,17 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">OPTIONAL ADD-ONS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING</div>
+                <ul className="space-y-3 mb-4">
+                  <li className="flex justify-between items-center text-sm text-gray-700">
+                    <span>{services[0].bonuses[0].text}</span>
+                    <span className="text-red-600 font-bold">{services[0].bonuses[0].value}</span>
+                  </li>
+                </ul>
+                
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">OPTIONAL ADD-ONS</div>
                 <ul className="space-y-3">
-                  {services[0].bonuses.map((bonus, index) => (
+                  {services[0].bonuses.slice(1).map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
                       <span>{bonus.text}</span>
                       {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
@@ -244,8 +252,18 @@ export default function ServiceList() {
               
               <div className="mt-auto pt-4 border-t border-gray-200">
                 <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
+                <ul className="space-y-3 mb-4">
+                  {services[1].bonuses.slice(0, 3).map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">OPTIONAL ADD-ONS</div>
                 <ul className="space-y-3">
-                  {services[1].bonuses.map((bonus, index) => (
+                  {services[1].bonuses.slice(3).map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
                       <span>{bonus.text}</span>
                       {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
@@ -288,8 +306,18 @@ export default function ServiceList() {
               
               <div className="mt-auto pt-4 border-t border-gray-200">
                 <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
+                <ul className="space-y-3 mb-4">
+                  {services[2].bonuses.slice(0, 3).map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">OPTIONAL ADD-ONS</div>
                 <ul className="space-y-3">
-                  {services[2].bonuses.map((bonus, index) => (
+                  {services[2].bonuses.slice(3).map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
                       <span>{bonus.text}</span>
                       {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
@@ -333,8 +361,18 @@ export default function ServiceList() {
               
               <div className="mt-auto pt-4 border-t border-gray-200">
                 <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
+                <ul className="space-y-3 mb-4">
+                  {services[3].bonuses.slice(0, 3).map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">ADDITIONAL INFORMATION</div>
                 <ul className="space-y-3">
-                  {services[3].bonuses.map((bonus, index) => (
+                  {services[3].bonuses.slice(3).map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
                       <span>{bonus.text}</span>
                       {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
@@ -376,9 +414,19 @@ export default function ServiceList() {
               </div>
               
               <div className="mt-auto pt-4 border-t border-gray-200">
-                <div className="font-bold text-xl text-gray-900 mb-2">PRICING & ADD-ONS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2">PRICING BY VEHICLE</div>
+                <ul className="space-y-3 mb-4">
+                  {services[4].bonuses.slice(0, 3).map((bonus, index) => (
+                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
+                      <span>{bonus.text}</span>
+                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">OPTIONAL ADD-ONS</div>
                 <ul className="space-y-3">
-                  {services[4].bonuses.map((bonus, index) => (
+                  {services[4].bonuses.slice(3).map((bonus, index) => (
                     <li key={index} className="flex justify-between items-center text-sm text-gray-700">
                       <span>{bonus.text}</span>
                       {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}

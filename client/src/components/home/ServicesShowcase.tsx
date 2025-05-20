@@ -16,7 +16,7 @@ const services = [
   {
     id: 1,
     title: "FULL INTERIOR DETAIL",
-    description: "Deep cleaning for a fresh, spotless interior, including stain and odor removal.",
+    description: "Revitalize your vehicle's cabin with our meticulous interior cleaning that eliminates stains, odors, and restores that showroom freshness.",
     image: interiorImage,
     link: "/services",
     primary: true,
@@ -24,7 +24,7 @@ const services = [
   {
     id: 2,
     title: "FULL EXTERIOR DETAIL",
-    description: "A thorough washing and waxing for a clean, protected exterior.",
+    description: "Transform your vehicle's exterior with our premium washing and waxing service that delivers a pristine finish and lasting protection against the elements.",
     image: exteriorImage,
     link: "/services",
     primary: true,
@@ -32,7 +32,7 @@ const services = [
   {
     id: 3,
     title: "FULL DETAIL",
-    description: "Complete care for both the interior and exterior of your vehicle.",
+    description: "Experience the ultimate in automotive luxury with our comprehensive service that meticulously restores both your vehicle's interior comfort and exterior brilliance.",
     image: fullHandWashImage,
     link: "/services",
     primary: true,
@@ -41,7 +41,7 @@ const services = [
   {
     id: 4,
     title: "PAINT CORRECTION",
-    description: "Restore your car's shine by removing scratches, swirl marks, and imperfections for a flawless finish.",
+    description: "Elevate your vehicle's appearance with our precision paint correction that eliminates scratches, swirls, and imperfections to reveal a mirror-like, flawless finish.",
     image: paintCorrectionImage,
     link: "/services",
     primary: false,
@@ -49,7 +49,7 @@ const services = [
   {
     id: 5,
     title: "CERAMIC COATING",
-    description: "8 year protection for your car's paint, providing a glossy finish and shielding against dirt, sun, and water.",
+    description: "Invest in your vehicle's longevity with our premium ceramic coating that provides up to 8 years of superior protection while enhancing depth, gloss, and resistance to environmental damage.",
     image: ceramicCoatingImage,
     link: "/services",
     primary: false,
@@ -57,7 +57,7 @@ const services = [
   {
     id: 6,
     title: "MAINTENANCE DETAILS",
-    description: "Keep your car looking its best with routine cleaning and care for both the interior and exterior.",
+    description: "Preserve your vehicle's pristine condition with our regular maintenance service that keeps both interior comfort and exterior appearance at their peak between major detailing sessions.",
     image: interiorImage2,
     link: "/services",
     primary: false,

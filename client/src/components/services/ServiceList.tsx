@@ -422,14 +422,11 @@ export default function ServiceList() {
                   ))}
                 </ul>
                 
-                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">OPTIONAL ADD-ONS</div>
+                <div className="font-bold text-xl text-gray-900 mb-2 border-t border-gray-200 pt-4">ADDITIONAL INFORMATION</div>
                 <ul className="space-y-3">
-                  {services[4].bonuses.slice(3).map((bonus, index) => (
-                    <li key={index} className="flex justify-between items-center text-sm text-gray-700">
-                      <span>{bonus.text}</span>
-                      {bonus.value && <span className="text-red-600 font-bold">{bonus.value}</span>}
-                    </li>
-                  ))}
+                  <li className="flex items-center text-sm text-gray-700">
+                    <span>Available with all add-on options from individual services</span>
+                  </li>
                 </ul>
               </div>
             </div>

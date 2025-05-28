@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Davis Mobile Car Detailing</title>
+        <title>Davis Mobile Car Detailing | Interior & Exterior Services</title>
         <meta name="description" content="Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc." />
         <meta name="keywords" content="Car Detailing Davis CA, Mobile Car Detailing UC Davis, Auto Detailing Woodland, Premium Mobile Detailing Yolo County, Car Wash Near UC Davis" />
         <link rel="canonical" href="https://www.hardyswashnwax.com" />
@@ -22,7 +22,7 @@ export default function Home() {
             "@type": "AutoWash",
             "name": "Hardys Wash N' Wax",
             "image": "https://hardyswashnwax.com/logo.png",
-            "description": "Premium mobile car detailing service that comes to your location in Davis and throughout Yolo County.",
+            "description": "Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc.",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Davis",

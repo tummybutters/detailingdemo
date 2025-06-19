@@ -1,0 +1,56 @@
+**Objective (be precise)**
+Google Search still shows the gray-globe icon for hardyswashnwax.com.  
+Deliver one valid, crawl-able favicon that Google will display in its SERP.
+
+**Context**
+• Node/Express app on Replit with a custom domain.  
+• Favicon/logo shows fine in browser tab; Google ignores it.  
+• Prior attempts left multiple <link rel="icon"> tags, assorted file paths, and maybe a corrupted or undersized image.
+
+**Step-by-Step Debug & Fix Plan**
+
+0. Quick sanity checks  
+   a. Locate the current favicon or logo file(s); note exact filenames and folders.  
+   b. Manually open each file in the browser to confirm it isn’t corrupted.  
+   c. Verify it’s a perfect square and ≥ 48 × 48 px. If not, create/export a new PNG (or ICO/SVG) that meets Google’s spec.
+
+1. HTML & CSS inspection  
+   a. Search the fully rendered HTML (view-source) for **ALL** favicon declarations.  
+   b. Remove everything except **one** tag:  
+      ```html
+      <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48">
+      ```  
+   c. Check for stray CSS or JS that programmatically swaps favicons—eliminate it.
+
+2. File-system and build integrity  
+   a. Move the final `favicon.png` (square, ≥ 48 px) into the *project root*; commit it to version control.  
+   b. Make sure build scripts or static pipelines don’t rename or relocate the file during `npm run build`.  
+   c. Symlink or copy the same file to `/favicon.ico` for legacy browsers.
+
+3. Serving & crawlability verification  
+   a. In the Replit shell, run:  
+      ```
+      curl -I https://hardyswashnwax.com/favicon.png
+      curl -I https://hardyswashnwax.com/favicon.ico
+      ```  
+      Expect **HTTP 200** and `Content-Type: image/*`.  
+   b. Check `robots.txt` and any security headers; *nothing* should block Googlebot-Image.  
+   c. Test in a private/incognito window to ensure no cached or CDN-stale assets.
+
+4. Google-specific actions  
+   a. Open **Google Search Console → URL Inspection** for the home page; click **“Request indexing.”**  
+   b. Document that only one `<link rel="icon">` exists in the fetched/rendered HTML via Search Console’s “View crawled page” tool.  
+   c. Wait—Google’s favicon cache can take 24-72 h to update.
+
+5. Verification extras (from the older prompt)  
+   • If the favicon still fails to appear, temporarily embed the PNG as base64 in the same `<link>` tag to rule out path issues.  
+   • As a last-ditch placeholder test, point the tag to a known-good CDN image and see if Google picks it up; revert once the root-cause is clear.
+
+**Deliverables (prove it works)**  
+✓ Exact code/config changes (diff or snippet).  
+✓ Shell output showing both curl commands return 200.  
+✓ Screenshot or console output confirming one `<link rel="icon">` in final HTML.  
+✓ Confirmation that `/favicon.png` is square ≥ 48 px and not corrupted.  
+✓ Note when “Request indexing” was triggered.
+
+If a checklist item is impossible under Replit’s hosting rules, explain why and propose the closest alternative. Otherwise, knock these out in order and report back.

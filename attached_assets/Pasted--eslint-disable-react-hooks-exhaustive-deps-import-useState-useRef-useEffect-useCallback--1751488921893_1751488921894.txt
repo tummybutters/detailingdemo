@@ -1,0 +1,351 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, X, MessageCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+// 🔧 Config -------------------------------------------------------------
+const HISTORY_KEY = 'askGreg_chatHistory';
+const DEFAULT_Z = 2147483646; // max safe value in most browsers
+const SUGGESTIONS = [
+  "What's the average kitchen remodel cost?",
+  'How long does a bathroom renovation take?',
+  'Can I see before/after photos?',
+  'What areas do you serve in Orange County?'
+];
+
+// 🗨️ Message shape
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+}
+
+interface AskGregProps {
+  className?: string;
+  endpoint?: string;      // defaults to /api/chat
+  zIndexBase?: number;    // override stacking base if needed
+  variant?: 'header' | 'hero';
+}
+
+export default function AskGreg({
+  className = '',
+  endpoint = '/api/chat',
+  zIndexBase = DEFAULT_Z,
+  variant = 'header'
+}: AskGregProps) {
+  // 🔒 state --------------------------------------------------------------
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 📜 load + persist history --------------------------------------------
+  useEffect(() => {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (raw) {
+      try {
+        setMessages(JSON.parse(raw).slice(-6));
+      } catch {/* ignore */}
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messages.length) localStorage.setItem(HISTORY_KEY, JSON.stringify(messages));
+  }, [messages]);
+
+  // 🔄 scroll + focus ------------------------------------------------------
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+  
+  useEffect(() => {
+    if (inputRef.current && open) {
+      inputRef.current.focus();
+    }
+  }, [open]);
+
+  // 🚀 send ---------------------------------------------------------------
+  const pushMessage = (msg: ChatMessage) => setMessages((m) => [...m, msg]);
+  const send = useCallback(async (text: string) => {
+    if (!text.trim() || loading) return;
+    const userMsg = { role: 'user', content: text.trim(), timestamp: Date.now() } as ChatMessage;
+    pushMessage(userMsg);
+    setInput('');
+    setLoading(true);
+
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg.content, chatHistory: [...messages, userMsg].slice(-4) })
+      });
+      const data = await res.json();
+      pushMessage({ role: 'assistant', content: data.response, timestamp: data.timestamp ?? Date.now() });
+    } catch {
+      pushMessage({ role: 'assistant', content: "I'm offline right now. Call us at (714) 224-9614!", timestamp: Date.now() });
+    } finally {
+      setLoading(false);
+    }
+  }, [endpoint, loading, messages]);
+
+  // 🖼️ modal portal --------------------------------------------------------
+  const modal = (
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-md"
+            style={{ zIndex: zIndexBase }}
+            onClick={() => setOpen(false)}
+          />
+
+          {/* Panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ type: 'spring', duration: 0.3 }}
+            className="fixed inset-0 flex flex-col pointer-events-none"
+            style={{ zIndex: zIndexBase + 1 }}
+          >
+            {/* Close */}
+            <div className="flex justify-end p-4 pointer-events-auto">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setOpen(false)}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur border border-white/20 hover:bg-white/20"
+              >
+                <X className="w-5 h-5 text-white" />
+              </Button>
+            </div>
+
+            {messages.length === 0 ? (
+              /* First view */
+              <div className="flex-1 flex items-start justify-center pointer-events-auto pt-8 sm:pt-20">
+                <div className="w-full max-w-3xl px-4 sm:px-8 space-y-6 sm:space-y-8">
+                  <header className="text-center space-y-2">
+                    <h2 className="text-2xl sm:text-4xl font-light text-white">Ask Greg Anything</h2>
+                    <p className="text-white/60 text-sm sm:text-base">Get instant answers about your remodel</p>
+                  </header>
+
+                  <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="relative group">
+                    <div className="relative">
+                      {/* Gradient glow background */}
+                      <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-purple-600 to-orange-600 rounded-xl blur-sm opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+                      <input
+                        ref={inputRef}
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            send(input);
+                          }
+                        }}
+                        placeholder="Ask about costs, timelines, or anything..."
+                        className="relative w-full px-6 py-5 pr-14 bg-white/10 backdrop-blur-xl text-white placeholder-white/50 rounded-xl border border-white/20 focus:border-white/30 outline-none"
+                        disabled={loading}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || loading}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 disabled:opacity-30"
+                    >
+                      <Send className="w-4 h-4 text-white" />
+                    </button>
+                  </form>
+
+                  <div className="flex flex-wrap justify-center gap-3">
+                    {SUGGESTIONS.map((s) => (
+                      <motion.button
+                        key={s}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => send(s)}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-full text-sm text-white/90"
+                      >
+                        {s}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Conversation view */
+              <div className="flex-1 flex flex-col max-w-4xl w-full mx-auto px-2 sm:px-4 pointer-events-auto">
+                <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 py-3 sm:py-4 max-h-[35vh] sm:max-h-[40vh] chat-scrollbar">
+                  {messages.map((m) => (
+                    <motion.div
+                      key={m.timestamp}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[85%] sm:max-w-[80%] lg:max-w-[60%] px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm rounded-2xl shadow-xl ${
+                          m.role === 'user'
+                            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-br-md'
+                            : 'bg-white/10 backdrop-blur border border-white/20 text-white rounded-bl-md'
+                        }`}
+                      >
+                        {m.content}
+                      </div>
+                    </motion.div>
+                  ))}
+                  {loading && <div className="text-white/70 text-sm">Greg is typing…</div>}
+                  <div ref={bottomRef} />
+                </div>
+
+                <form onSubmit={(e) => { e.preventDefault(); send(input); }} className="pb-2 group">
+                  <div className="relative">
+                    {/* Gradient glow background */}
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 via-purple-600 to-orange-600 rounded-lg blur-sm opacity-60 group-hover:opacity-90 transition duration-1000 group-hover:duration-200"></div>
+                    <input
+                      ref={inputRef}
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          send(input);
+                        }
+                      }}
+                      placeholder="Continue the conversation…"
+                      className="relative w-full px-5 py-4 pr-12 bg-white/10 backdrop-blur rounded-lg border border-white/20 text-sm text-white placeholder-white/50 focus:border-white/30 outline-none"
+                      disabled={loading}
+                    />
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || loading}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-md flex items-center justify-center disabled:opacity-30"
+                    >
+                      <Send className="w-4 h-4 text-white" />
+                    </button>
+                  </div>
+                </form>
+
+                {/* Dead Space Content - Quick Actions, Suggestions, Urgency */}
+                <div className="py-6 sm:py-8 space-y-4 sm:space-y-6 px-2 sm:px-0">
+                  {/* Quick Action Bar */}
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center">
+                    <button 
+                      onClick={() => {
+                        setOpen(false);
+                        // Smooth scroll to intake form
+                        setTimeout(() => {
+                          const form = document.querySelector('#intake-form');
+                          if (form) {
+                            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }
+                        }, 300);
+                      }}
+                      className="relative group w-full sm:w-auto"
+                    >
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-600 via-purple-600 to-orange-600 rounded-lg blur-sm opacity-60 group-hover:opacity-90 transition duration-300"></div>
+                      <div className="relative px-4 sm:px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg text-white font-medium hover:bg-white/20 transition-colors text-center">
+                        Check Fit
+                      </div>
+                    </button>
+                    <button 
+                      onClick={() => window.open('tel:+17142249614', '_self')}
+                      className="relative px-4 sm:px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg text-white font-medium hover:bg-white/20 transition-colors border border-white/20 w-full sm:w-auto"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        📞 Call (714) 224-9614
+                      </span>
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setInput("Can I see some recent kitchen and bathroom projects?");
+                        send("Can I see some recent kitchen and bathroom projects?");
+                      }}
+                      className="relative px-4 sm:px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg text-white font-medium hover:bg-white/20 transition-colors border border-white/20 w-full sm:w-auto text-center"
+                    >
+                      View Gallery
+                    </button>
+
+                    
+                  </div>
+
+                  {/* Dynamic Question Suggestions */}
+                  <div className="space-y-3">
+                    <div className="text-white/70 text-sm text-center px-2">Ask Greg about:</div>
+                    <div className="flex flex-wrap gap-2 justify-center max-w-full sm:max-w-2xl mx-auto px-2">
+                      {[
+                        "How much does a kitchen remodel cost?",
+                        "What's your typical timeline?",
+                        "Do you handle permits?",
+                        "Can I see recent kitchen projects?",
+                        "What's included in a full remodel?",
+                        "How do I get started?"
+                      ].map((question, idx) => (
+                        <button 
+                          key={idx}
+                          onClick={() => {
+                            setInput(question);
+                            send(question);
+                          }}
+                          className="px-3 sm:px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm hover:bg-white/20 transition-colors border border-white/10 hover:border-white/30 text-center leading-tight"
+                        >
+                          {question}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Urgency Section */}
+                  <div className="text-center space-y-2 px-2">
+                    <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-orange-500/20 to-pink-500/20 rounded-full border border-orange-500/30 max-w-full">
+                      <span className="w-2 h-2 bg-orange-400 rounded-full animate-pulse flex-shrink-0"></span>
+                      <span className="text-orange-200 text-xs sm:text-sm font-medium">
+                        Only 3 consultation slots left this month
+                      </span>
+                    </div>
+                    <div className="text-white/60 text-xs">
+                      15+ Orange County families chose us this year
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+
+  // 🖼️ Trigger button rendered inline ---------------------------
+  return (
+    <div className={className}>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setOpen(true)}
+        className={
+          variant === 'hero'
+            ? 'group inline-flex items-center gap-2 text-white/90 hover:text-white transition border-b border-transparent hover:border-white/30'
+            : 'group inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors duration-200'
+        }
+      >
+        <MessageCircle className="w-4 h-4" />
+        <span className="text-sm font-medium">Ask Greg</span>
+      </motion.button>
+
+      {/* 🔗 Portal to body so we escape any local stacking contexts */}
+      {createPortal(modal, document.body)}
+    </div>
+  );
+}

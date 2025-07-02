@@ -146,6 +146,29 @@
   width: 100%;
 }
 
+/* Chat scrollbar styling */
+.chat-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 179, 117, 0.3) transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 179, 117, 0.3);
+  border-radius: 3px;
+}
+
+.chat-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 179, 117, 0.5);
+}
+
 #mapbox-geocoder-unique-container .mapboxgl-ctrl-geocoder:not(:first-child),
 #mapbox-geocoder-unique-container > input:not(:first-child),
 #mapbox-geocoder-unique-container > .mapboxgl-ctrl:not(:first-child) {

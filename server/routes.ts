@@ -359,6 +359,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AI Chat endpoint for Ask Ian chatbot
+  app.post('/api/chat', async (req, res) => {
+    try {
+      const { message, chatHistory } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({
+          error: 'Message is required'
+        });
+      }
+
+      // For now, return helpful responses about car detailing services
+      // TODO: Integrate with actual AI service (OpenAI, Claude, etc.)
+      const responses = {
+        cost: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
+        pricing: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
+        price: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
+        ceramic: "Ceramic coating lasts 2-3 years and provides excellent protection. We use premium products with a $299+ application.",
+        paint: "Paint correction removes swirl marks, scratches, and oxidation. Prices start at $299 depending on your vehicle's condition.",
+        correction: "Paint correction removes swirl marks, scratches, and oxidation. Prices start at $299 depending on your vehicle's condition.",
+        time: "Most services take 2-4 hours. We come to your location for convenience.",
+        duration: "Most services take 2-4 hours. We come to your location for convenience.",
+        area: "We serve Davis, Woodland, Dixon, Winters, West Sacramento, and surrounding areas in Sacramento County.",
+        location: "We serve Davis, Woodland, Dixon, Winters, West Sacramento, and surrounding areas in Sacramento County.",
+        photos: "I'd love to show you our work! Check out our before/after gallery on the website or call (949) 734-0201 to see recent projects.",
+        gallery: "I'd love to show you our work! Check out our before/after gallery on the website or call (949) 734-0201 to see recent projects.",
+        subscription: "We offer monthly subscription plans starting at $89/month for regular maintenance washes. Perfect for keeping your car pristine year-round!",
+        book: "Ready to book? Use our online booking form or call (949) 734-0201. We'll come to your location at your convenience.",
+        booking: "Ready to book? Use our online booking form or call (949) 734-0201. We'll come to your location at your convenience."
+      };
+
+      const lowerMessage = message.toLowerCase();
+      let response = "Hi! I'm Ian from Hardy's Wash N' Wax. I specialize in premium mobile car detailing. What can I help you with today?";
+
+      // Check for keywords and provide relevant responses
+      for (const [keyword, answer] of Object.entries(responses)) {
+        if (lowerMessage.includes(keyword)) {
+          response = answer;
+          break;
+        }
+      }
+
+      // Default helpful response if no keywords matched
+      if (response === "Hi! I'm Ian from Hardy's Wash N' Wax. I specialize in premium mobile car detailing. What can I help you with today?") {
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+          response = "Hello! I'm Ian from Hardy's Wash N' Wax. We provide luxury mobile car detailing services. How can I help you today?";
+        } else {
+          response = "Great question! Hardy's Wash N' Wax offers premium mobile detailing services including interior/exterior cleaning, paint correction, and ceramic coating. We serve Davis and surrounding areas. What specific service interests you?";
+        }
+      }
+
+      return res.json({
+        response,
+        timestamp: Date.now()
+      });
+    } catch (error) {
+      console.error('Chat API error:', error);
+      return res.status(500).json({
+        error: "Sorry, I am having trouble right now. Please call us at (949) 734-0201!"
+      });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

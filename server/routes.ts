@@ -370,28 +370,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // For now, return helpful responses about car detailing services
-      // TODO: Integrate with actual AI service (OpenAI, Claude, etc.)
+      // System prompt for Ian's AI personality
+      const systemPrompt = `You are Hardy's Wash N' Wax's AI concierge. You speak on behalf of Ian—the 23-year-old founder, UC Davis grad, substitute teacher, and certified detailer based in California. Ian specializes in ceramic coatings, paint correction, and high-end mobile detailing. Your tone is sharp, dry, slightly witty, and never bubbly or over-friendly. You never use emojis, exclamation marks, or filler phrases. Every reply must be no more than four short, high-information sentences.
+
+Always highlight: we're fully insured, IDA certified, and offer 60-second online booking. We serve both Davis, CA and a wide range of Southern California areas—Newport, Irvine, Tustin, San Clemente, Huntington Beach, and more inland cities. We accept Zelle, card, and cash. There are no cancellation fees unless it's same-day.
+
+We detail all vehicles: sedans, SUVs, trucks, exotics, boats, RVs, and 18-wheelers. We do require customer-supplied water and power at the location. If someone seems unsure, say: "It depends what kind of wash you're looking for—we're not always the right fit, but we might be." Emphasize we offer customizable subscriptions and many long-time clients book a week in advance.
+
+When asked for results, always respond with: "You can see our latest work on Instagram @hardyswashnwaxllc." If asked for a quote, give the correct price range and recommend they book online or call (949) 734-0201. If a dry joke fits, use it (e.g., "We'll clean everything except your browser history."). Only mention add-ons (e.g. spray wax, trim restore, stain removal) if asked.
+
+SERVICE SUMMARIES:
+- Maintenance Detail: $149–$199, 1.5–2.5 hrs — Light vacuum, dash wipe-down, windows, wheel clean, exterior wash, tire shine.
+- Interior Detail: $159–$229, 2–4 hrs — Deep vacuum, cabin restoration, plastics cleaned, leather conditioned.
+- Exterior Detail: $99–$159, 1.5–3 hrs — Iron decon, foam/contact wash, towel dry, showroom finish.
+- Full Interior + Exterior: $279–$379, 3–5 hrs — Full interior refresh + full exterior treatment.
+- Ceramic Coating (7–10 years): $549–$849, 5–8 hrs — Paint correction + long-term ceramic protection.
+
+PERSONALITY:
+- Speak like a professional who knows detailing inside and out.
+- Never break character or mention being an AI.
+- If asked why we're better: "California has great detailers. What sets us apart is consistent results, transparent service, and satisfied clients—just check our page."
+
+GUARDRAILS:
+- If a prompt is off-topic, abusive, or inappropriate, respond: "I'm here to talk car detailing, not the mysteries of the universe. Let's stay on task."
+- If asked for illegal, NSFW, or personal topics, reply: "No can do. I clean cars, not criminal records."
+- Never answer questions about politics, relationships, health, or religion.
+
+Always stay focused on helping the user understand our services and feel confident booking.`;
+
+      // Enhanced responses based on the system prompt
       const responses = {
-        cost: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
-        pricing: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
-        price: "Our services range from $149 for Express Detail to $399 for Premium Detail. Paint correction starts at $299.",
-        ceramic: "Ceramic coating lasts 2-3 years and provides excellent protection. We use premium products with a $299+ application.",
-        paint: "Paint correction removes swirl marks, scratches, and oxidation. Prices start at $299 depending on your vehicle's condition.",
-        correction: "Paint correction removes swirl marks, scratches, and oxidation. Prices start at $299 depending on your vehicle's condition.",
-        time: "Most services take 2-4 hours. We come to your location for convenience.",
-        duration: "Most services take 2-4 hours. We come to your location for convenience.",
-        area: "We serve Davis, Woodland, Dixon, Winters, West Sacramento, and surrounding areas in Sacramento County.",
-        location: "We serve Davis, Woodland, Dixon, Winters, West Sacramento, and surrounding areas in Sacramento County.",
-        photos: "I'd love to show you our work! Check out our before/after gallery on the website or call (949) 734-0201 to see recent projects.",
-        gallery: "I'd love to show you our work! Check out our before/after gallery on the website or call (949) 734-0201 to see recent projects.",
-        subscription: "We offer monthly subscription plans starting at $89/month for regular maintenance washes. Perfect for keeping your car pristine year-round!",
-        book: "Ready to book? Use our online booking form or call (949) 734-0201. We'll come to your location at your convenience.",
-        booking: "Ready to book? Use our online booking form or call (949) 734-0201. We'll come to your location at your convenience."
+        cost: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        pricing: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        price: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        ceramic: "Ceramic coating lasts 7-10 years and costs $549-$849 including paint correction. Takes 5-8 hours but transforms your paint permanently. Worth every penny for the protection.",
+        paint: "Paint correction removes swirl marks, scratches, and oxidation through multi-stage polishing. Starts around $300 depending on condition. We assess first, then quote accurately.",
+        correction: "Paint correction removes swirl marks, scratches, and oxidation through multi-stage polishing. Starts around $300 depending on condition. We assess first, then quote accurately.",
+        time: "Maintenance Detail takes 1.5-2.5 hours, Interior Detail 2-4 hours, Full service 3-5 hours. Ceramic coating is 5-8 hours. We bring everything to you.",
+        duration: "Maintenance Detail takes 1.5-2.5 hours, Interior Detail 2-4 hours, Full service 3-5 hours. Ceramic coating is 5-8 hours. We bring everything to you.",
+        area: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
+        location: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
+        photos: "You can see our latest work on Instagram @hardyswashnwaxllc. Before and afters speak louder than words.",
+        gallery: "You can see our latest work on Instagram @hardyswashnwaxllc. Before and afters speak louder than words.",
+        subscription: "We offer customizable subscriptions for regular maintenance. Many long-time clients book a week in advance. Keeps your car pristine year-round.",
+        book: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day.",
+        booking: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day.",
+        water: "You supply water and power at your location. We bring the expertise and equipment. Standard setup for mobile detailing.",
+        power: "You supply water and power at your location. We bring the expertise and equipment. Standard setup for mobile detailing.",
+        why: "California has great detailers. What sets us apart is consistent results, transparent service, and satisfied clients—just check our page.",
+        better: "California has great detailers. What sets us apart is consistent results, transparent service, and satisfied clients—just check our page."
       };
 
       const lowerMessage = message.toLowerCase();
-      let response = "Hi! I'm Ian from Hardy's Wash N' Wax. I specialize in premium mobile car detailing. What can I help you with today?";
+      let response = "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.";
 
       // Check for keywords and provide relevant responses
       for (const [keyword, answer] of Object.entries(responses)) {
@@ -401,13 +432,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      // Default helpful response if no keywords matched
-      if (response === "Hi! I'm Ian from Hardy's Wash N' Wax. I specialize in premium mobile car detailing. What can I help you with today?") {
+      // Default helpful response if no keywords matched with Ian's personality
+      if (response === "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.") {
         if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-          response = "Hello! I'm Ian from Hardy's Wash N' Wax. We provide luxury mobile car detailing services. How can I help you today?";
+          response = "Ian here. Mobile car detailing specialist based in California. IDA certified, fully insured. What do you need.";
+        } else if (lowerMessage.includes('thank')) {
+          response = "You're welcome. Book online or call (949) 734-0201 when you're ready.";
         } else {
-          response = "Great question! Hardy's Wash N' Wax offers premium mobile detailing services including interior/exterior cleaning, paint correction, and ceramic coating. We serve Davis and surrounding areas. What specific service interests you?";
+          response = "Hardy's Wash N' Wax offers premium mobile detailing—maintenance, interior/exterior, paint correction, ceramic coating. We serve Davis and Southern California areas. What specific service interests you.";
         }
+      }
+
+      // Handle off-topic or inappropriate requests
+      if (lowerMessage.includes('politics') || lowerMessage.includes('religion') || lowerMessage.includes('relationship')) {
+        response = "I'm here to talk car detailing, not the mysteries of the universe. Let's stay on task.";
       }
 
       return res.json({
@@ -417,7 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Chat API error:', error);
       return res.status(500).json({
-        error: "Sorry, I am having trouble right now. Please call us at (949) 734-0201!"
+        error: "I'm offline right now. Call us at (949) 734-0201."
       });
     }
   });

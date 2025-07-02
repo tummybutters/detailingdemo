@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, MessageCircle, Car, Sparkles } from 'lucide-react';
@@ -36,7 +36,7 @@ interface AskIanProps {
  * 1. Collapsed duplicate effects (scroll ➜ focus) into a single useEffect.
  * 2. Replaced useCallback dep on `messages` with a ref to avoid stale‑closure ESLint warnings and
  *    cut re‑renders.
- * 3. Guarded all window / document access so Replit SSR or tests won't explode.
+ * 3. Guarded all window / document access so Replit SSR or tests won’t explode.
  * 4. Wrapped localStorage calls in safe helpers – fewer try/catch blocks sprinkled around.
  * 5. Added small helper handlers (toggle, scrollToBooking, makeCall) so JSX stays readable.
  *
@@ -169,10 +169,10 @@ export default function AskIan({
                   </header>
 
                   {/* Input ------------------------------------------------- */}
-                  <ChatInputWithRef
+                  <ChatInput
                     ref={inputRef}
                     value={input}
-                    onChange={(v: string) => setInput(v)}
+                    onChange={(v) => setInput(v)}
                     onSend={send}
                     disabled={loading}
                     placeholder="Ask about services, pricing, or anything..."
@@ -226,11 +226,11 @@ export default function AskIan({
                 </div>
 
                 {/* input */}
-                <ChatInputWithRef
+                <ChatInput
                   ref={inputRef}
                   compact
                   value={input}
-                  onChange={(v: string) => setInput(v)}
+                  onChange={(v) => setInput(v)}
                   onSend={send}
                   disabled={loading}
                   placeholder="Continue the conversation…"
@@ -345,7 +345,6 @@ const ChatInput = ({
     </form>
   );
 };
-
 // Need forwardRef to pass down inputRef
 const ForwardChatInput = (props: any, ref: any) => ChatInput(props, ref);
 const ChatInputWithRef = React.forwardRef(ForwardChatInput);
@@ -412,17 +411,4 @@ const Urgency = () => (
 function loadHistory(): ChatMessage[] {
   if (typeof window === 'undefined') return [];
   try {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-  } catch {
-    return [];
-  }
-}
-
-function saveHistory(messages: ChatMessage[]): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(messages.slice(-10))); // keep last 10
-  } catch {
-    // ignore storage errors
-  }
-}
+    return

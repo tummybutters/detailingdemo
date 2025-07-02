@@ -16,6 +16,7 @@ import {
   addContactToGoogleSheets 
 } from "./googleSheetsSync";
 import { dbHealthCheck } from "./db/health";
+import { GoogleGenAI } from "@google/genai";
 
 // Type for enhanced booking data
 interface EnhancedBookingData {
@@ -359,7 +360,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Chat endpoint for Ask Ian chatbot
+  // AI Chat endpoint for Ask Ian chatbot with Gemini AI
   app.post('/api/chat', async (req, res) => {
     try {
       const { message, chatHistory } = req.body;
@@ -369,6 +370,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           error: 'Message is required'
         });
       }
+
+      // Initialize Gemini AI
+      if (!process.env.GEMINI_API_KEY) {
+        console.error('GEMINI_API_KEY not found in environment variables');
+        throw new Error("GEMINI_API_KEY environment variable must be set");
+      }
+
+      console.log('GEMINI_API_KEY found, initializing Gemini AI...');
+      const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
       // System prompt for Ian's AI personality
       const systemPrompt = `You are Hardy's Wash N' Wax's AI concierge. You speak on behalf of Ian—the 23-year-old founder, UC Davis grad, substitute teacher, and certified detailer based in California. Ian specializes in ceramic coatings, paint correction, and high-end mobile detailing. Your tone is sharp, dry, slightly witty, and never bubbly or over-friendly. You never use emojis, exclamation marks, or filler phrases. Every reply must be no more than four short, high-information sentences.
@@ -398,64 +408,58 @@ GUARDRAILS:
 
 Always stay focused on helping the user understand our services and feel confident booking.`;
 
-      // Enhanced responses based on the system prompt
-      const responses = {
-        cost: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
-        pricing: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
-        price: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
-        ceramic: "Ceramic coating lasts 7-10 years and costs $549-$849 including paint correction. Takes 5-8 hours but transforms your paint permanently. Worth every penny for the protection.",
-        paint: "Paint correction removes swirl marks, scratches, and oxidation through multi-stage polishing. Starts around $300 depending on condition. We assess first, then quote accurately.",
-        correction: "Paint correction removes swirl marks, scratches, and oxidation through multi-stage polishing. Starts around $300 depending on condition. We assess first, then quote accurately.",
-        time: "Maintenance Detail takes 1.5-2.5 hours, Interior Detail 2-4 hours, Full service 3-5 hours. Ceramic coating is 5-8 hours. We bring everything to you.",
-        duration: "Maintenance Detail takes 1.5-2.5 hours, Interior Detail 2-4 hours, Full service 3-5 hours. Ceramic coating is 5-8 hours. We bring everything to you.",
-        area: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
-        location: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
-        photos: "You can see our latest work on Instagram @hardyswashnwaxllc. Before and afters speak louder than words.",
-        gallery: "You can see our latest work on Instagram @hardyswashnwaxllc. Before and afters speak louder than words.",
-        subscription: "We offer customizable subscriptions for regular maintenance. Many long-time clients book a week in advance. Keeps your car pristine year-round.",
-        book: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day.",
-        booking: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day.",
-        water: "You supply water and power at your location. We bring the expertise and equipment. Standard setup for mobile detailing.",
-        power: "You supply water and power at your location. We bring the expertise and equipment. Standard setup for mobile detailing.",
-        why: "California has great detailers. What sets us apart is consistent results, transparent service, and satisfied clients—just check our page.",
-        better: "California has great detailers. What sets us apart is consistent results, transparent service, and satisfied clients—just check our page."
-      };
-
-      const lowerMessage = message.toLowerCase();
-      let response = "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.";
-
-      // Check for keywords and provide relevant responses
-      for (const [keyword, answer] of Object.entries(responses)) {
-        if (lowerMessage.includes(keyword)) {
-          response = answer;
-          break;
-        }
+      // Build conversation context with chat history
+      let conversationContext = systemPrompt + "\n\nConversation History:\n";
+      
+      if (chatHistory && Array.isArray(chatHistory)) {
+        chatHistory.forEach((msg: any) => {
+          conversationContext += `${msg.role === 'user' ? 'Customer' : 'Ian'}: ${msg.content}\n`;
+        });
       }
+      
+      conversationContext += `Customer: ${message}\nIan:`;
 
-      // Default helpful response if no keywords matched with Ian's personality
-      if (response === "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.") {
-        if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-          response = "Ian here. Mobile car detailing specialist based in California. IDA certified, fully insured. What do you need.";
-        } else if (lowerMessage.includes('thank')) {
-          response = "You're welcome. Book online or call (949) 734-0201 when you're ready.";
-        } else {
-          response = "Hardy's Wash N' Wax offers premium mobile detailing—maintenance, interior/exterior, paint correction, ceramic coating. We serve Davis and Southern California areas. What specific service interests you.";
-        }
-      }
+      // Generate response using Gemini
+      console.log('Calling Gemini API with context length:', conversationContext.length);
+      
+      const response = await genAI.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: conversationContext,
+      });
 
-      // Handle off-topic or inappropriate requests
-      if (lowerMessage.includes('politics') || lowerMessage.includes('religion') || lowerMessage.includes('relationship')) {
-        response = "I'm here to talk car detailing, not the mysteries of the universe. Let's stay on task.";
-      }
+      console.log('Gemini API response received:', response.text?.substring(0, 100));
+      const aiResponse = response.text || "I'm offline right now. Call us at (949) 734-0201.";
 
       return res.json({
-        response,
+        response: aiResponse,
         timestamp: Date.now()
       });
     } catch (error) {
       console.error('Chat API error:', error);
-      return res.status(500).json({
-        error: "I'm offline right now. Call us at (949) 734-0201."
+      
+      // Fallback to basic responses if AI fails
+      const fallbackResponses = {
+        cost: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        pricing: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        area: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
+        book: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day."
+      };
+
+      const { message } = req.body;
+      const lowerMessage = message?.toLowerCase() || '';
+      
+      let fallbackResponse = "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.";
+      
+      for (const [keyword, answer] of Object.entries(fallbackResponses)) {
+        if (lowerMessage.includes(keyword)) {
+          fallbackResponse = answer;
+          break;
+        }
+      }
+
+      return res.json({
+        response: fallbackResponse,
+        timestamp: Date.now()
       });
     }
   });

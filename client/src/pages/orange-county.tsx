@@ -10,9 +10,9 @@ export default function OrangeCounty() {
   return (
     <>
       <Helmet>
-        <title>Orange County Mobile Car Detailing | Newport Beach, Irvine, Tustin</title>
-        <meta name="description" content="Premium mobile car detailing in Orange County. Serving Newport Beach, Irvine, Tustin, Huntington Beach, and San Clemente. Interior detailing, exterior detailing, paint correction, ceramic coating." />
-        <meta name="keywords" content="Car Detailing Orange County, Mobile Car Detailing Newport Beach, Auto Detailing Irvine, Premium Mobile Detailing Tustin, Car Wash Huntington Beach, San Clemente Car Detailing" />
+        <title>Orange County Mobile Car Detailing | Newport Beach, Irvine, Tustin, Huntington Beach</title>
+        <meta name="description" content="Premium mobile car detailing in Orange County. Serving Newport Beach, Irvine, Tustin, Huntington Beach, San Clemente, and Costa Mesa. Interior detailing, exterior detailing, paint correction, ceramic coating. 24/7 by appointment." />
+        <meta name="keywords" content="Car Detailing Orange County CA, Mobile Car Detailing Newport Beach, Auto Detailing Irvine, Premium Mobile Detailing Tustin, Car Wash Huntington Beach, San Clemente Car Detailing, Costa Mesa Auto Detail, Laguna Beach Car Wash" />
         
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content="Orange County Mobile Car Detailing | Newport Beach, Irvine, Tustin" />

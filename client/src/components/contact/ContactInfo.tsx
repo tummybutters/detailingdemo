@@ -4,7 +4,6 @@ const ContactInfo = () => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
-      
       <div className="space-y-6">
         <div className="flex items-start">
           <Phone className="h-5 w-5 text-red-500 mt-1 mr-3" />
@@ -63,14 +62,11 @@ const ContactInfo = () => {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-orange-500 transition-colors"
-              >
-                @hardyswashnwax
-              </a>
+              >@hardyswashnwaxllc</a>
             </p>
           </div>
         </div>
       </div>
-      
       <div className="mt-8 p-4 bg-gray-50 rounded border border-gray-100">
         <h3 className="font-medium text-gray-800 mb-2">Book a Service</h3>
         <p className="text-sm text-gray-600 mb-3">

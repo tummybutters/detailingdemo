@@ -110,6 +110,12 @@ The application follows a modern full-stack architecture with clear separation o
 
 ```
 Changelog:
+- July 02, 2025. Removed Ask Ian chatbot per client request and added location-based navigation:
+  * Removed AskIan chat component from header navigation
+  * Added Locations dropdown menu with Davis, CA and Orange County, CA options
+  * Created dedicated Orange County homepage (/orange-county)
+  * Updated Hero component to accept location prop for dynamic content
+  * Added Orange County-specific SEO meta tags and structured data
 - July 02, 2025. Enhanced Ian's AI system prompt with improved personality constraints:
   * Responses limited to 4 short, high-information sentences
   * Better sentence structure variation to avoid repetition

@@ -2,20 +2,23 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
 import CallOption from "../home/CallOption";
-import AskIan from "@/components/ui/ask-ian-chat";
 import "../ui/custom-nav-button.css";
 
 const navLinks = [
-  { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
   { href: "/subscriptions", label: "Subscriptions" },
   { href: "/blog", label: "Blog" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" }
+];
+
+const locationLinks = [
+  { href: "/", label: "Davis, CA" },
+  { href: "/orange-county", label: "Orange County, CA" }
 ];
 
 export default function Header() {
@@ -43,6 +46,25 @@ export default function Header() {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-end space-x-2">
+            {/* Locations Dropdown */}
+            <div className="relative group">
+              <button className="nav-button flex items-center space-x-1">
+                <span>Locations</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="py-1">
+                  {locationLinks.map((link) => (
+                    <Link key={link.href} href={link.href}>
+                      <button className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#EE432C] ${isActive(link.href) ? 'bg-gray-100 text-[#EE432C]' : ''}`}>
+                        {link.label}
+                      </button>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
             {navLinks.map((link) => (
               <Link 
                 key={link.href}
@@ -53,8 +75,7 @@ export default function Header() {
                 </button>
               </Link>
             ))}
-            {/* Ask Ian chatbot */}
-            <AskIan variant="header" className="ml-2" />
+            
             {/* Call button in header */}
             <CallOption 
               phone="19497340201" 
@@ -73,23 +94,34 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent className="bg-light-orange">
               <div className="flex flex-col mt-12">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                  >
-                    <button className={`mobile-nav-button ${isActive(link.href) ? 'active' : ''}`}>
-                      {link.label}
-                    </button>
-                  </Link>
-                ))}
+                {/* Locations section for mobile */}
+                <div className="mb-4">
+                  <div className="text-sm font-medium text-gray-700 mb-2 px-6">Locations</div>
+                  {locationLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                    >
+                      <button className={`mobile-nav-button ${isActive(link.href) ? 'active' : ''}`}>
+                        {link.label}
+                      </button>
+                    </Link>
+                  ))}
+                </div>
                 
-                {/* Ask Ian chatbot for mobile */}
-                <div className="mt-4 pt-4 border-t border-black/10">
-                  <div className="text-center mb-3">
-                    <AskIan variant="header" className="mx-auto justify-center" />
-                  </div>
+                <div className="border-t border-black/10 pt-4">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                    >
+                      <button className={`mobile-nav-button ${isActive(link.href) ? 'active' : ''}`}>
+                        {link.label}
+                      </button>
+                    </Link>
+                  ))}
                 </div>
                 
                 {/* Call option for mobile menu */}

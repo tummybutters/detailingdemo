@@ -10,42 +10,42 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Davis Mobile Car Detailing</title>
-        <meta name="description" content="Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc." />
-        <meta name="keywords" content="Car Detailing Davis CA, Mobile Car Detailing UC Davis, Auto Detailing Woodland, Premium Mobile Detailing Yolo County, Car Wash Near UC Davis" />
+        <title>Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove</title>
+        <meta name="description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
+        <meta name="keywords" content="Car Detailing Sacramento CA, Mobile Car Detailing Davis, Auto Detailing Woodland, Premium Mobile Detailing Elk Grove, Car Wash Sacramento County" />
         
         {/* Open Graph Meta Tags */}
-        <meta property="og:title" content="Davis Mobile Car Detailing" />
-        <meta property="og:description" content="Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc." />
+        <meta property="og:title" content="Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove" />
+        <meta property="og:description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.hardyswashnwax.com" />
         
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Davis Mobile Car Detailing" />
-        <meta name="twitter:description" content="Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc." />
+        <meta name="twitter:title" content="Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove" />
+        <meta name="twitter:description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
         
         <link rel="canonical" href="https://www.hardyswashnwax.com" />
         
-        {/* Structured Data for Local Business with speakable content */}
+        {/* Structured Data for Local Business with Sacramento focus */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AutoWash",
-            "name": "Hardys Wash N' Wax",
+            "name": "Hardys Wash N' Wax - Sacramento",
             "image": "https://hardyswashnwax.com/logo.png",
-            "description": "Interior detailing, Exterior Detailing, Paint correction, ceramic coat, car wash, carpet conditioning, car waxing, etc.",
+            "description": "Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating.",
             "address": {
               "@type": "PostalAddress",
-              "addressLocality": "Davis",
+              "addressLocality": "Sacramento",
               "addressRegion": "CA",
-              "postalCode": "95616",
+              "postalCode": "95814",
               "addressCountry": "US"
             },
             "geo": {
               "@type": "GeoCoordinates",
-              "latitude": 38.5449,
-              "longitude": -121.7405
+              "latitude": 38.5816,
+              "longitude": -121.4944
             },
             "telephone": "+19497340201",
             "priceRange": "$$$",
@@ -70,8 +70,10 @@ export default function Home() {
               }
             ],
             "areaServed": [
+              { "@type": "Place", "name": "Sacramento, CA"},
               { "@type": "Place", "name": "Davis, CA"},
               { "@type": "Place", "name": "Woodland, CA"},
+              { "@type": "Place", "name": "Elk Grove, CA"},
               { "@type": "Place", "name": "Dixon, CA"},
               { "@type": "Place", "name": "Winters, CA"},
               { "@type": "Place", "name": "West Sacramento, CA"}

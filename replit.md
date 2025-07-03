@@ -110,9 +110,15 @@ The application follows a modern full-stack architecture with clear separation o
 
 ```
 Changelog:
+- July 02, 2025. Enhanced locations dropdown with premium design and updated Davis to Sacramento focus:
+  * Enhanced dropdown with premium styling, animations, and luxury design elements
+  * Changed primary service area from Davis to Sacramento in navigation and homepage
+  * Updated H1 title to "Mobile Car Detailing Sacramento, CA" 
+  * Updated serving areas to prioritize Sacramento, Davis, Woodland, Elk Grove
+  * Updated SEO meta tags and structured data for Sacramento focus
 - July 02, 2025. Removed Ask Ian chatbot per client request and added location-based navigation:
   * Removed AskIan chat component from header navigation
-  * Added Locations dropdown menu with Davis, CA and Orange County, CA options
+  * Added Locations dropdown menu with Sacramento, CA and Orange County, CA options
   * Created dedicated Orange County homepage (/orange-county)
   * Updated Hero component to accept location prop for dynamic content
   * Added Orange County-specific SEO meta tags and structured data

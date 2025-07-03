@@ -17,7 +17,7 @@ const navLinks = [
 ];
 
 const locationLinks = [
-  { href: "/", label: "Davis, CA" },
+  { href: "/", label: "Sacramento, CA" },
   { href: "/orange-county", label: "Orange County, CA" }
 ];
 

@@ -7,18 +7,18 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import CallOption from "./CallOption";
 
 interface HeroProps {
-  location?: "davis" | "orange-county";
+  location?: "sacramento" | "orange-county";
 }
 
-export default function Hero({ location = "davis" }: HeroProps) {
+export default function Hero({ location = "sacramento" }: HeroProps) {
   const isMobile = useIsMobile();
   
   // Location-specific content
   const locationContent = {
-    davis: {
-      title: "Mobile Car Detailing Davis, CA",
+    sacramento: {
+      title: "Mobile Car Detailing Sacramento, CA",
       subtitle: "Providing Interior Detailing, Exterior Detailing, Paint Correction, Ceramic Coating, and more!",
-      description: "Serving Davis, Woodland, Dixon, Winters, Sacramento, and more surrounding areas — all delivered with precision, care, and professional-grade results."
+      description: "Serving Sacramento, Davis, Woodland, Dixon, Winters, Elk Grove, and more surrounding areas — all delivered with precision, care, and professional-grade results."
     },
     "orange-county": {
       title: "Mobile Car Detailing Orange County, CA",

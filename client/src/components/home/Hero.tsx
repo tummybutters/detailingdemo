@@ -22,8 +22,8 @@ export default function Hero({ location = "davis" }: HeroProps) {
     },
     "orange-county": {
       title: "Mobile Car Detailing Orange County, CA",
-      subtitle: "Premium Interior Detailing, Exterior Detailing, Paint Correction, Ceramic Coating, and more!",
-      description: "Serving Newport Beach, Irvine, Tustin, Huntington Beach, San Clemente, and surrounding Orange County areas — all delivered with precision, care, and professional-grade results."
+      subtitle: "Providing Interior Detailing, Exterior Detailing, Paint Correction, Ceramic Coating, and more!",
+      description: "Serving Irvine, Tustin, Newport Beach, Huntington Beach, San Clemente, Costa Mesa, and surrounding Orange County areas — all delivered with precision, care, and professional-grade results."
     }
   };
   

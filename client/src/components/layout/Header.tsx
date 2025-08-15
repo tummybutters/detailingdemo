@@ -9,7 +9,6 @@ import "../ui/custom-nav-button.css";
 
 const navLinks = [
   { href: "/services", label: "Services" },
-  { href: "/subscriptions", label: "Subscriptions" },
   { href: "/blog", label: "Blog" },
   { href: "/booking", label: "Book Now" },
   { href: "/about", label: "About Us" },

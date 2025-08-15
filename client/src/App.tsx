@@ -8,7 +8,7 @@ import OrangeCounty from "@/pages/orange-county";
 import Services from "@/pages/services";
 import Booking from "@/pages/booking";
 import About from "@/pages/about";
-import Subscriptions from "@/pages/subscriptions";
+
 import Contact from "@/pages/contact";
 import CardDemo from "@/pages/card-demo";
 import AdminDashboard from "@/pages/admin-dashboard";
@@ -59,7 +59,7 @@ function Router() {
             <Route path="/services/car-wash-and-wax" component={CarWashAndWax} />
             <Route path="/booking" component={Booking} />
             <Route path="/about" component={About} />
-            <Route path="/subscriptions" component={Subscriptions} />
+
             <Route path="/contact" component={Contact} />
             <Route path="/card-demo" component={CardDemo} />
             

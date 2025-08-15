@@ -110,6 +110,11 @@ The application follows a modern full-stack architecture with clear separation o
 
 ```
 Changelog:
+- January 02, 2025. Removed subscriptions page and navigation link per client request:
+  * Removed "Subscriptions" link from header navigation
+  * Removed subscriptions route from App.tsx routing system
+  * Cleaned up unused import statements
+  * Navigation now flows: Services > Blog > Book Now > About Us > Contact
 - July 02, 2025. Enhanced locations dropdown with premium design and updated Davis to Sacramento focus:
   * Enhanced dropdown with premium styling, animations, and luxury design elements
   * Changed primary service area from Davis to Sacramento in navigation and homepage

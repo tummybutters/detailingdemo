@@ -22,11 +22,7 @@ export default function PartnershipBanner() {
               Partnered with UC Davis Alumni Small Business Network
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-1">
-            <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-              Trusted Local Business
-            </span>
-          </div>
+          
         </div>
       </div>
     </div>

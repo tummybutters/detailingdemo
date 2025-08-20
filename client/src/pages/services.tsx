@@ -157,16 +157,16 @@ const serviceCategories = [
         condition: "Complete paint restoration & protection"
       },
       {
+        title: "BMW M40i",
+        description: "Ceramic Coat and Paint Correction",
+        image: "/bmw-m40i.jpg",
+        services: ["Paint Correction", "Ceramic Coating"],
+        condition: "Complete paint restoration & protection"
+      },
+      {
         title: "BMW X50i - Front View",
         description: "Ceramic Coat BMW X50i",
         image: bmwX50i1Image,
-        services: ["Ceramic Coating", "Paint Protection"],
-        condition: "Premium ceramic application"
-      },
-      {
-        title: "BMW X50i - Side Detail",
-        description: "Ceramic Coat BMW X50i",
-        image: bmwX50i2Image,
         services: ["Ceramic Coating", "Paint Protection"],
         condition: "Premium ceramic application"
       },
@@ -178,11 +178,11 @@ const serviceCategories = [
         condition: "Premium ceramic application"
       },
       {
-        title: "BMW M40i",
-        description: "Ceramic Coat and Paint Correction",
-        image: "/bmw-m40i.jpg",
-        services: ["Paint Correction", "Ceramic Coating"],
-        condition: "Complete paint restoration & protection"
+        title: "BMW X50i - Side Detail",
+        description: "Ceramic Coat BMW X50i",
+        image: bmwX50i2Image,
+        services: ["Ceramic Coating", "Paint Protection"],
+        condition: "Premium ceramic application"
       }
     ]
   }

@@ -49,10 +49,10 @@ const serviceCategories = [
         condition: "Luxury interior maintenance"
       },
       {
-        title: "Porsche Spyder 718",
-        description: "Interior Detail",
+        title: "Interior Detail - Leather Conditioner & Carpet Shampoo Porsche Panamera",
+        description: "Interior Detail with Leather Conditioning and Carpet Shampooing",
         image: "/porsche-spyder-after.jpg",
-        services: ["Deep Clean", "Interior Detail"],
+        services: ["Interior Detail", "Leather Conditioning", "Carpet Shampoo"],
         condition: "Complete interior restoration"
       },
       {

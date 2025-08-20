@@ -49,7 +49,7 @@ const serviceCategories = [
         condition: "Luxury interior maintenance"
       },
       {
-        title: "Interior Detail - Leather Conditioner & Carpet Shampoo Porsche Panamera",
+        title: "Porsche Panamera",
         description: "Interior Detail with Leather Conditioning and Carpet Shampooing",
         image: "/porsche-spyder-after.jpg",
         services: ["Interior Detail", "Leather Conditioning", "Carpet Shampoo"],

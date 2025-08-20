@@ -16,42 +16,20 @@ import porscheSpyder1Image from "@assets/green_1755666353308.jpg";
 import porscheSpyder2Image from "@assets/green 2_1755666356311.jpg";
 import teslaModelSImage from "@assets/tes_1755666391761.jpg";
 
-// Service gallery data with detailed descriptions and visual information
-const serviceGallery = [
-  {
-    id: "express-detail",
-    title: "Express Detail",
-    subtitle: "Quick & Professional",
-    price: "$149-199",
-    duration: "1.5-2.5 hours",
-    icon: <Sparkles className="w-8 h-8" />,
-    description: "Perfect for busy schedules. A comprehensive quick detail that refreshes your vehicle's appearance.",
-    includes: [
-      "Exterior hand wash & dry",
-      "Interior vacuum & wipe down", 
-      "Windows cleaned inside & out",
-      "Tire shine application",
-      "Dashboard & trim conditioning"
-    ],
-    color: "from-blue-500 to-cyan-500"
-  },
+// Three main service categories
+const serviceCategories = [
   {
     id: "interior-detail",
     title: "Interior Detail",
-    subtitle: "Deep Clean & Restore",
-    price: "$199-299",
-    duration: "2-3 hours",
-    icon: <Car className="w-8 h-8" />,
-    description: "Complete interior transformation. Deep cleaning, stain removal, and protection for all surfaces.",
-    includes: [
-      "Deep vacuum (seats, carpets, crevices)",
-      "Steam cleaning & stain removal",
-      "Leather/fabric conditioning",
-      "Dashboard & console detailing",
-      "Door panels & cup holders",
-      "Air freshener application"
+    description: "Deep cleaning and conditioning for seats, carpets, dashboard, and all interior surfaces.",
+    icon: Sparkles,
+    features: [
+      "Deep vacuum & steam cleaning",
+      "Leather conditioning & protection",
+      "Dashboard & trim restoration",
+      "Pet hair removal specialist"
     ],
-    color: "from-purple-500 to-pink-500",
+    color: "from-blue-500 to-cyan-500",
     portfolioJobs: [
       {
         title: "Mercedes AMG",
@@ -93,16 +71,11 @@ const serviceGallery = [
   {
     id: "exterior-detail",
     title: "Exterior Detail",
-    subtitle: "Shine & Protection",
-    price: "$249-349",
-    duration: "2.5-3.5 hours",
-    icon: <Droplets className="w-8 h-8" />,
-    description: "Restore your vehicle's exterior to showroom condition with professional washing, polishing, and protection.",
-    includes: [
-      "Pre-wash & foam treatment",
-      "Hand wash with premium soap",
-      "Clay bar decontamination",
-      "Machine polish application",
+    description: "Complete exterior restoration and protection for your vehicle's paint, wheels, and trim.",
+    icon: Car,
+    features: [
+      "Premium hand wash & dry",
+      "Clay bar paint decontamination",
       "High-quality wax protection",
       "Wheel & tire detailing"
     ],
@@ -132,22 +105,18 @@ const serviceGallery = [
     ]
   },
   {
-    id: "paint-correction",
-    title: "Paint Correction",
-    subtitle: "Remove Swirls & Scratches",
-    price: "$399-599",
-    duration: "4-6 hours",
-    icon: <Paintbrush className="w-8 h-8" />,
-    description: "Professional paint restoration to remove swirl marks, scratches, and oxidation for a flawless finish.",
-    includes: [
-      "Paint depth measurement",
-      "Multi-stage machine polishing",
-      "Scratch & swirl removal",
-      "Paint defect correction",
-      "High-grade polish application",
-      "Paint protection sealant"
+    id: "premium-protection",
+    title: "Premium Protection",
+    description: "Advanced paint correction, ceramic coating, and specialty treatments for ultimate vehicle protection.",
+    icon: Shield,
+    features: [
+      "Multi-stage paint correction",
+      "Professional ceramic coating",
+      "Swirl & scratch removal",
+      "UV & chemical resistance",
+      "Long-term protection warranty"
     ],
-    color: "from-orange-500 to-red-500",
+    color: "from-violet-500 to-purple-500",
     portfolioJobs: [
       {
         title: "Porsche Spyder 718 - Interior View",
@@ -162,27 +131,7 @@ const serviceGallery = [
         image: porscheSpyder2Image,
         services: ["Paint Correction", "Polish", "Ceramic Coating"],
         condition: "Complete paint restoration & protection"
-      }
-    ]
-  },
-  {
-    id: "ceramic-coating",
-    title: "Ceramic Coating",
-    subtitle: "Ultimate Protection",
-    price: "$599-899",
-    duration: "6-8 hours",
-    icon: <Shield className="w-8 h-8" />,
-    description: "The ultimate paint protection. Long-lasting ceramic coating provides years of protection and enhanced gloss.",
-    includes: [
-      "Complete paint decontamination",
-      "Paint correction preparation",
-      "Professional ceramic coating application",
-      "Hydrophobic protection layer",
-      "UV & chemical resistance",
-      "5-year coating warranty"
-    ],
-    color: "from-violet-500 to-purple-500",
-    portfolioJobs: [
+      },
       {
         title: "BMW X50i - Front View",
         description: "Ceramic Coat BMW X50i",
@@ -198,29 +147,10 @@ const serviceGallery = [
         condition: "Premium ceramic application"
       }
     ]
-  },
-  {
-    id: "full-detail",
-    title: "Full Detail Package",
-    subtitle: "Complete Transformation",
-    price: "$399-499",
-    duration: "4-5 hours",
-    icon: <Star className="w-8 h-8" />,
-    description: "The complete package. Interior and exterior detailing for a total vehicle transformation.",
-    includes: [
-      "Everything from Interior Detail",
-      "Everything from Exterior Detail", 
-      "Engine bay cleaning",
-      "Trunk/cargo area detail",
-      "Chrome & trim polishing",
-      "Comprehensive vehicle inspection"
-    ],
-    color: "from-yellow-500 to-orange-500"
   }
 ];
 
 export default function Services() {
-  const [selectedService, setSelectedService] = useState(serviceGallery[0]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
@@ -285,59 +215,38 @@ export default function Services() {
         </div>
       </div>
 
-      {/* Interactive Service Gallery */}
+      {/* Service Categories */}
       <div className="bg-white py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          {/* Service Selection Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
-            {serviceGallery.map((service) => (
-              <button
-                key={service.id}
-                onClick={() => setSelectedService(service)}
-                className={`p-4 rounded-lg border-2 transition-all duration-300 hover:scale-105 ${
-                  selectedService.id === service.id
-                    ? 'border-[#EE432C] bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white shadow-lg'
-                    : 'border-gray-200 bg-white text-gray-700 hover:border-[#FFB375] hover:bg-[#FFD7B5]/20'
-                }`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className={`${selectedService.id === service.id ? 'text-white' : 'text-[#EE432C]'}`}>
-                    {service.icon}
-                  </div>
-                  <span className="text-sm font-semibold text-center leading-tight">
-                    {service.title}
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Portfolio Gallery for Selected Service */}
-          <div className="max-w-7xl mx-auto">
-            {/* Service Header */}
-            <div className={`bg-gradient-to-r ${selectedService.color} p-6 text-white rounded-t-xl`}>
-              <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 space-y-16">
+          {serviceCategories.map((category) => (
+            <div key={category.id} className="max-w-7xl mx-auto">
+              {/* Service Header */}
+              <div className={`bg-gradient-to-r ${category.color} p-6 text-white rounded-t-xl`}>
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-white/20 rounded-lg">
-                    {selectedService.icon}
+                    <category.icon className="w-8 h-8" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold font-heading">{selectedService.title}</h2>
-                    <p className="text-lg text-white/90">{selectedService.subtitle}</p>
+                    <h2 className="text-3xl font-bold font-heading">{category.title}</h2>
+                    <p className="text-lg text-white/90 max-w-2xl">{category.description}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold">{selectedService.price}</div>
-                  <div className="text-sm text-white/80">{selectedService.duration}</div>
+                
+                {/* Features List */}
+                <div className="mt-6 grid md:grid-cols-2 gap-2">
+                  {category.features.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-2 text-white/90">
+                      <ChevronRight className="w-4 h-4" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
 
-            {/* Portfolio Grid */}
-            <div className="bg-white border-2 border-black border-t-0 rounded-b-xl shadow-[8px_8px_0_0_#000] p-6 lg:p-8">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {selectedService.portfolioJobs ? (
-                  selectedService.portfolioJobs.map((job, index) => (
+              {/* Portfolio Grid */}
+              <div className="bg-white border-2 border-black border-t-0 rounded-b-xl shadow-[8px_8px_0_0_#000] p-6 lg:p-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {category.portfolioJobs?.map((job, index) => (
                     <div key={index} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#EE432C] transition-colors">
                       <div className="aspect-[4/3] overflow-hidden cursor-pointer" onClick={() => setSelectedImage(job.image)}>
                         <img
@@ -358,57 +267,24 @@ export default function Services() {
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  // Placeholder cards for services without portfolio jobs yet
-                  Array.from({ length: 6 }, (_, index) => (
-                    <div key={index} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#EE432C] transition-colors">
-                      <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-4xl text-gray-400 mb-2">📸</div>
-                          <p className="text-sm text-gray-500">Portfolio Example Coming Soon</p>
-                        </div>
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-gray-900 mb-1">[Car Make/Model]</h3>
-                        <p className="text-sm text-gray-600 mb-2">[Specific service description]</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
-                          <span className="bg-[#FFD7B5] px-2 py-1 rounded">[Service type]</span>
-                          <span className="bg-[#FFD7B5] px-2 py-1 rounded">[Add-on]</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Call to Action */}
-              <div className="mt-8 text-center border-t pt-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Ready to Get Your Car Detailed?</h3>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                  <Link href="/booking">
-                    <HeroButton className="w-full sm:w-auto">Book This Service</HeroButton>
-                  </Link>
-                  <Link href="/contact">
-                    <HeroButton variant="secondary" className="w-full sm:w-auto">Ask Questions</HeroButton>
-                  </Link>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
+          ))}
 
-          {/* Quick Action Section */}
-          <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h3>
-            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Not sure which service is right for you? Our team is ready to help you choose the perfect detailing package for your vehicle's needs.
+          {/* Call to Action Section */}
+          <div className="max-w-4xl mx-auto text-center bg-gradient-to-br from-[#F3F4E6] to-[#FFD7B5] rounded-xl p-8 lg:p-12">
+            <h3 className="text-3xl font-bold text-gray-900 mb-4">Ready to Transform Your Vehicle?</h3>
+            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              Choose from our professional detailing services or contact us for a custom quote tailored to your vehicle's specific needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
               <Link href="/booking">
-                <HeroButton className="w-full sm:w-auto">Book Now</HeroButton>
+                <HeroButton className="w-full sm:w-auto">Book Your Service</HeroButton>
               </Link>
               <Link href="/contact">
-                <HeroButton variant="secondary" className="w-full sm:w-auto">Get Quote</HeroButton>
+                <HeroButton variant="secondary" className="w-full sm:w-auto">Get Custom Quote</HeroButton>
               </Link>
             </div>
           </div>

@@ -68,6 +68,13 @@ const serviceCategories = [
         image: petHairAfterImage,
         services: ["Interior Detail", "Pet Hair Removal"],
         condition: "Complete hair removal & restoration"
+      },
+      {
+        title: "Interior Detail - Porsche Spyder 718",
+        description: "Interior Detail",
+        image: "/porsche-spyder-718-interior.jpg",
+        services: ["Interior Detail"],
+        condition: "Premium interior restoration"
       }
     ]
   },

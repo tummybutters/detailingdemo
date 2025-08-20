@@ -32,7 +32,7 @@ const serviceCategories = [
       "Dashboard & trim restoration",
       "Pet hair removal specialist"
     ],
-    color: "from-blue-500 to-cyan-500",
+    color: "from-[#EE432C] to-[#FFB375]",
     portfolioJobs: [
       {
         title: "Mercedes AMG",
@@ -82,7 +82,7 @@ const serviceCategories = [
       "High-quality wax protection",
       "Wheel & tire detailing"
     ],
-    color: "from-green-500 to-emerald-500",
+    color: "from-[#EE432C] to-[#FFB375]",
     portfolioJobs: [
       {
         title: "Acura A-Spec",
@@ -140,7 +140,7 @@ const serviceCategories = [
       "UV & chemical resistance",
       "Long-term protection warranty"
     ],
-    color: "from-violet-500 to-purple-500",
+    color: "from-[#EE432C] to-[#FFB375]",
     portfolioJobs: [
       {
         title: "Porsche Spyder 718 - Interior View",

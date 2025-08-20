@@ -90,13 +90,24 @@ export default function Header() {
           </div>
           
           {/* Mobile Navigation Button */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden text-text-dark">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
+          <div className="md:hidden relative flex items-center">
+            {/* Location hint arrow - only shows on mobile */}
+            <div className="absolute -left-28 top-1/2 transform -translate-y-1/2 flex items-center text-xs text-gray-600 pointer-events-none">
+              <span className="whitespace-nowrap text-[10px] font-medium">Serving Sac & OC<br/>Tap menu →</span>
+              <svg className="w-4 h-4 ml-1 text-[#EE432C]" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+            
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-text-dark relative">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Open menu</span>
+                  {/* Small dot indicator */}
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#EE432C] rounded-full"></div>
+                </Button>
+              </SheetTrigger>
             <SheetContent className="bg-light-orange">
               <div className="flex flex-col mt-12">
                 {/* Locations section for mobile */}
@@ -141,6 +152,7 @@ export default function Header() {
               </div>
             </SheetContent>
           </Sheet>
+          </div>
         </nav>
       </div>
     </header>

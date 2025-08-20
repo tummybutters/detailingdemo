@@ -169,6 +169,20 @@ const serviceCategories = [
         image: bmwX50i2Image,
         services: ["Ceramic Coating", "Paint Protection"],
         condition: "Premium ceramic application"
+      },
+      {
+        title: "Corvette Stingray",
+        description: "Ceramic Coat",
+        image: "/corvette-stingray.jpg",
+        services: ["Ceramic Coating", "Paint Protection"],
+        condition: "Premium ceramic application"
+      },
+      {
+        title: "BMW M40i",
+        description: "Ceramic Coat and Paint Correction",
+        image: "/bmw-m40i.jpg",
+        services: ["Paint Correction", "Ceramic Coating"],
+        condition: "Complete paint restoration & protection"
       }
     ]
   }

@@ -52,14 +52,14 @@ const serviceCategories = [
         title: "Porsche Spyder 718",
         description: "Interior Detail Before and After",
         image: porsche718Image,
-        services: ["Interior Detail", "Deep Clean"],
+        services: ["Deep Clean", "Interior Detail"],
         condition: "Complete interior restoration"
       },
       {
         title: "Pet Hair Removal - Before",
         description: "Interior Detail with Pet Hair Removal",
         image: petHairBeforeImage,
-        services: ["Interior Detail", "Pet Hair Removal"],
+        services: ["Pet Hair Removal", "Before Photo"],
         condition: "Heavy pet hair contamination"
       },
       {
@@ -109,7 +109,7 @@ const serviceCategories = [
         title: "Scion XB - Before",
         description: "Before and After - Headlight Restoration Scion XB",
         image: headlightBeforeImage,
-        services: ["Headlight Restoration", "Before Photo"],
+        services: ["Exterior Detail", "Headlight Restoration"],
         condition: "Cloudy, oxidized headlights"
       },
       {
@@ -123,7 +123,7 @@ const serviceCategories = [
         title: "Ford Mustang GT",
         description: "Engine Bay Detailing - Ford Mustang GT",
         image: engineBayImage,
-        services: ["Engine Bay Detailing", "Deep Clean"],
+        services: ["Deep Clean", "Engine Bay Detailing"],
         condition: "Complete engine bay restoration"
       }
     ]

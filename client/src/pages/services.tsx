@@ -15,6 +15,9 @@ import bmwX50i2Image from "@assets/extt_1755666340879.jpg";
 import porscheSpyder1Image from "@assets/green_1755666353308.jpg";
 import porscheSpyder2Image from "@assets/green 2_1755666356311.jpg";
 import teslaModelSImage from "@assets/tes_1755666391761.jpg";
+import headlightBeforeImage from "@assets/before_1755668254553.jpg";
+import headlightAfterImage from "@assets/after_1755668250810.jpg";
+import engineBayImage from "@assets/engine_1755668325321.jpg";
 
 // Three main service categories
 const serviceCategories = [
@@ -101,6 +104,27 @@ const serviceCategories = [
         image: teslaModelSImage,
         services: ["Pre Wash", "Foam Bath Treatment"],
         condition: "Preparation for full detail"
+      },
+      {
+        title: "Scion XB - Before",
+        description: "Before and After - Headlight Restoration Scion XB",
+        image: headlightBeforeImage,
+        services: ["Headlight Restoration", "Before Photo"],
+        condition: "Cloudy, oxidized headlights"
+      },
+      {
+        title: "Scion XB - After",
+        description: "Before and After - Headlight Restoration Scion XB",
+        image: headlightAfterImage,
+        services: ["Headlight Restoration", "After Photo"],
+        condition: "Crystal clear headlights"
+      },
+      {
+        title: "Ford Mustang GT",
+        description: "Engine Bay Detailing - Ford Mustang GT",
+        image: engineBayImage,
+        services: ["Engine Bay Detailing", "Deep Clean"],
+        condition: "Complete engine bay restoration"
       }
     ]
   },

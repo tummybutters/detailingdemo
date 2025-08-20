@@ -246,28 +246,89 @@ export default function Services() {
               {/* Portfolio Grid */}
               <div className="bg-white border-2 border-black border-t-0 rounded-b-xl shadow-[8px_8px_0_0_#000] p-6 lg:p-8">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {category.portfolioJobs?.map((job, index) => (
-                    <div key={index} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#EE432C] transition-colors">
-                      <div className="aspect-[4/3] overflow-hidden cursor-pointer" onClick={() => setSelectedImage(job.image)}>
-                        <img
-                          src={job.image}
-                          alt={`${job.title} - ${job.description}`}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-bold text-gray-900 mb-1">{job.title}</h3>
-                        <p className="text-sm text-gray-600 mb-2">{job.description}</p>
-                        <div className="flex flex-wrap gap-1 text-xs text-gray-500">
-                          {job.services.map((service, serviceIndex) => (
-                            <span key={serviceIndex} className="bg-[#FFD7B5] px-2 py-1 rounded">
-                              {service}
-                            </span>
-                          ))}
+                  {(() => {
+                    const jobs = category.portfolioJobs || [];
+                    const groupedJobs = [];
+                    let i = 0;
+                    
+                    while (i < jobs.length) {
+                      const currentJob = jobs[i];
+                      const nextJob = jobs[i + 1];
+                      
+                      // Check if current and next job are the same car (same base title)
+                      if (nextJob && currentJob.title.split(' - ')[0] === nextJob.title.split(' - ')[0]) {
+                        // Group them together
+                        groupedJobs.push({
+                          type: 'group',
+                          title: currentJob.title.split(' - ')[0],
+                          description: currentJob.description,
+                          services: currentJob.services,
+                          condition: currentJob.condition,
+                          images: [currentJob.image, nextJob.image]
+                        });
+                        i += 2; // Skip the next job since we grouped it
+                      } else {
+                        // Single job
+                        groupedJobs.push({
+                          type: 'single',
+                          ...currentJob
+                        });
+                        i += 1;
+                      }
+                    }
+                    
+                    return groupedJobs.map((item, index) => (
+                      item.type === 'group' ? (
+                        // Grouped container (spans 2 columns)
+                        <div key={index} className="md:col-span-2 lg:col-span-2 bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#EE432C] transition-colors">
+                          <div className="grid grid-cols-2 gap-0">
+                            {item.images.map((image, imgIndex) => (
+                              <div key={imgIndex} className="aspect-[4/3] overflow-hidden cursor-pointer" onClick={() => setSelectedImage(image)}>
+                                <img
+                                  src={image}
+                                  alt={`${item.title} - View ${imgIndex + 1}`}
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <div className="p-4">
+                            <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            <div className="flex flex-wrap gap-1 text-xs text-gray-500">
+                              {item.services.map((service, serviceIndex) => (
+                                <span key={serviceIndex} className="bg-[#FFD7B5] px-2 py-1 rounded">
+                                  {service}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      ) : (
+                        // Single job container
+                        <div key={index} className="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#EE432C] transition-colors">
+                          <div className="aspect-[4/3] overflow-hidden cursor-pointer" onClick={() => setSelectedImage(item.image)}>
+                            <img
+                              src={item.image}
+                              alt={`${item.title} - ${item.description}`}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="p-4">
+                            <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
+                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            <div className="flex flex-wrap gap-1 text-xs text-gray-500">
+                              {item.services.map((service, serviceIndex) => (
+                                <span key={serviceIndex} className="bg-[#FFD7B5] px-2 py-1 rounded">
+                                  {service}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    ));
+                  })()}
                 </div>
               </div>
             </div>

@@ -8,7 +8,7 @@ export const blogPosts: BlogPost[] = [
     metaDescription: "Got bird droppings or tree sap on your car in SoCal? Learn fast DIY fixes, what only pros can remove safely, and how to protect your paint with sealants or ceramic coatings.",
     date: "2025-08-24",
     excerpt: "Bird droppings and tree sap can etch your clear coat within hours in SoCal's sun. Learn immediate DIY steps, when to call professionals, and prevention strategies that actually work.",
-    coverImage: "@assets/bird_1755672738589.jpeg",
+    coverImage: "/bird.jpg",
     readTime: 6,
     categories: ["Emergency Care", "Paint Protection", "Orange County"],
     serviceLink: "/orange-county",

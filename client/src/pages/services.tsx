@@ -397,14 +397,11 @@ export default function Services() {
           <div className="max-w-4xl mx-auto text-center bg-gradient-to-br from-[#F3F4E6] to-[#FFD7B5] rounded-xl p-8 lg:p-12">
             <h3 className="text-3xl font-bold text-gray-900 mb-4">Ready to Transform Your Vehicle?</h3>
             <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-              Choose from our professional detailing services or contact us for a custom quote tailored to your vehicle's specific needs.
+              Choose from our professional detailing services and book your appointment today.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <div className="flex justify-center">
               <Link href="/booking">
                 <HeroButton className="w-full sm:w-auto">Book Your Service</HeroButton>
-              </Link>
-              <Link href="/contact">
-                <HeroButton variant="secondary" className="w-full sm:w-auto">Get Custom Quote</HeroButton>
               </Link>
             </div>
           </div>

@@ -9,6 +9,12 @@ import porschePanameraImage from "@assets/int_1755241550770.jpg";
 import porsche718Image from "@assets/718_1755241627534.jpg";
 import petHairBeforeImage from "@assets/hair before_1755241679282.jpg";
 import petHairAfterImage from "@assets/hair after_1755241684573.jpg";
+import audiSQ5Image from "@assets/blue_1755666323913.jpg";
+import bmwX50i1Image from "@assets/exttt_1755666334962.jpg";
+import bmwX50i2Image from "@assets/extt_1755666340879.jpg";
+import porscheSpyder1Image from "@assets/green_1755666353308.jpg";
+import porscheSpyder2Image from "@assets/green 2_1755666356311.jpg";
+import teslaModelSImage from "@assets/tes_1755666391761.jpg";
 
 // Service gallery data with detailed descriptions and visual information
 const serviceGallery = [
@@ -108,6 +114,20 @@ const serviceGallery = [
         image: acuraImage,
         services: ["Exterior Detail", "Ceramic Spray Wax"],
         condition: "Maintaining premium finish"
+      },
+      {
+        title: "Audi SQ5",
+        description: "Exterior Detail - Clay Bar, Polish and Ceramic Machine Wax",
+        image: audiSQ5Image,
+        services: ["Exterior Detail", "Clay Bar", "Polish", "Ceramic Machine Wax"],
+        condition: "Complete paint restoration"
+      },
+      {
+        title: "Tesla Model S",
+        description: "Pre Wash Foam Bath Treatment",
+        image: teslaModelSImage,
+        services: ["Pre Wash", "Foam Bath Treatment"],
+        condition: "Preparation for full detail"
       }
     ]
   },
@@ -127,7 +147,23 @@ const serviceGallery = [
       "High-grade polish application",
       "Paint protection sealant"
     ],
-    color: "from-orange-500 to-red-500"
+    color: "from-orange-500 to-red-500",
+    portfolioJobs: [
+      {
+        title: "Porsche Spyder 718 - Interior View",
+        description: "Paint Correction Polish & Ceramic Coat",
+        image: porscheSpyder1Image,
+        services: ["Paint Correction", "Polish", "Ceramic Coating"],
+        condition: "Complete paint restoration & protection"
+      },
+      {
+        title: "Porsche Spyder 718 - Exterior View",
+        description: "Paint Correction Polish & Ceramic Coat",
+        image: porscheSpyder2Image,
+        services: ["Paint Correction", "Polish", "Ceramic Coating"],
+        condition: "Complete paint restoration & protection"
+      }
+    ]
   },
   {
     id: "ceramic-coating",
@@ -145,7 +181,23 @@ const serviceGallery = [
       "UV & chemical resistance",
       "5-year coating warranty"
     ],
-    color: "from-violet-500 to-purple-500"
+    color: "from-violet-500 to-purple-500",
+    portfolioJobs: [
+      {
+        title: "BMW X50i - Front View",
+        description: "Ceramic Coat BMW X50i",
+        image: bmwX50i1Image,
+        services: ["Ceramic Coating", "Paint Protection"],
+        condition: "Premium ceramic application"
+      },
+      {
+        title: "BMW X50i - Side Detail",
+        description: "Ceramic Coat BMW X50i",
+        image: bmwX50i2Image,
+        services: ["Ceramic Coating", "Paint Protection"],
+        condition: "Premium ceramic application"
+      }
+    ]
   },
   {
     id: "full-detail",

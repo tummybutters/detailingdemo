@@ -110,6 +110,13 @@ The application follows a modern full-stack architecture with clear separation o
 
 ```
 Changelog:
+- October 06, 2025. Added Privacy Policy and SMS Terms pages:
+  * Created comprehensive Privacy Policy page at /privacy-policy with CCPA compliance
+  * Created SMS Terms page at /sms-terms with 10DLC compliance for Twilio integration
+  * Added routes for both new pages in App.tsx
+  * Updated footer links to point to Privacy Policy and SMS Terms pages
+  * Note: Twilio integration available but not set up - user will need to add credentials as secrets
+  * Pages include detailed information about data collection, SMS messaging program, opt-out procedures, and legal compliance
 - January 02, 2025. Removed subscriptions page and navigation link per client request:
   * Removed "Subscriptions" link from header navigation
   * Removed subscriptions route from App.tsx routing system

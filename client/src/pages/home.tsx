@@ -1,4 +1,4 @@
-import LegacyHero from "@/components/home/LegacyHero";
+import InteractiveHeroScene from "@/components/home/InteractiveHeroScene";
 import ServicesShowcase from "@/components/home/ServicesShowcase";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import GoogleReviews from "@/components/home/GoogleReviews";
@@ -13,20 +13,20 @@ export default function Home() {
         <title>Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove</title>
         <meta name="description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
         <meta name="keywords" content="Car Detailing Sacramento CA, Mobile Car Detailing Davis, Auto Detailing Woodland, Premium Mobile Detailing Elk Grove, Car Wash Sacramento County" />
-        
+
         {/* Open Graph Meta Tags */}
         <meta property="og:title" content="Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove" />
         <meta property="og:description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.hardyswashnwax.com" />
-        
+
         {/* Twitter Meta Tags */}
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="Sacramento Mobile Car Detailing | Davis, Woodland, Elk Grove" />
         <meta name="twitter:description" content="Premium mobile car detailing in Sacramento. Serving Davis, Woodland, Elk Grove, Dixon, and Winters. Interior detailing, exterior detailing, paint correction, ceramic coating." />
-        
+
         <link rel="canonical" href="https://www.hardyswashnwax.com" />
-        
+
         {/* Structured Data for Local Business with Sacramento focus */}
         <script type="application/ld+json">
           {JSON.stringify({
@@ -70,13 +70,13 @@ export default function Home() {
               }
             ],
             "areaServed": [
-              { "@type": "Place", "name": "Sacramento, CA"},
-              { "@type": "Place", "name": "Davis, CA"},
-              { "@type": "Place", "name": "Woodland, CA"},
-              { "@type": "Place", "name": "Elk Grove, CA"},
-              { "@type": "Place", "name": "Dixon, CA"},
-              { "@type": "Place", "name": "Winters, CA"},
-              { "@type": "Place", "name": "West Sacramento, CA"}
+              { "@type": "Place", "name": "Sacramento, CA" },
+              { "@type": "Place", "name": "Davis, CA" },
+              { "@type": "Place", "name": "Woodland, CA" },
+              { "@type": "Place", "name": "Elk Grove, CA" },
+              { "@type": "Place", "name": "Dixon, CA" },
+              { "@type": "Place", "name": "Winters, CA" },
+              { "@type": "Place", "name": "West Sacramento, CA" }
             ],
             "sameAs": [
               "https://www.facebook.com/hardyswashnwax",
@@ -85,7 +85,7 @@ export default function Home() {
           })}
         </script>
       </Helmet>
-      <LegacyHero />
+      <InteractiveHeroScene />
       <GoogleReviews />
       <ServicesShowcase />
       <WhyChooseUs />

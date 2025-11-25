@@ -8,7 +8,10 @@ export default function PartnershipBanner() {
   if (location !== "/") return null;
 
   return (
-    <div className="bg-gradient-to-r from-[#EE432C] to-[#FFB375] border-b-2 border-black relative overflow-hidden">
+    <div
+      id="partnership-banner"
+      className="bg-gradient-to-r from-[#EE432C] to-[#FFB375] border-b-2 border-black relative overflow-hidden"
+    >
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>

@@ -1270,6 +1270,10 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
   const [showBookingWidget, setShowBookingWidget] = useState(false);
   const heroCopyRef = useRef<HTMLDivElement>(null);
   const [mobilePopupTop, setMobilePopupTop] = useState(220);
+  const bookingPopupVariants = useMemo(() => ({
+    hidden: { opacity: 0, y: -10, scale: 0.97 },
+    visible: { opacity: 1, y: 0, scale: 1 }
+  }), []);
 
   useLayoutEffect(() => {
     if (!isMobile) return;
@@ -1474,26 +1478,22 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
 
         {/* Mobile booking popup anchored below hero text */}
         {isMobile && (
-          <AnimatePresence>
-            {showBookingWidget && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.97 }}
-                transition={{ duration: 0.25 }}
-                style={{
-                  position: 'absolute',
-                  top: mobilePopupTop,
-                  left: '16px',
-                  right: '16px',
-                  zIndex: 90,
-                  pointerEvents: 'auto'
-                }}
-              >
-                <BookingWidgetCard isMobile iframeHeight={360} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.div
+            variants={bookingPopupVariants}
+            initial="hidden"
+            animate={showBookingWidget ? 'visible' : 'hidden'}
+            transition={{ duration: 0.25 }}
+            style={{
+              position: 'absolute',
+              top: mobilePopupTop,
+              left: '16px',
+              right: '16px',
+              zIndex: 90,
+              pointerEvents: showBookingWidget ? 'auto' : 'none'
+            }}
+          >
+            <BookingWidgetCard isMobile iframeHeight={360} />
+          </motion.div>
         )}
 
         {/* InfoCard - Now enabled for mobile too */}
@@ -1707,23 +1707,19 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
                 >
                   {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
                 </HeroButton>
-                <AnimatePresence>
-                  {showBookingWidget && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -12, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -12, scale: 0.97 }}
-                      transition={{ duration: 0.25 }}
-                      style={{
-                        width: '100%',
-                        maxWidth: '520px',
-                        pointerEvents: 'auto'
-                      }}
-                    >
-                      <BookingWidgetCard iframeHeight={300} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <motion.div
+                  variants={bookingPopupVariants}
+                  initial="hidden"
+                  animate={showBookingWidget ? 'visible' : 'hidden'}
+                  transition={{ duration: 0.25 }}
+                  style={{
+                    width: '100%',
+                    maxWidth: '520px',
+                    pointerEvents: showBookingWidget ? 'auto' : 'none'
+                  }}
+                >
+                  <BookingWidgetCard iframeHeight={300} />
+                </motion.div>
               </div>
             </motion.div>
           </div>

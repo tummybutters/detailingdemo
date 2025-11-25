@@ -1100,7 +1100,7 @@ const ServiceDock = ({
 }) => {
   return (
     <div style={{
-      position: 'fixed', // Changed from absolute to fixed for better mobile support
+      position: 'absolute', // Anchor within hero so it scrolls away with the section
       bottom: 0,
       left: 0,
       right: 0,

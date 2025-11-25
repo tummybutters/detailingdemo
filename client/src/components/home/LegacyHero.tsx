@@ -1197,7 +1197,7 @@ const AddOnBar = ({ activeService, activeAddOn, setActiveAddOn, setCameraView, q
         gap: '10px',
         overflowX: 'auto',
         overflowY: 'hidden',
-        zIndex: 39,
+        zIndex: 54,
         background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%)',
         maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
         WebkitOverflowScrolling: 'touch'
@@ -1418,7 +1418,8 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
                   pointerEvents: 'auto',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '14px'
+                  gap: '14px',
+                  zIndex: 40 // Below navbar (50) but above canvas
                 }}
               >
                 <h2 style={{
@@ -1454,16 +1455,18 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
                       <motion.div
                         initial={{ opacity: 0, y: -10, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
-                        transition={{ duration: 0.25 }}
-                        style={{
-                          width: '100%',
-                          pointerEvents: 'auto'
-                        }}
-                      >
-                        <BookingWidgetCard isMobile iframeHeight={360} />
-                      </motion.div>
-                    )}
+                      exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                      transition={{ duration: 0.25 }}
+                      style={{
+                        width: '100%',
+                        pointerEvents: 'auto',
+                        zIndex: 80,
+                        position: 'relative'
+                      }}
+                    >
+                      <BookingWidgetCard isMobile iframeHeight={360} />
+                    </motion.div>
+                  )}
                   </AnimatePresence>
                 </div>
               </motion.div>

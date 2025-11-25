@@ -1108,7 +1108,7 @@ const ServiceDock = ({
       maxHeight: '140px', // Cap the maximum height
       background: 'rgba(10, 10, 10, 0.95)',
       borderTop: `1px solid ${THEME.border}`,
-      zIndex: 40,
+      zIndex: 55,
       display: 'flex',
       alignItems: 'center',
       padding: '12px 16px',
@@ -1388,47 +1388,6 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
       {/* HERO SECTION - 3D Canvas */}
       <div id="hero" style={{ width: '100%', height: '100vh', minWidth: '320px', background: 'linear-gradient(to bottom, #000000 0%, #1a0b05 70%, #4a1905 100%)', position: 'relative' }}>
 
-        {/* Booking dropdown toggle in hero */}
-        {isMobile && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '150px',
-              left: '16px',
-              right: '16px',
-              zIndex: 60,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '10px',
-              pointerEvents: 'auto'
-            }}
-          >
-            <HeroButton
-              className="text-sm sm:text-base"
-              onClick={() => setShowBookingWidget((prev) => !prev)}
-            >
-              {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
-            </HeroButton>
-            <AnimatePresence>
-              {showBookingWidget && (
-                <motion.div
-                  initial={{ opacity: 0, y: -12, scale: 0.97 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -12, scale: 0.97 }}
-                  transition={{ duration: 0.25 }}
-                  style={{
-                    width: 'min(480px, calc(100vw - 32px))',
-                    pointerEvents: 'auto'
-                  }}
-                >
-                  <BookingWidgetCard isMobile={isMobile} iframeHeight={360} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
-
         <header style={{
           position: 'absolute',
           top: 0,
@@ -1453,17 +1412,20 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
                 transition={{ duration: 0.5 }}
                 style={{
                   position: 'absolute',
-                  top: '80px',
+                  top: '120px',
                   left: '20px',
                   right: '20px',
-                  pointerEvents: 'none'
+                  pointerEvents: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '14px'
                 }}
               >
                 <h2 style={{
                   fontFamily: 'Playfair Display, serif',
-                  fontSize: '2.5rem',
+                  fontSize: 'clamp(2.1rem, 6vw + 1rem, 2.6rem)',
                   lineHeight: '1.1',
-                  margin: '0 0 16px 0',
+                  margin: '0',
                   color: 'white',
                   textShadow: '0 2px 10px rgba(0,0,0,0.8)'
                 }}>
@@ -1472,14 +1434,38 @@ export default function LegacyHero({ location = 'sacramento' }: { location?: key
                 </h2>
                 <p style={{
                   fontFamily: 'Inter, sans-serif',
-                  fontSize: '1rem',
-                  lineHeight: '1.5',
+                  fontSize: 'clamp(0.95rem, 2.5vw + 0.6rem, 1.05rem)',
+                  lineHeight: '1.45',
                   color: 'rgba(255,255,255,0.9)',
                   textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-                  maxWidth: '90%'
+                  maxWidth: '92%'
                 }}>
                   {locationCopy.description}
                 </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: 'min(480px, 100%)' }}>
+                  <HeroButton
+                    className="text-sm sm:text-base"
+                    onClick={() => setShowBookingWidget((prev) => !prev)}
+                  >
+                    {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
+                  </HeroButton>
+                  <AnimatePresence>
+                    {showBookingWidget && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                        transition={{ duration: 0.25 }}
+                        style={{
+                          width: '100%',
+                          pointerEvents: 'auto'
+                        }}
+                      >
+                        <BookingWidgetCard isMobile iframeHeight={360} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -1188,8 +1188,8 @@ const AddOnBar = ({ activeService, activeAddOn, setActiveAddOn, setCameraView, q
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       style={{
-        position: 'fixed', // Changed to fixed for consistency
-        bottom: 'calc(100px + env(safe-area-inset-bottom, 0px))', // Position above the dock
+        position: 'absolute', // Clamp within hero so it scrolls away with the section
+        bottom: 'calc(110px + env(safe-area-inset-bottom, 0px))',
         left: 0,
         right: 0,
         padding: '12px 16px',

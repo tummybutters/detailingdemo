@@ -1,4 +1,4 @@
-import Hero from "@/components/home/Hero";
+import LegacyHero from "@/components/home/LegacyHero";
 import ServicesShowcase from "@/components/home/ServicesShowcase";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import GoogleReviews from "@/components/home/GoogleReviews";
@@ -85,7 +85,7 @@ export default function Home() {
           })}
         </script>
       </Helmet>
-      <Hero />
+      <LegacyHero />
       <GoogleReviews />
       <ServicesShowcase />
       <WhyChooseUs />

@@ -72,15 +72,15 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = 5000;
-  server.listen({
+  // ALWAYS serve the app on port 3001 unless overridden.
+  // This serves both the API and the client.
+  const port = Number(process.env.PORT || 3002);
+  const listenOptions = {
     port,
     host: "0.0.0.0",
-    reusePort: true,
-  }, async () => {
+    ...(process.platform !== "darwin" && process.platform !== "win32" ? { reusePort: true } : {})
+  };
+  server.listen(listenOptions, async () => {
     log(`serving on port ${port}`);
     
     // Check Google Sheets credentials and initialize on server startup

@@ -1,10 +1,9 @@
 import { Link } from "wouter";
 import { HeroButton } from "@/components/ui/hero-button";
-import hardyLogoPath from "@assets/hardy logo-Photoroom.png";
 import carSunsetBg from "@assets/ChatGPT Image Mar 31, 2025, 05_35_46 PM.png";
 import mobileHeroBg from "@assets/mobile hero image.png";
 import { useIsMobile } from "@/hooks/use-mobile";
-import CallOption from "./CallOption";
+import BookingWidgetCard from "@/components/booking/BookingWidgetCard";
 
 interface HeroProps {
   location?: "sacramento" | "orange-county";
@@ -70,58 +69,7 @@ export default function Hero({ location = "sacramento" }: HeroProps) {
           {/* Right side with booking iframe and call options */}
           <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
             <div className={`w-full ${isMobile ? 'max-w-full' : 'max-w-md'}`}>
-              <div className="bg-white/95 backdrop-blur rounded-lg shadow-[5px_5px_0_0_#000] border-2 border-black overflow-hidden neo-brutalist-card">
-                {/* Header with booking title */}
-                <div className="py-3 px-4 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white border-b-2 border-black">
-                  <div>
-                    <h3 className="text-lg font-bold">Book Your Detail</h3>
-                    <p className="text-xs text-white/90">We'll call to confirm once booked</p>
-                  </div>
-                </div>
-                
-                {/* Booking widget iframe */}
-                <iframe 
-                  src="https://hardyswashnwax.fieldd.co" 
-                  style={{
-                    width: "100%", 
-                    height: isMobile ? "370px" : "400px",
-                    border: "none",
-                    overflow: "hidden"
-                  }}
-                  title="Hardys Wash N' Wax Quick Booking"
-                  loading="lazy"
-                ></iframe>
-                
-                {/* Call option banner below iframe for better visibility */}
-                <div className="py-3 px-4 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
-                  <div className="text-black">
-                    <p className="font-medium text-sm">Have questions?</p>
-                    <p className="text-xs text-gray-700 hidden sm:block">Our team is ready to assist you</p>
-                  </div>
-                  <CallOption 
-                    phone="19497340201" 
-                    text="" 
-                    className="ml-4"
-                  />
-                </div>
-              </div>
-              
-              {/* Trust indicators */}
-              <div className="mt-3 flex justify-center items-center gap-3 text-white text-xs">
-                <div className="flex items-center">
-                  <svg className="w-4 h-4 mr-1 text-[#FFB375]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
-                  </svg>
-                  <span>60-second booking</span>
-                </div>
-                <div className="h-4 w-px bg-white/30"></div>
-                <div className="flex items-center">
-                  <svg className="w-4 h-4 mr-1 text-[#FFB375]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.177-7.86l-2.765-2.767L7 12.431l3.823 3.832 7.177-7.177-1.06-1.06-7.117 7.114z"/>
-                  </svg>
-                  <span>Instant confirmation</span>
-                </div>
-              </div>
+              <BookingWidgetCard isMobile={isMobile} />
             </div>
           </div>
         </div>

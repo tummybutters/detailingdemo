@@ -1,4 +1,4 @@
-import Hero from "@/components/home/Hero";
+import LegacyHero from "@/components/home/LegacyHero";
 import ServicesShowcase from "@/components/home/ServicesShowcase";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import GoogleReviews from "@/components/home/GoogleReviews";
@@ -25,7 +25,7 @@ export default function OrangeCounty() {
         <meta name="twitter:title" content="Orange County Mobile Car Detailing | Newport Beach, Irvine, Tustin" />
         <meta name="twitter:description" content="Premium mobile car detailing in Orange County. Serving Newport Beach, Irvine, Tustin, Huntington Beach, and San Clemente. Interior detailing, exterior detailing, paint correction, ceramic coating." />
         
-        <link rel="canonical" href="https://www.hardyswashnwax.com/orange-county" />
+      <link rel="canonical" href="https://www.hardyswashnwax.com/orange-county" />
         
         {/* Structured Data for Local Business with Orange County focus */}
         <script type="application/ld+json">
@@ -85,7 +85,7 @@ export default function OrangeCounty() {
           })}
         </script>
       </Helmet>
-      <Hero location="orange-county" />
+      <LegacyHero location="orange-county" />
       <GoogleReviews />
       <ServicesShowcase />
       <WhyChooseUs />

@@ -1,0 +1,25 @@
+diff --git a/node_modules/finalhandler/index.js b/node_modules/finalhandler/index.js
+index ec34be9..5916e2a 100644
+--- a/node_modules/finalhandler/index.js
++++ b/node_modules/finalhandler/index.js
+@@ -11,7 +11,19 @@
+  * @private
+  */
+ 
+-var debug = require('debug')('finalhandler')
++var debugRequire = typeof require === 'function'
++  ? require
++  : typeof module !== 'undefined' && module && typeof module.require === 'function'
++    ? module.require
++    : undefined
++var debugLib = typeof debugRequire === 'function'
++  ? debugRequire('debug')
++  : undefined
++var debug = typeof debugLib === 'function'
++  ? debugLib('finalhandler')
++  : typeof debugLib === 'object' && typeof debugLib.default === 'function'
++    ? debugLib.default('finalhandler')
++    : function () {}
+ var encodeUrl = require('encodeurl')
+ var escapeHtml = require('escape-html')
+ var onFinished = require('on-finished')

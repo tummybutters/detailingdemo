@@ -23,10 +23,9 @@ export default function BookingWidgetCard({
   return (
     <div className={`w-full ${className}`} style={style}>
       <div className="bg-white/95 backdrop-blur rounded-lg shadow-[5px_5px_0_0_#000] border-2 border-black overflow-hidden neo-brutalist-card">
-        <div className="py-1.5 px-3 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white border-b-2 border-black flex items-start justify-between gap-3">
+        <div className="py-1 px-3 bg-gradient-to-r from-[#EE432C] to-[#FFB375] text-white border-b-2 border-black flex items-center justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold leading-tight">Book Your Detail</h3>
-            <p className="text-xs text-white/90">We&apos;ll call to confirm once booked</p>
+            <p className="text-xs text-white/90 leading-tight">We&apos;ll call to confirm once booked</p>
           </div>
           {onClose && (
             <button

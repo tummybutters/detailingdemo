@@ -122,6 +122,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
 
   useLayoutEffect(() => {
     if (typeof window === 'undefined') return;
+
     const measureHero = () => {
       const header = document.getElementById('site-header');
       const banner = document.getElementById('partnership-banner');
@@ -129,15 +130,26 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
       const bannerHeight = banner?.getBoundingClientRect().height || 0;
       const viewportHeight = window.visualViewport?.height || window.innerHeight || 0;
       const availableHeight = viewportHeight - headerHeight - bannerHeight;
-      setHeroHeight(Math.max(560, availableHeight));
+      return Math.max(560, availableHeight);
     };
-    measureHero();
-    window.addEventListener('resize', measureHero);
-    window.addEventListener('orientationchange', measureHero);
-    return () => {
-      window.removeEventListener('resize', measureHero);
-      window.removeEventListener('orientationchange', measureHero);
-    };
+
+    if (isMobile) {
+      // Lock height once on mobile to avoid jitter from browser chrome hide/show.
+      setHeroHeight(measureHero());
+      const handleOrientation = () => setHeroHeight(measureHero());
+      window.addEventListener('orientationchange', handleOrientation);
+      return () => window.removeEventListener('orientationchange', handleOrientation);
+    } else {
+      const handleResize = () => setHeroHeight(measureHero());
+      const handleOrientation = () => setHeroHeight(measureHero());
+      setHeroHeight(measureHero());
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleOrientation);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('orientationchange', handleOrientation);
+      };
+    }
   }, [isMobile]);
 
   useLayoutEffect(() => {

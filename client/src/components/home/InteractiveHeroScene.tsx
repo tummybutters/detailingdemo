@@ -374,6 +374,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
                     onClick={() => {
                       window.location.href = '/booking';
                     }}
+                    style={{ width: 'fit-content', minWidth: '200px', maxWidth: '240px', alignSelf: 'flex-start' }}
                   >
                     Book Your Detail
                   </HeroButton>
@@ -654,6 +655,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
                   onClick={() => {
                     window.location.href = '/booking';
                   }}
+                  style={{ width: 'fit-content', minWidth: '200px', maxWidth: '240px', alignSelf: 'flex-start' }}
                 >
                   Book Your Detail
                 </HeroButton>

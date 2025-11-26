@@ -7,6 +7,7 @@ interface HeroButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary';
+  style?: React.CSSProperties;
 }
 
 export function HeroButton({ 
@@ -14,13 +15,15 @@ export function HeroButton({
   onClick, 
   className = '',
   type = 'button',
-  variant = 'primary'
+  variant = 'primary',
+  style
 }: HeroButtonProps) {
   return (
     <button 
       className={`hero-button ${variant === 'secondary' ? 'secondary' : ''} ${className}`} 
       onClick={onClick} 
       type={type}
+      style={style}
     >
       <span className="hero-button-top">{children}</span>
       <span className="hero-button-bottom"></span>

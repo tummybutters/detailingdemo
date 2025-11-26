@@ -1,5 +1,4 @@
-import React from "react";
-import CallOption from "@/components/home/CallOption";
+import React, { useState, useEffect } from "react";
 
 interface BookingWidgetCardProps {
   isMobile?: boolean;
@@ -19,6 +18,14 @@ export default function BookingWidgetCard({
   onClose
 }: BookingWidgetCardProps) {
   const computedIframeHeight = iframeHeight ?? (isMobile ? 315 : 340);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 12000); // safety timeout in case load event never fires
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className={`w-full ${className}`} style={style}>
@@ -49,14 +56,22 @@ export default function BookingWidgetCard({
           }}
           title="Hardys Wash N' Wax Quick Booking"
           loading="lazy"
+          onLoad={() => setIsLoading(false)}
         ></iframe>
 
-        <div className="py-1 px-3 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
-          <div className="text-black">
-            <p className="font-medium text-sm leading-tight">Have questions?</p>
-            <p className="text-xs text-gray-700 hidden sm:block">Our team is ready to assist you</p>
+        {isLoading && (
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center text-white text-sm font-medium">
+            Loading booking form…
           </div>
-          <CallOption phone="19497340201" text="" className="ml-4" />
+        )}
+
+        <div className="py-1 px-3 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
+          <div className="text-black text-xs leading-tight">
+            <span className="font-semibold">Have questions?</span>{" "}
+            <a href="tel:+19497340201" className="underline font-semibold text-black">
+              (949) 734-0201
+            </a>
+          </div>
         </div>
       </div>
 

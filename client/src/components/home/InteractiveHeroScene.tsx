@@ -344,22 +344,26 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
                   Mobile Car Detailing<br />
                   <span style={{ color: THEME.primary }}>{locationCopy.city}</span>
                 </h2>
-                <p style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: 'clamp(0.82rem, 2.2vw + 0.48rem, 0.94rem)',
-                  lineHeight: '1.35',
-                  color: 'rgba(255,255,255,0.9)',
-                  textShadow: '0 1px 4px rgba(0,0,0,0.8)',
-                  maxWidth: '92%'
-                }}>
-                  {locationCopy.description}
-                </p>
+                {locationCopy.description && (
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: 'clamp(0.82rem, 2.2vw + 0.48rem, 0.94rem)',
+                    lineHeight: '1.35',
+                    color: 'rgba(255,255,255,0.9)',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+                    maxWidth: '92%'
+                  }}>
+                    {locationCopy.description.replace(' — all delivered with precision, care, and professional-grade results.', '')}
+                  </p>
+                )}
                 <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: 'min(320px, 90%)' }}>
                   <HeroButton
                     className="text-xs sm:text-sm"
-                    onClick={() => setShowBookingWidget((prev) => !prev)}
+                    onClick={() => {
+                      window.location.href = '/booking';
+                    }}
                   >
-                    {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
+                    Book Your Detail
                   </HeroButton>
                 </div>
               </motion.div>
@@ -369,12 +373,12 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
         </header>
 
         {/* Mobile booking popup anchored below hero text */}
-        {isMobile && (
+        {isMobile && false && (
           <motion.div
             variants={bookingPopupVariants}
             initial="hidden"
-          animate={showBookingWidget ? 'visible' : 'hidden'}
-          transition={{ duration: 0.25 }}
+            animate={showBookingWidget ? 'visible' : 'hidden'}
+            transition={{ duration: 0.25 }}
           style={{
             position: 'absolute',
             top: mobilePopupTop,
@@ -635,30 +639,16 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
               >
                 <HeroButton
                   className="text-xs sm:text-sm"
-                  onClick={() => setShowBookingWidget((prev) => !prev)}
+                  onClick={() => {
+                    window.location.href = '/booking';
+                  }}
                 >
-                  {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
+                  Book Your Detail
                 </HeroButton>
-                <motion.div
-                  variants={bookingPopupVariants}
-                  initial="hidden"
-                  animate={showBookingWidget ? 'visible' : 'hidden'}
-                  transition={{ duration: 0.25 }}
-                  style={{
-                    width: '100%',
-                    maxWidth: '520px',
-                  pointerEvents: showBookingWidget ? 'auto' : 'none'
-                }}
-              >
-                <BookingWidgetCard
-                  iframeHeight={300}
-                  onClose={() => setShowBookingWidget(false)}
-                />
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      )}
+              </div>
+            </motion.div>
+          </div>
+        )}
 
         <BookingModal
           isOpen={isBookingOpen}

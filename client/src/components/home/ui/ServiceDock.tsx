@@ -52,8 +52,10 @@ export const ServiceDock = ({
                 overflowY: 'hidden',
                 gap: '10px',
                 WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
-                touchAction: 'pan-x pan-y',
-                overscrollBehavior: 'contain',
+                touchAction: 'pan-x', // Prioritize horizontal drag
+                overscrollBehaviorX: 'contain',
+                overscrollBehaviorY: 'none',
+                whiteSpace: 'nowrap',
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none'
             }}>
@@ -71,6 +73,7 @@ export const ServiceDock = ({
                             queueInfoCard(service.target);
                         }}
                         style={{
+                            flex: '0 0 auto',
                             minWidth: '140px',
                             background: isActive ? 'rgba(255, 127, 80, 0.14)' : 'rgba(255,255,255,0.05)',
                             border: isActive ? `1px solid ${THEME.primary}` : '1px solid rgba(255,255,255,0.12)',

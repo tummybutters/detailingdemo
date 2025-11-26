@@ -25,17 +25,20 @@ export const AddOnBar = ({ activeService, activeAddOn, setActiveAddOn, setCamera
             style={{
                 position: 'relative',
                 padding: '10px 12px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                display: 'flex',
                 gap: '10px',
-                overflow: 'hidden',
+                overflowX: 'auto',
+                overflowY: 'hidden',
                 zIndex: 54,
-                background: 'rgba(10, 10, 10, 0.92)',
+                background: 'linear-gradient(180deg, rgba(10,10,10,0.94) 0%, rgba(10,10,10,0.92) 100%)',
                 WebkitOverflowScrolling: 'touch',
                 touchAction: 'pan-x pan-y',
-                overscrollBehavior: 'contain'
+                overscrollBehavior: 'contain',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
             }}
         >
+            <style>{`::-webkit-scrollbar { display: none; height: 0; }`}</style>
             {activeService.addOns.map((addon, idx) => {
                 const isSelected = activeAddOn?.name === addon.name;
                 return (
@@ -49,16 +52,16 @@ export const AddOnBar = ({ activeService, activeAddOn, setActiveAddOn, setCamera
                             }
                         }}
                         style={{
-                            background: isSelected ? 'rgba(255, 127, 80, 0.12)' : 'rgba(255,255,255,0.04)',
+                            background: isSelected ? 'rgba(255, 127, 80, 0.14)' : 'rgba(255,255,255,0.05)',
                             border: isSelected ? `1px solid ${THEME.primary}` : '1px solid rgba(255,255,255,0.12)',
                             borderRadius: '12px',
                             padding: '10px 12px',
                             color: 'white',
                             fontSize: '0.85rem',
                             whiteSpace: 'nowrap',
-                            width: '100%',
                             textAlign: 'center',
-                            boxShadow: isSelected ? '0 8px 20px rgba(255,127,80,0.18)' : 'none',
+                            minWidth: '140px',
+                            boxShadow: isSelected ? '0 10px 24px rgba(255,127,80,0.22)' : '0 6px 12px rgba(0,0,0,0.25)',
                             transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease'
                         }}
                     >

@@ -52,16 +52,18 @@ export const AddOnBar = ({ activeService, activeAddOn, setActiveAddOn, setCamera
                             }
                         }}
                         style={{
-                            background: isSelected ? 'rgba(255, 127, 80, 0.14)' : 'rgba(255,255,255,0.05)',
-                            border: isSelected ? `1px solid ${THEME.primary}` : '1px solid rgba(255,255,255,0.12)',
-                            borderRadius: '12px',
-                            padding: '10px 12px',
+                            background: isSelected ? 'rgba(255, 127, 80, 0.18)' : 'rgba(255,255,255,0.08)',
+                            border: isSelected ? `1px solid ${THEME.primary}` : '1px solid rgba(255,255,255,0.18)',
+                            borderRadius: '999px',
+                            padding: '12px 18px',
                             color: 'white',
                             fontSize: '0.85rem',
-                            whiteSpace: 'nowrap',
+                            fontWeight: 600,
+                            whiteSpace: 'normal',
+                            lineHeight: 1.2,
                             textAlign: 'center',
-                            minWidth: '140px',
-                            boxShadow: isSelected ? '0 10px 24px rgba(255,127,80,0.22)' : '0 6px 12px rgba(0,0,0,0.25)',
+                            minWidth: '150px',
+                            boxShadow: isSelected ? '0 12px 26px rgba(255,127,80,0.24)' : '0 8px 16px rgba(0,0,0,0.22)',
                             transition: 'border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease'
                         }}
                     >

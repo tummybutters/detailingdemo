@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 interface BookingWidgetCardProps {
   isMobile?: boolean;
@@ -18,14 +18,6 @@ export default function BookingWidgetCard({
   onClose
 }: BookingWidgetCardProps) {
   const computedIframeHeight = iframeHeight ?? (isMobile ? 315 : 340);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 12000); // safety timeout in case load event never fires
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className={`w-full ${className}`} style={style}>
@@ -56,14 +48,7 @@ export default function BookingWidgetCard({
           }}
           title="Hardys Wash N' Wax Quick Booking"
           loading="lazy"
-          onLoad={() => setIsLoading(false)}
         ></iframe>
-
-        {isLoading && (
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center text-white text-sm font-medium">
-            Loading booking form…
-          </div>
-        )}
 
         <div className="py-1 px-3 bg-[#FFD7B5] flex justify-between items-center border-t-2 border-black">
           <div className="text-black text-xs leading-tight">

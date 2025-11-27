@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import './custom-hero-button.css';
 
 interface HeroButtonProps {
@@ -10,18 +10,19 @@ interface HeroButtonProps {
   style?: React.CSSProperties;
 }
 
-export function HeroButton({ 
-  children, 
-  onClick, 
+export const HeroButton = forwardRef<HTMLButtonElement, HeroButtonProps>(function HeroButton({
+  children,
+  onClick,
   className = '',
   type = 'button',
   variant = 'primary',
   style
-}: HeroButtonProps) {
+}, ref) {
   return (
-    <button 
-      className={`hero-button ${variant === 'secondary' ? 'secondary' : ''} ${className}`} 
-      onClick={onClick} 
+    <button
+      ref={ref}
+      className={`hero-button ${variant === 'secondary' ? 'secondary' : ''} ${className}`}
+      onClick={onClick}
       type={type}
       style={style}
     >
@@ -30,4 +31,4 @@ export function HeroButton({
       <span className="hero-button-base"></span>
     </button>
   );
-}
+});

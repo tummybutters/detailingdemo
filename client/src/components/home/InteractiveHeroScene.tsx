@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useEffect, useRef, useMemo, Suspense, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense, useLayoutEffect, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   useGLTF,
@@ -96,6 +96,9 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [showBookingWidget, setShowBookingWidget] = useState(false);
   const heroCopyRef = useRef<HTMLDivElement>(null);
+  const heroRootRef = useRef<HTMLDivElement>(null);
+  const bookingButtonRef = useRef<HTMLButtonElement>(null);
+  const [bookingPopupPosition, setBookingPopupPosition] = useState({ top: 220, left: 0 });
   const [mobilePopupTop, setMobilePopupTop] = useState(220);
   const mobileDockRef = useRef<HTMLDivElement>(null);
   const [mobileDockHeight, setMobileDockHeight] = useState(120);
@@ -107,6 +110,34 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
     }),
     []
   );
+
+  const updateBookingPopupPosition = useCallback(() => {
+    if (isMobile) return;
+    const button = bookingButtonRef.current;
+    const heroRoot = heroRootRef.current;
+    if (!button || !heroRoot) return;
+    const heroRect = heroRoot.getBoundingClientRect();
+    const buttonRect = button.getBoundingClientRect();
+    const topOffset = buttonRect.bottom - heroRect.top + 12;
+    const leftOffset = buttonRect.left - heroRect.left;
+    setBookingPopupPosition({ top: topOffset, left: leftOffset });
+  }, [isMobile]);
+
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    updateBookingPopupPosition();
+    window.addEventListener('resize', updateBookingPopupPosition);
+    window.addEventListener('orientationchange', updateBookingPopupPosition);
+    return () => {
+      window.removeEventListener('resize', updateBookingPopupPosition);
+      window.removeEventListener('orientationchange', updateBookingPopupPosition);
+    };
+  }, [isMobile, updateBookingPopupPosition]);
+
+  useLayoutEffect(() => {
+    if (isMobile || !showBookingWidget) return;
+    updateBookingPopupPosition();
+  }, [isMobile, showBookingWidget, updateBookingPopupPosition]);
 
   useLayoutEffect(() => {
     if (!isMobile) return;
@@ -289,7 +320,9 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
   }, [loadingProgress]);
 
   return (
-    <div style={{
+    <div
+      ref={heroRootRef}
+      style={{
       width: '100%',
       minWidth: '320px',
       position: 'relative',
@@ -407,8 +440,8 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
             transition={{ duration: 0.2, ease: 'easeOut' }}
             style={{
               position: 'absolute',
-              top: '220px',
-              right: '12%',
+              top: bookingPopupPosition.top,
+              left: bookingPopupPosition.left,
               width: '340px',
               zIndex: 90,
               pointerEvents: showBookingWidget ? 'auto' : 'none',
@@ -668,13 +701,14 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
                 }}
               >
                 <HeroButton
+                  ref={bookingButtonRef}
                   className="text-xs sm:text-sm"
                   onClick={() => {
                     setShowBookingWidget((prev) => !prev);
                   }}
                   style={{ width: 'fit-content', minWidth: '200px', maxWidth: '240px', alignSelf: 'flex-start' }}
                 >
-                  Book Your Detail
+                  {showBookingWidget ? 'Hide Booking' : 'Book Your Detail'}
                 </HeroButton>
               </div>
             </motion.div>

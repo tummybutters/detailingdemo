@@ -666,7 +666,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
                 <HeroButton
                   className="text-xs sm:text-sm"
                   onClick={() => {
-                    window.location.href = '/booking';
+                    setShowBookingWidget((prev) => !prev);
                   }}
                   style={{ width: 'fit-content', minWidth: '200px', maxWidth: '240px', alignSelf: 'flex-start' }}
                 >

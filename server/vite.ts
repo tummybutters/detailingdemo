@@ -71,6 +71,8 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
+  // In production, __dirname will be dist/ after build
+  // So we need to look for public/ relative to dist/
   const distPath = path.resolve(__dirname, "public");
 
   if (!fs.existsSync(distPath)) {

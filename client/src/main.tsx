@@ -2,33 +2,29 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "./components/ui/theme-colors.css";
-import "./components/ui/mapbox-geocoder.css";
+// import "./components/ui/mapbox-geocoder.css"; // Removed for demo
 import "./components/ui/3d-button.css";
 import "./components/ui/custom-hero-button.css";
 import "./components/ui/custom-nav-button.css";
 import "./components/ui/service-3d-button.css";
 import "./components/ui/3d-step-icon.css";
-import { initEmailJS } from "./lib/emailService";
 
-// Initialize EmailJS when the app starts
-initEmailJS();
+// EmailJS removed for demo
+// import { initEmailJS } from "./lib/emailService";
+// initEmailJS();
 
 // Make environment variables available to the frontend
 declare global {
   interface Window {
     env: {
-      EMAILJS_SERVICE_ID: string;
-      EMAILJS_TEMPLATE_ID: string;
-      EMAILJS_PUBLIC_KEY: string;
+      // EmailJS vars removed
     };
   }
 }
 
 // Initialize global env object with Vite environment variables (prefixed with VITE_)
 window.env = {
-  EMAILJS_SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
-  EMAILJS_TEMPLATE_ID: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
-  EMAILJS_PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || ''
+  // EmailJS vars removed
 };
 
 // Mount the React application

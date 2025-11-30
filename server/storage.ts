@@ -7,13 +7,13 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Booking methods
   createBooking(booking: InsertBooking): Promise<Booking>;
   getBookings(): Promise<Booking[]>;
   getBooking(id: number): Promise<Booking | undefined>;
   updateBookingStatus(id: number, status: string): Promise<Booking | undefined>;
-  
+
   // Google Sheets sync methods
   markBookingAsSynced(id: number): Promise<Booking | undefined>;
   getUnsyncedBookings(): Promise<Booking[]>;
@@ -30,11 +30,11 @@ export class MemStorage implements IStorage {
     this.bookingsStore = new Map();
     this.currentUserId = 1;
     this.currentBookingId = 1;
-    
+
     // Add a test booking
     this.addTestBooking();
   }
-  
+
   // Helper method to add test booking data
   private addTestBooking() {
     // First test booking - pending
@@ -60,7 +60,7 @@ export class MemStorage implements IStorage {
       bookingReference: `HWW-${Date.now().toString().slice(-6)}-001`,
       syncedToSheets: true // Already synced
     };
-    
+
     // Second test booking - confirmed
     const testBooking2: Booking = {
       id: this.currentBookingId++,
@@ -84,7 +84,7 @@ export class MemStorage implements IStorage {
       bookingReference: `HWW-${Date.now().toString().slice(-6)}-002`,
       syncedToSheets: true // Already synced
     };
-    
+
     this.bookingsStore.set(testBooking1.id, testBooking1);
     this.bookingsStore.set(testBooking2.id, testBooking2);
   }
@@ -110,27 +110,27 @@ export class MemStorage implements IStorage {
   async createBooking(insertBooking: InsertBooking): Promise<Booking> {
     const id = this.currentBookingId++;
     const now = new Date();
-    
+
     // Generate a booking reference if not provided
-    const bookingReference = insertBooking.bookingReference || 
+    const bookingReference = insertBooking.bookingReference ||
       `HWW-${now.getTime().toString().slice(-6)}-${Math.floor(Math.random() * 1000)}`;
-    
+
     // Handle null values for optional fields
     const addOns = insertBooking.addOns || null;
     const conditionNotes = insertBooking.conditionNotes || null;
-    
-    const booking: Booking = { 
+
+    const booking: Booking = {
       ...insertBooking,
       addOns,
-      conditionNotes, 
-      id, 
-      createdAt: now, 
+      conditionNotes,
+      id,
+      createdAt: now,
       updatedAt: now,
       status: "pending",
       bookingReference,
       syncedToSheets: false // New booking is not synced yet
     };
-    
+
     this.bookingsStore.set(id, booking);
     return booking;
   }
@@ -146,38 +146,38 @@ export class MemStorage implements IStorage {
   async updateBookingStatus(id: number, status: string): Promise<Booking | undefined> {
     const booking = this.bookingsStore.get(id);
     if (!booking) return undefined;
-    
-    const updatedBooking = { 
-      ...booking, 
+
+    const updatedBooking = {
+      ...booking,
       status,
       updatedAt: new Date()
     };
     this.bookingsStore.set(id, updatedBooking);
     return updatedBooking;
   }
-  
+
   async markBookingAsSynced(id: number): Promise<Booking | undefined> {
     const booking = this.bookingsStore.get(id);
     if (!booking) return undefined;
-    
-    const updatedBooking = { 
-      ...booking, 
+
+    const updatedBooking = {
+      ...booking,
       syncedToSheets: true,
       updatedAt: new Date()
     };
     this.bookingsStore.set(id, updatedBooking);
     return updatedBooking;
   }
-  
+
   async getUnsyncedBookings(): Promise<Booking[]> {
     return Array.from(this.bookingsStore.values())
       .filter(booking => !booking.syncedToSheets);
   }
 }
 
-// Import the database storage
-import { dbStorage } from "./db/storage";
-import { checkDatabaseAvailability } from "./db/operations";
+// DB Storage removed for demo
+// import { dbStorage } from "./db/storage";
+// import { checkDatabaseAvailability } from "./db/operations";
 
 // Define a namespace for our global variables to avoid polluting global scope
 declare global {
@@ -196,25 +196,9 @@ global.appStorage = global.appStorage || {
 // Initialize storage based on database availability
 // This will be called when the server starts
 async function initializeStorage() {
-  try {
-    // Check if the database is available
-    const isDatabaseAvailable = await checkDatabaseAvailability();
-    
-    if (isDatabaseAvailable) {
-      console.log("Database is available. Using DatabaseStorage.");
-      global.appStorage.selectedStorage = dbStorage;
-      global.appStorage.storageType = 'database';
-    } else {
-      console.log("Database is not available. Falling back to in-memory storage.");
-      global.appStorage.selectedStorage = new MemStorage();
-      global.appStorage.storageType = 'memory';
-    }
-  } catch (error) {
-    console.error("Error initializing storage:", error);
-    console.log("Falling back to in-memory storage due to initialization error.");
-    global.appStorage.selectedStorage = new MemStorage();
-    global.appStorage.storageType = 'memory';
-  }
+  console.log("Using in-memory storage for demo.");
+  global.appStorage.selectedStorage = new MemStorage();
+  global.appStorage.storageType = 'memory';
 }
 
 // Initialize storage
@@ -232,37 +216,37 @@ export const storage: IStorage = {
   getUser: async (id: number) => {
     return (global.appStorage.selectedStorage || memStorage).getUser(id);
   },
-  
+
   getUserByUsername: async (username: string) => {
     return (global.appStorage.selectedStorage || memStorage).getUserByUsername(username);
   },
-  
+
   createUser: async (user: InsertUser) => {
     return (global.appStorage.selectedStorage || memStorage).createUser(user);
   },
-  
+
   // Booking functions
   createBooking: async (booking: InsertBooking) => {
     return (global.appStorage.selectedStorage || memStorage).createBooking(booking);
   },
-  
+
   getBookings: async () => {
     return (global.appStorage.selectedStorage || memStorage).getBookings();
   },
-  
+
   getBooking: async (id: number) => {
     return (global.appStorage.selectedStorage || memStorage).getBooking(id);
   },
-  
+
   updateBookingStatus: async (id: number, status: string) => {
     return (global.appStorage.selectedStorage || memStorage).updateBookingStatus(id, status);
   },
-  
+
   // Google Sheets sync methods
   markBookingAsSynced: async (id: number) => {
     return (global.appStorage.selectedStorage || memStorage).markBookingAsSynced(id);
   },
-  
+
   getUnsyncedBookings: async () => {
     return (global.appStorage.selectedStorage || memStorage).getUnsyncedBookings();
   }

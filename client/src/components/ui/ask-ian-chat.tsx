@@ -56,8 +56,8 @@ export default function AskIan({
 
   // Always‑up‑to‑date ref for send(); avoids listing `messages` in deps
   const messagesRef = useRef<ChatMessage[]>(messages);
-  const bottomRef   = useRef<HTMLDivElement>(null);
-  const inputRef    = useRef<HTMLInputElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Helper keeps state + ref in sync -----------------------------------
   const setMessages = (fn: (m: ChatMessage[]) => ChatMessage[]) => {
@@ -87,16 +87,29 @@ export default function AskIan({
     setLoading(true);
 
     try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMsg.content,
-          chatHistory: [...messagesRef.current, userMsg].slice(-4)
-        })
-      });
-      const data = await res.json();
-      setMessages((m) => [...m, { role: 'assistant', content: data.response, timestamp: data.timestamp ?? Date.now() }]);
+      // Mocked response for demo
+      // const res = await fetch(endpoint, ...);
+
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
+
+      const fallbackResponses: Record<string, string> = {
+        cost: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        pricing: "Maintenance Detail runs $149-$199, Interior Detail $159-$229, Exterior Detail $99-$159. Full service is $279-$379. Ceramic coating with paint correction starts at $549.",
+        area: "We serve Davis, Woodland, Dixon, Winters, plus Newport, Irvine, Tustin, San Clemente, Huntington Beach. Basically Northern and Southern California mobile service.",
+        book: "Book online in 60 seconds or call (949) 734-0201. We're fully insured, IDA certified. No cancellation fees unless same-day."
+      };
+
+      const lowerMessage = userMsg.content.toLowerCase();
+      let responseText = "Ian here from Hardy's Wash N' Wax. UC Davis grad, certified detailer, fully insured. What can I help you with.";
+
+      for (const [keyword, answer] of Object.entries(fallbackResponses)) {
+        if (lowerMessage.includes(keyword)) {
+          responseText = answer;
+          break;
+        }
+      }
+
+      setMessages((m) => [...m, { role: 'assistant', content: responseText, timestamp: Date.now() }]);
     } catch {
       setMessages((m) => [...m, { role: 'assistant', content: "I'm offline right now. Call us at (949) 734-0201!", timestamp: Date.now() }]);
     } finally {
@@ -105,7 +118,7 @@ export default function AskIan({
   }, [endpoint, loading]);
 
   // 🖼️ Helpers ----------------------------------------------------------
-  const toggle      = () => setOpen((o) => !o);
+  const toggle = () => setOpen((o) => !o);
   const scrollToTop = () => bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   const scrollToBooking = () => {
     toggle();
@@ -206,11 +219,10 @@ export default function AskIan({
                       className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-[85%] sm:max-w-[80%] lg:max-w-[60%] px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm rounded-2xl shadow-xl ${
-                          m.role === 'user'
+                        className={`max-w-[85%] sm:max-w-[80%] lg:max-w-[60%] px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm rounded-2xl shadow-xl ${m.role === 'user'
                             ? 'bg-gradient-to-br from-[#FFB375] to-[#EE432C] text-white rounded-br-md'
                             : 'bg-white/10 backdrop-blur border border-white/20 text-white rounded-bl-md'
-                        }`}
+                          }`}
                       >
                         {m.content}
                       </div>

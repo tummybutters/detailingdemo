@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,7 +16,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
-import { initEmailJS, sendContactEmail } from '@/lib/emailService';
+// EmailJS removed for demo
+// import { initEmailJS, sendContactEmail } from '@/lib/emailService';
 
 // Form validation schema
 const contactFormSchema = z.object({
@@ -32,20 +33,7 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [emailJSInitialized, setEmailJSInitialized] = useState(false);
   const { toast } = useToast();
-
-  // Initialize EmailJS
-  useEffect(() => {
-    const initialized = initEmailJS();
-    setEmailJSInitialized(initialized);
-    
-    if (!initialized) {
-      console.warn("EmailJS initialization failed. Will use server-side submission.");
-    } else {
-      console.log("EmailJS initialized successfully.");
-    }
-  }, []);
 
   // Form definition
   const form = useForm<ContactFormValues>({
@@ -59,53 +47,24 @@ export default function ContactForm() {
     },
   });
 
-  // Form submission handler (dual approach: EmailJS + server API)
+  // Form submission handler (server API only)
   async function onSubmit(values: ContactFormValues) {
     setIsSubmitting(true);
 
     try {
       console.log('Form submitted with values:', values);
-      
-      // First attempt: Try to send via EmailJS
-      if (emailJSInitialized) {
-        try {
-          const emailResult = await sendContactEmail(values);
-          console.log('EmailJS result:', emailResult);
-          
-          if (emailResult.success) {
-            console.log('Email sent successfully via EmailJS');
-          } else {
-            console.warn('EmailJS failed, falling back to server API:', emailResult.error);
-          }
-        } catch (emailError) {
-          console.error('EmailJS error, falling back to server API:', emailError);
-        }
-      }
-      
-      // Always send to the server endpoint as backup and for record-keeping
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: values.email,
-          firstName: values.name.split(' ')[0], // Simple name splitting
-          lastName: values.name.split(' ').slice(1).join(' '),
-          phone: values.phone || '',
-          subject: values.subject || 'Contact Form Submission',
-          message: values.message
-        }),
-      });
 
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
+      // Mock submission for demo
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
+
+      const data = { success: true, message: 'Your message has been received successfully' };
+
+      if (data.success) {
         toast({
           title: "Message Received",
           description: "Thank you for your message. We'll get back to you soon!",
         });
-        
+
         form.reset();
         setSubmitSuccess(true);
       } else {
@@ -115,8 +74,8 @@ export default function ContactForm() {
       console.error('Error in form submission:', error);
       toast({
         title: "Error",
-        description: error instanceof Error 
-          ? error.message 
+        description: error instanceof Error
+          ? error.message
           : "Something went wrong. Please try again or contact us directly by phone.",
         variant: "destructive",
       });
@@ -128,7 +87,7 @@ export default function ContactForm() {
   return (
     <div className="w-full max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center text-red-primary">Contact Us</h2>
-      
+
       {submitSuccess ? (
         <div className="text-center py-8">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -138,7 +97,7 @@ export default function ContactForm() {
           </div>
           <h3 className="text-xl font-bold mb-2">Thank You!</h3>
           <p className="text-gray-600 mb-6">Your message has been received. We'll get back to you soon!</p>
-          <Button 
+          <Button
             onClick={() => setSubmitSuccess(false)}
             className="bg-gradient-to-r from-red-primary to-accent-orange hover:from-red-primary-dark hover:to-accent-orange-dark transition-all duration-300"
           >
@@ -162,7 +121,7 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="email"
@@ -177,7 +136,7 @@ export default function ContactForm() {
                 )}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -192,7 +151,7 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="subject"
@@ -207,7 +166,7 @@ export default function ContactForm() {
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="message"
@@ -215,10 +174,10 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Message</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="How can we help you?" 
-                      className="min-h-[120px]" 
-                      {...field} 
+                    <Textarea
+                      placeholder="How can we help you?"
+                      className="min-h-[120px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription>
@@ -228,9 +187,9 @@ export default function ContactForm() {
                 </FormItem>
               )}
             />
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               className="w-full bg-gradient-to-r from-red-primary to-accent-orange hover:from-red-primary-dark hover:to-accent-orange-dark transition-all duration-300"
               disabled={isSubmitting}
             >

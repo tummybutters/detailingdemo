@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { checkGoogleSheetsCredentials, syncBookingsToGoogleSheets } from "./googleSheetsSync";
+
 
 const app = express();
 app.use(express.json());
@@ -14,9 +14,9 @@ app.use(express.static('public'));
 app.use((req, res, next) => {
   const host = req.header('host');
   // Check for non-www domain, apply redirect regardless of environment
-  if (host && 
-      host.match(/^hardyswashnwax\.com/) && 
-      !host.match(/^www\./)) {
+  if (host &&
+    host.match(/^hardyswashnwax\.com/) &&
+    !host.match(/^www\./)) {
     return res.redirect(301, `https://www.${host}${req.url}`);
   }
   next();
@@ -81,23 +81,8 @@ app.use((req, res, next) => {
   };
   server.listen(listenOptions, async () => {
     log(`serving on port ${port}`);
-    
-    // Check Google Sheets credentials and initialize on server startup
-    try {
-      const googleSheetsEnabled = await checkGoogleSheetsCredentials();
-      if (googleSheetsEnabled) {
-        // Perform initial sync of all bookings to Google Sheets
-        const syncResult = await syncBookingsToGoogleSheets();
-        if (syncResult) {
-          log('Initial sync of bookings to Google Sheets completed successfully');
-        } else {
-          log('Initial sync of bookings to Google Sheets failed');
-        }
-      } else {
-        log('Google Sheets integration is disabled - service account not found or invalid');
-      }
-    } catch (error) {
-      console.error('Error initializing Google Sheets integration:', error);
-    }
+
+    // Google Sheets integration removed for demo
+    log('Server started in demo mode');
   });
 })();

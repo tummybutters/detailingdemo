@@ -1,64 +1,31 @@
-import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-});
-
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+// User Schema
+export const insertUserSchema = z.object({
+  username: z.string(),
+  password: z.string(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type User = InsertUser & { id: number };
 
 // Booking Schema
-export const bookings = pgTable("bookings", {
-  id: serial("id").primaryKey(),
-  // Customer details
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone").notNull(),
-  
-  // Location details
-  location: text("location").notNull(),
-  
-  // Vehicle details
-  vehicleType: text("vehicle_type").notNull(),
-  
-  // Service details
-  serviceCategory: text("service_category").notNull(),
-  mainService: text("main_service").notNull(),
-  addOns: text("add_ons"),
-  totalPrice: text("total_price").notNull(),
-  totalDuration: text("total_duration").notNull(),
-  
-  // Appointment details
-  appointmentDate: text("appointment_date").notNull(),
-  appointmentTime: text("appointment_time").notNull(),
-  
-  // Additional information
-  conditionNotes: text("condition_notes"),
-  
-  // System fields
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at"),
-  status: text("status").default("pending"),
-  bookingReference: text("booking_reference"),
-  syncedToSheets: boolean("synced_to_sheets").default(false),
-});
-
-export const insertBookingSchema = createInsertSchema(bookings).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  status: true,
-  syncedToSheets: true,
+export const insertBookingSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  location: z.string(),
+  vehicleType: z.string(),
+  serviceCategory: z.string(),
+  mainService: z.string(),
+  addOns: z.string().nullable().optional(),
+  totalPrice: z.string(),
+  totalDuration: z.string(),
+  appointmentDate: z.string(),
+  appointmentTime: z.string(),
+  conditionNotes: z.string().nullable().optional(),
+  bookingReference: z.string().nullable().optional(),
 });
 
 export const bookingFormSchema = insertBookingSchema.extend({
@@ -78,24 +45,21 @@ export const bookingFormSchema = insertBookingSchema.extend({
 });
 
 export type InsertBooking = z.infer<typeof insertBookingSchema>;
-export type Booking = typeof bookings.$inferSelect;
+export type Booking = InsertBooking & {
+  id: number;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  status: string | null;
+  syncedToSheets: boolean | null;
+};
 
 // Contacts Schema
-export const contacts = pgTable("contacts", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone"),
-  subject: text("subject"),
-  message: text("message").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-  syncedToSheets: boolean("synced_to_sheets").default(false),
-});
-
-export const insertContactSchema = createInsertSchema(contacts).omit({
-  id: true,
-  createdAt: true,
-  syncedToSheets: true,
+export const insertContactSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  phone: z.string().nullable().optional(),
+  subject: z.string().nullable().optional(),
+  message: z.string(),
 });
 
 export const contactFormSchema = insertContactSchema.extend({
@@ -105,4 +69,13 @@ export const contactFormSchema = insertContactSchema.extend({
 });
 
 export type InsertContact = z.infer<typeof insertContactSchema>;
-export type Contact = typeof contacts.$inferSelect;
+export type Contact = InsertContact & {
+  id: number;
+  createdAt: Date | null;
+  syncedToSheets: boolean | null;
+};
+
+// Mock objects for compatibility if needed (though we removed usage)
+export const users = {};
+export const bookings = {};
+export const contacts = {};

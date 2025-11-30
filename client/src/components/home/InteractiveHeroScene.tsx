@@ -30,6 +30,7 @@ useTexture.preload('/engine_dirt.png');
 useTexture.preload('/dog_hair_texture.png');
 useTexture.preload('/floor_proxy_base.png');
 useTexture.preload('/headlight_fog.png');
+// HDRI loaded directly via <Environment />
 
 // Constants extracted to ./config/constants.ts
 
@@ -519,7 +520,11 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
             />
             <pointLight position={[-10, -10, -10]} color={THEME.primary} intensity={5} />
 
-            <Environment preset="city" blur={envBlur} resolution={envResolution} />
+            <Environment
+              files="/leibstadt_4k.exr"
+              background
+              blur={0.12}
+            />
 
             {/* Ceiling plane to hide stray objects above the scene */}
             <mesh

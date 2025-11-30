@@ -29,6 +29,8 @@ export default defineConfig({
       "@assets": path.resolve(__dirname, "attached_assets"),
     },
   },
+  // Ensure Vite copies static assets (GLB, textures, icons, sw.js) from the root public folder
+  publicDir: path.resolve(__dirname, "public"),
   root: path.resolve(__dirname, "client"),
   build: {
     outDir: path.resolve(__dirname, "dist"),

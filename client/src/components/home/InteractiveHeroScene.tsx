@@ -328,7 +328,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
       minWidth: '320px',
       position: 'relative',
       overflowX: 'hidden',
-      background: '#000'
+      background: 'transparent'
     }}>
 
       {/* LOADING SCREEN */}
@@ -505,7 +505,7 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
             height: '100%',
             pointerEvents: 'none',
             zIndex: 1,
-            background: 'linear-gradient(180deg, #050505 0%, #0d0806 55%, #030303 100%)'
+            background: 'transparent'
           }}
         >
           <Suspense fallback={<CanvasLoader setLoadingProgress={setLoadingProgress} />}>
@@ -522,9 +522,9 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
 
             <Environment
               files="/leibstadt_4k.exr"
-              blur={0.28}
-              background={false} // use HDRI for reflections/lighting only
-              ground={{ height: 12, radius: 140, scale: 160 }} // project the HDRI onto a ground plane to avoid the “floating car” look
+              blur={0.22}
+              background // show the HDRI behind the car
+              ground={{ height: 12, radius: 140, scale: 160 }} // project onto ground to keep the car seated
             />
 
             {/* Ceiling plane to hide stray objects above the scene */}

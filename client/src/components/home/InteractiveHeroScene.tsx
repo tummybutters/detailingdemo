@@ -509,12 +509,12 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
           }}
         >
           <Suspense fallback={<CanvasLoader setLoadingProgress={setLoadingProgress} />}>
-            <ambientLight intensity={0.45} />
+            <ambientLight intensity={0.38} />
             <spotLight
               position={[10, 10, 10]}
               angle={0.15}
               penumbra={1}
-              intensity={8}
+              intensity={6.5}
               castShadow={enableShadows}
               shadow-mapSize={shadowMapSize} // Reduced for mobile performance
             />
@@ -522,8 +522,9 @@ export default function InteractiveHeroScene({ location = 'sacramento' }: { loca
 
             <Environment
               files="/leibstadt_4k.exr"
-              background
-              blur={0.12}
+              blur={0.28}
+              background={false} // use HDRI for reflections/lighting only
+              ground={{ height: 12, radius: 140, scale: 160 }} // project the HDRI onto a ground plane to avoid the “floating car” look
             />
 
             {/* Ceiling plane to hide stray objects above the scene */}
